@@ -21,6 +21,13 @@ start a node in the background...
 $ brew services start rabbitmq
 ```
 
+open url in browser...
+```
+username: guest
+password: guest
+http://localhost:15672
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
