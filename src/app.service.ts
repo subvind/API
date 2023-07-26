@@ -15,4 +15,9 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
+
+  getInitialize(): string {
+    // todo
+    return 'insert enum tables: [node-type]';
+  }
 }

@@ -28,6 +28,15 @@ password: guest
 http://localhost:15672
 ```
 
+running app with .env variables
+```
+# Running in production mode
+NODE_ENV=production node dist/main.js
+
+# Running in development mode
+NODE_ENV=development node dist/main.js
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>

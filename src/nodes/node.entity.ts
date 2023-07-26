@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+
+import { NodeType } from './node-type.entity'
 
 @Entity()
 export class Node {
@@ -6,8 +8,32 @@ export class Node {
   id: number;
 
   @Column()
-  name: string;
+  identity: string;
 
   @Column()
-  email: string;
+  kind: string;
+
+  @Column()
+  positionX: number;
+  
+  @Column()
+  positionY: number;
+
+  @Column()
+  dimensionWidth: number;
+
+  @Column()
+  dimensionHeight: number;
+
+  @Column()
+  bgColor: string;
+
+  @Column()
+  textColor: string;
+
+  @Column()
+  borderColor: string;
+
+  @ManyToOne(() => NodeType, (nodeType) => nodeType.nodes)
+  active: NodeType
 }

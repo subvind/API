@@ -16,7 +16,7 @@ import { Node } from './node.entity';
           type: 'topic',
         },
       ],
-      uri: 'amqp://guest:guest@localhost:5672',
+      uri: `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@localhost:5672`,
       connectionInitOptions: { wait: false },
     }),
     TypeOrmModule.forFeature([Node]),

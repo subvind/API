@@ -6,6 +6,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { NodeModule } from './nodes/node.module';
 
+import config from './typeorm.config'; // Import your TypeORM configuration file
+
 @Module({
   imports: [
     RabbitMQModule.forRoot(RabbitMQModule, {
@@ -15,15 +17,10 @@ import { NodeModule } from './nodes/node.module';
           type: 'topic',
         },
       ],
-      uri: 'amqp://guest:guest@localhost:5672',
+      uri: `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@localhost:5672`,
       connectionInitOptions: { wait: false },
     }),
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: './InomSystem/database.db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, // Auto-create database schema (for demo purposes, not recommended in production)
-    }),
+    TypeOrmModule.forRoot(config),
     NodeModule,
   ],
   controllers: [AppController],
