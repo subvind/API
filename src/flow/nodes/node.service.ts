@@ -28,20 +28,21 @@ export class NodeService {
     return this.nodeRepository.find();
   }
 
-  async findOne(id: number): Promise<Node> {
+  async findOne(id: string): Promise<Node> {
     return this.nodeRepository.findOneBy({ id: id });
   }
 
   async create(node: Node): Promise<Node> {
-    return this.nodeRepository.save(node);
+    const newObject = this.nodeRepository.create(node);
+    return this.nodeRepository.save(newObject);
   }
 
-  async update(id: number, node: Node): Promise<Node> {
+  async update(id: string, node: Node): Promise<Node> {
     await this.nodeRepository.update(id, node);
     return this.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.nodeRepository.delete(id);
   }
 }

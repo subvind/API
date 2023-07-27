@@ -4,9 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { NodeModule } from './nodes/node.module';
 
 import config from './typeorm.config'; // Import your TypeORM configuration file
+
+import { APP_FILTER } from '@nestjs/core';
+import { TypeOrmExceptionFilter } from './typeorm-exception.filter';
+
+import { NodeModule } from './flow/nodes/node.module';
+import { CustomerModule } from './customers/customer.module';
 
 @Module({
   imports: [
@@ -22,8 +27,15 @@ import config from './typeorm.config'; // Import your TypeORM configuration file
     }),
     TypeOrmModule.forRoot(config),
     NodeModule,
+    CustomerModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: TypeOrmExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

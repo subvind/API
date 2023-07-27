@@ -23,7 +23,7 @@ export class NodeController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Node> {
+  async findOne(@Param('id') id: string): Promise<Node> {
     return this.nodeService.findOne(id);
   }
 
@@ -33,12 +33,12 @@ export class NodeController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updatedNodeData: Node): Promise<Node> {
+  async update(@Param('id') id: string, @Body() updatedNodeData: Node): Promise<Node> {
     return this.nodeService.update(id, updatedNodeData);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<void> {
+  async remove(@Param('id') id: string): Promise<void> {
     return this.nodeService.remove(id);
   }
 }
