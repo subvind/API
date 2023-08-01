@@ -1,4 +1,5 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Module } from '@nestjs/common';
@@ -10,8 +11,12 @@ import config from './typeorm.config'; // Import your TypeORM configuration file
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmExceptionFilter } from './typeorm-exception.filter';
 
+import { JwtAuthModule } from './auth/jwt.module';
+import { AuthModule } from './auth/auth.module';
+
 import { NodeModule } from './flow/nodes/node.module';
 import { CustomerModule } from './customers/customer.module';
+import { UserModule } from './users/user.module';
 
 @Module({
   imports: [
@@ -25,7 +30,11 @@ import { CustomerModule } from './customers/customer.module';
       uri: `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@localhost:5672`,
       connectionInitOptions: { wait: false },
     }),
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot(config),
+    JwtAuthModule,
+    UserModule,
+    AuthModule,
     NodeModule,
     CustomerModule,
   ],
