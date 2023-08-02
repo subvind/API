@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:20
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -11,7 +11,7 @@ COPY tsconfig.json ./
 COPY tsconfig.build.json ./
 COPY src ./src
 
-RUN npm install
+RUN npm install --force
 RUN npm run build
 
 # Bundle app source
