@@ -27,7 +27,7 @@ import { UserModule } from './users/user.module';
           type: 'topic',
         },
       ],
-      uri: `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@localhost:5672`,
+      uri: process.env.RABBITMQ,
       connectionInitOptions: { wait: false },
     }),
     ConfigModule.forRoot(),

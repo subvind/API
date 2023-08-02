@@ -16,7 +16,7 @@ import { Customer } from './customer.entity';
           type: 'topic',
         },
       ],
-      uri: `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@localhost:5672`,
+      uri: process.env.RABBITMQ,
       connectionInitOptions: { wait: false },
     }),
     TypeOrmModule.forFeature([Customer]),
