@@ -13,6 +13,52 @@ part of ecosystem...
 - [client :: frontend :: subvind/autoide](https://github.com/subvind/autoide)
 
 
+### deploy to railwap.app
+To deploy a NestJS app to Railway.app, you can follow these steps:
+
+Prepare Your NestJS App:
+Ensure your NestJS app is fully functional and runs without any issues locally. Make sure you have a package.json file with all the required dependencies and scripts for starting the application.
+
+Install Railway CLI:
+Install the Railway CLI on your local machine. The CLI allows you to interact with your Railway.app account and deploy applications.
+
+```bash
+npm install -g railway
+```
+Log in to Railway.app:
+Log in to your Railway.app account using the CLI. If you don't have an account, you can sign up for free on the Railway.app website.
+
+```bash
+railway login
+```
+Initialize Railway Project:
+Navigate to your NestJS app's root directory and initialize your project with Railway. This creates the necessary files and configurations for deployment.
+
+```bash
+cd /path/to/your/nestjs/app
+railway init
+```
+Set Environment Variables:
+Configure the environment variables required by your NestJS app. You can set environment variables in the railway.env file or use the Railway CLI to set them.
+
+```bash
+railway secrets:set KEY=VALUE
+```
+Replace KEY with the name of the environment variable and VALUE with the corresponding value.
+
+Deploy to Railway.app:
+Use the Railway CLI to deploy your NestJS app to Railway.app. The CLI will handle the deployment process for you.
+```bash
+railway up
+```
+Access Your Deployed App:
+After the deployment is successful, Railway.app will provide you with a unique URL where your NestJS app is hosted. You can use this URL to access your deployed application.
+
+
+
+
+### deploy locally
+
 installing rabbitmq...
 https://www.rabbitmq.com/install-homebrew.html
 
