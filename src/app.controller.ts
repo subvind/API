@@ -15,9 +15,4 @@ export class AppController {
 
     return this.appService.getHello();
   }
-
-  @Get('init')
-  getInitialize(): string {
-    return this.appService.getInitialize();
-  }
 }

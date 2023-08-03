@@ -5,6 +5,9 @@ import { Customer } from './customer.entity';
 
 import { LocalAuth } from './local-auth.decorator';
 
+import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
+
+@ApiTags('customers')
 @Controller('customers')
 export class CustomerController {
   constructor(
@@ -19,6 +22,8 @@ export class CustomerController {
   //   return this.customerService.getHello();
   // }
 
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, description: 'Success' })
   @Get()
   @LocalAuth()
   async findAll(): Promise<Customer[]> {
