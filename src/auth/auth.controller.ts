@@ -9,6 +9,8 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOperation({ summary: 'Auth via JWT' })
+  @ApiResponse({ status: 200, description: 'Success' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
