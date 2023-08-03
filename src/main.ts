@@ -14,6 +14,9 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
+  // so browsers can use api
+  app.enableCors();
+
   // Create a Swagger document builder
   const options = new DocumentBuilder()
     .setTitle('FlowERP')
