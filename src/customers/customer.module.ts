@@ -7,8 +7,6 @@ import { CustomerService } from './customer.service';
 
 import { Customer } from './customer.entity';
 
-console.log('process.env.RABBITMQ', process.env.RABBITMQ)
-
 @Module({
   imports: [
     RabbitMQModule.forRoot(RabbitMQModule, {

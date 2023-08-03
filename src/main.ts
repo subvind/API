@@ -16,8 +16,8 @@ async function bootstrap() {
 
   // Create a Swagger document builder
   const options = new DocumentBuilder()
-    .setTitle('subvind(FlowERP)')
-    .setDescription('Swagger API Documentation')
+    .setTitle('FlowERP')
+    .setDescription('subvind backend API documentation')
     .setVersion('1.0')
     .build();
 

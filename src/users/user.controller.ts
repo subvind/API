@@ -13,13 +13,6 @@ export class UserController {
     private readonly amqpConnection: AmqpConnection
   ) {}
 
-  @Get()
-  getHello(): string {
-    this.amqpConnection.publish('exchange1', 'subscribe-route', { msg: 'hello world' });
-
-    return this.userService.getHello();
-  }
-
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get()

@@ -11,7 +11,11 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    this.amqpConnection.publish('exchange1', 'subscribe-route', { msg: 'hello world' });
+    try {
+      this.amqpConnection.publish('exchange1', 'subscribe-route', { msg: 'hello world' });
+    } catch (e) {
+      console.log(e)
+    }
 
     return this.appService.getHello();
   }
