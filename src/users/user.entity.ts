@@ -1,4 +1,7 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+
+import { IsNotEmpty, Matches } from 'class-validator';
+
 import { hash } from 'bcrypt';
 
 import { ApiProperty } from '@nestjs/swagger';
@@ -12,12 +15,21 @@ export enum UserRole {
 }
 
 @Entity()
+@Unique(['username']) 
 @Unique(['email']) 
 @Unique(['firstName', 'lastName']) 
 export class User {
   @PrimaryColumn('uuid')
   id: string;
   
+  @ApiProperty({ example: 'johndoe', description: 'The username of the user' })
+  @Column({ type: 'varchar', length: 18, collation: 'utf8mb4_bin' })
+  @IsNotEmpty()
+  @Matches(/^[a-zA-Z0-9_]+$/, {
+    message: 'Username can only contain letters, numbers, and underscores'
+  })
+  username: string;
+
   @ApiProperty({ example: 'John', description: 'The first name of the user' })
   @Column()
   firstName: string;
@@ -27,7 +39,7 @@ export class User {
   lastName: string;
 
   @ApiProperty({ example: 'john.doe@gmail.com', description: 'The email address of the user' })
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @ApiProperty({ example: 'jd2023', description: 'The secret password of the user' })
@@ -38,6 +50,12 @@ export class User {
   role: string; // Role can be 'admin', 'employee', etc.
 
   // Other properties and relationships as needed
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 
   @BeforeInsert()
   async hashPassword() {
