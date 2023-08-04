@@ -23,7 +23,7 @@ export class User {
   id: string;
   
   @ApiProperty({ example: 'johndoe', description: 'The username of the user' })
-  @Column({ type: 'varchar', length: 18, collation: 'utf8mb4_bin' })
+  @Column({ type: 'varchar', length: 18 })
   @IsNotEmpty()
   @Matches(/^[a-zA-Z0-9_]+$/, {
     message: 'Username can only contain letters, numbers, and underscores'
