@@ -31,7 +31,7 @@ export class UserService {
   
     if (search) {
       query.where(
-        'user.username LIKE :search OR CONCAT(user.firstName, " ", user.lastName) LIKE :search',
+        'user.username LIKE :search',
         { search: `%${search}%` }
       );
     }
