@@ -25,9 +25,22 @@ export class UserService {
   getHello(): string {
     return 'Hello World!';
   }
-
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find();
+  
+  async findAll(page: number, limit: number, search?: string): Promise<{ data: User[]; total: number }> {
+    const query = this.userRepository.createQueryBuilder('user');
+  
+    if (search) {
+      query.where(
+        'user.username LIKE :search OR CONCAT(user.firstName, " ", user.lastName) LIKE :search',
+        { search: `%${search}%` }
+      );
+    }
+  
+    const offset = (page - 1) * limit;
+  
+    const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
+  
+    return { data, total };
   }
 
   async findOne(id: string): Promise<User> {
