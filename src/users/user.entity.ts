@@ -53,7 +53,7 @@ export class User {
 
   // Other properties and relationships as needed
 
-  @OneToMany(() => Organization, (organization) => organization.owner, { nullable: true })
+  @OneToMany(() => Organization, organization => organization.owner, { nullable: true })
   organizations: Organization[]
 
   @CreateDateColumn({ type: 'timestamp' })

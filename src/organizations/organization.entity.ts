@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { User } from '../users/user.entity';
 
 @Entity()
-@Unique(['orgname', 'owner']) 
+@Unique(['orgname']) 
 export class Organization {
   @PrimaryColumn('uuid')
   id: string;
@@ -27,8 +27,7 @@ export class Organization {
 
   // Other properties and relationships as needed
 
-  @ApiProperty({ example: '3o4iuh71f...', description: 'The user id that owns this organization' })
-  @ManyToOne(() => User, (user) => user.organizations)
+  @ManyToOne(() => User, user => user.organizations)
   owner: User;
 
   @CreateDateColumn({ type: 'timestamp' })
