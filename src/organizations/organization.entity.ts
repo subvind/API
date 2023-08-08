@@ -1,25 +1,41 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Unique, PrimaryColumn, Column, BeforeInsert, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+
+import { IsNotEmpty, Matches } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { Customer } from '../customers/customer.entity';
+import { User } from '../users/user.entity';
 
 @Entity()
-export class Invoice {
+@Unique(['orgname', 'owner']) 
+export class Organization {
   @PrimaryColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Customer)
-  @JoinColumn()
-  customer: Customer;
+  @ApiProperty({ example: 'acme', description: 'The orgname of the organization' })
+  @Column({ type: 'varchar', length: 18 })
+  @IsNotEmpty()
+  @Matches(/^[a-zA-Z0-9_]+$/, {
+    message: 'Orgname can only contain letters, numbers, and underscores'
+  })
+  orgname: string;
 
-  @Column({ type: 'date' })
-  invoiceDate: Date;
-
+  @ApiProperty({ example: 'ACME Corp.', description: 'The display name of the organization' })
   @Column()
-  totalAmount: number;
+  displayName: string;
 
   // Other properties and relationships as needed
+
+  @ApiProperty({ example: '3o4iuh71f...', description: 'The user id that owns this organization' })
+  @ManyToOne(() => User, (user) => user.organizations)
+  owner: User;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 
   @BeforeInsert()
   generateUUID() {

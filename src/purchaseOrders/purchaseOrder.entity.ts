@@ -1,17 +1,16 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Unique, PrimaryColumn, Column, BeforeInsert, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+
+import { IsNotEmpty, Matches } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { v4 as uuidv4 } from 'uuid';
 
 import { Customer } from '../customers/customer.entity';
 
 @Entity()
-export class Invoice {
+export class PurchaseOrder {
   @PrimaryColumn('uuid')
   id: string;
-
-  @ManyToOne(() => Customer)
-  @JoinColumn()
-  customer: Customer;
 
   @Column({ type: 'date' })
   invoiceDate: Date;
@@ -20,6 +19,12 @@ export class Invoice {
   totalAmount: number;
 
   // Other properties and relationships as needed
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 
   @BeforeInsert()
   generateUUID() {

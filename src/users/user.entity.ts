@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 import { IsNotEmpty, Matches } from 'class-validator';
 
@@ -6,6 +6,8 @@ import { hash } from 'bcrypt';
 
 import { ApiProperty } from '@nestjs/swagger';
 import { v4 as uuidv4 } from 'uuid';
+
+import { Organization } from '../organizations/organization.entity';
 
 export enum UserRole {
   ADMIN = 'Admin',
@@ -50,6 +52,9 @@ export class User {
   role: string; // Role can be 'admin', 'employee', etc.
 
   // Other properties and relationships as needed
+
+  @OneToMany(() => Organization, (organization) => organization.owner, { nullable: true })
+  organizations: Organization[]
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
