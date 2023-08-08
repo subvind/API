@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 
 import { NodeModule } from './flow/nodes/node.module';
 import { CustomerModule } from './customers/customer.module';
+import { OrganizationModule } from './organizations/organization.module';
 import { UserModule } from './users/user.module';
 
 @Module({
@@ -33,10 +34,11 @@ import { UserModule } from './users/user.module';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(config),
     JwtAuthModule,
-    UserModule,
     AuthModule,
-    NodeModule,
+    NodeModule, // flow
     CustomerModule,
+    OrganizationModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
