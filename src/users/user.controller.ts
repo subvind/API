@@ -32,6 +32,13 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Get a user by username' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('username/:username')
+  async findSingle(@Param('username') username: string): Promise<User> {
+    return await this.userService.findByUsername(username);
+  }
+
   @ApiOperation({ summary: 'Create a user' })
   @ApiBody({ type: User })
   @ApiResponse({ status: 201, description: 'Success', type: User })
