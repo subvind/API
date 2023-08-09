@@ -51,17 +51,14 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updatedUserData: User): Promise<User> {
-
+    let user = await this.userService.findOne(id);
     let data
-    const { username, email, ...userDataWithoutEmailAndUsername } = updatedUserData;
-    if (updatedUserData.username === 'testing' || updatedUserData.email === 'test@test.com') {
+    const { username, email, password, ...userDataWithoutEmailAndUsername } = updatedUserData;
+    if (user.username === 'testing' || user.email === 'test@test.com') {
       data = userDataWithoutEmailAndUsername
     } else {
       data = updatedUserData
     }
-
-    // TODO: add update password from another endpoint
-    data.password = undefined
 
     return this.userService.update(id, data);
   }
