@@ -36,6 +36,9 @@ export class OrganizationService {
       );
     }
   
+    // Include the 'users' relationship in the query
+    query.leftJoinAndSelect('organization.owner', 'owner');
+    
     const offset = (page - 1) * limit;
   
     const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
