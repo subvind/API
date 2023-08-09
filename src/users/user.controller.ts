@@ -53,9 +53,9 @@ export class UserController {
   async update(@Param('id') id: string, @Body() updatedUserData: User): Promise<User> {
 
     let data
-    const { username, email, ...userDataWithoutEmailAndPassword } = updatedUserData;
+    const { username, email, ...userDataWithoutEmailAndUsername } = updatedUserData;
     if (updatedUserData.username === 'testing' || updatedUserData.email === 'test@test.com') {
-      data = userDataWithoutEmailAndPassword
+      data = userDataWithoutEmailAndUsername
     } else {
       data = updatedUserData
     }
