@@ -53,15 +53,30 @@ export class UserService {
   }
 
   async findOne(id: string): Promise<User> {
-    return this.userRepository.findOneBy({ id: id });
+    return this.userRepository.findOne({ 
+      where: {
+        id: id
+      },
+      select: ['id', 'username', 'firstName', 'lastName', 'role', 'createdAt'] 
+    });
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userRepository.findOneBy({ email: email });
+    return this.userRepository.findOne({ 
+      where: {
+        email: email
+      },
+      select: ['id', 'username', 'firstName', 'lastName', 'role', 'createdAt'] 
+    });
   }
 
   async findByUsername(username: string): Promise<User> {
-    return this.userRepository.findOneBy({ username: username });
+    return this.userRepository.findOne({ 
+      where: {
+        username: username
+      },
+      select: ['id', 'username', 'firstName', 'lastName', 'role', 'createdAt'] 
+    });
   }
 
   async create(user: User): Promise<User> {
