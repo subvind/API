@@ -36,16 +36,16 @@ export class OrganizationService {
       );
     }
   
-    query.leftJoinAndSelect('organization.owner', 'owner');
+    query.innerJoinAndSelect('organization.owner', 'owner');
     
-    // query.select([
-    //   'owner.id',
-    //   'owner.username',
-    //   'owner.firstName',
-    //   'owner.lastName',
-    //   'owner.role',
-    //   'owner.createdAt'
-    // ]);
+    query.addSelect([
+      'owner.id',
+      'owner.username',
+      'owner.firstName',
+      'owner.lastName',
+      'owner.role',
+      'owner.createdAt'
+    ]);
     
     const offset = (page - 1) * limit;
   
