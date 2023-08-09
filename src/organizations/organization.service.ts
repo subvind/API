@@ -36,8 +36,16 @@ export class OrganizationService {
       );
     }
   
-    // Include the 'users' relationship in the query
     query.leftJoinAndSelect('organization.owner', 'owner');
+    
+    query.select([
+      'owner.id',
+      'owner.username',
+      'owner.firstName',
+      'owner.lastName',
+      'owner.role',
+      'owner.createdAt'
+    ]);
     
     const offset = (page - 1) * limit;
   

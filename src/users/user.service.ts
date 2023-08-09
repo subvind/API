@@ -38,6 +38,15 @@ export class UserService {
   
     const offset = (page - 1) * limit;
   
+    query.select([
+      'user.id',
+      'user.username',
+      'user.firstName',
+      'user.lastName',
+      'user.role',
+      'user.createdAt'
+    ]);
+    
     const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
   
     return { data, total };
