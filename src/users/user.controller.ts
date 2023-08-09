@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, BadRequestException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 
@@ -51,7 +51,19 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updatedUserData: User): Promise<User> {
-    return this.userService.update(id, updatedUserData);
+
+    let data
+    const { username, email, ...userDataWithoutEmailAndPassword } = updatedUserData;
+    if (updatedUserData.username === 'testing' || updatedUserData.email === 'test@test.com') {
+      data = userDataWithoutEmailAndPassword
+    } else {
+      data = updatedUserData
+    }
+
+    // TODO: add update password from another endpoint
+    data.password = undefined
+
+    return this.userService.update(id, data);
   }
 
   @ApiOperation({ summary: 'Delete a user' })
