@@ -36,7 +36,7 @@ export class OrganizationService {
       );
     }
   
-    query.innerJoinAndSelect('organization.owner', 'owner');
+    query.leftJoinAndSelect('organization.owner', 'owner');
     
     query.addSelect([
       'owner.id',
