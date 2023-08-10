@@ -95,7 +95,7 @@ export class UserController {
     }
     
     // send changes to database
-    let result: any = this.userService.update(user.id, change);
+    let result: any = await this.userService.update(user.id, change);
 
     // resend JWT
     return this.authService.login(result)
