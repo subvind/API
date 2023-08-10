@@ -16,13 +16,19 @@ export class AuthService {
   }
 
   async login(user: User) {
+    let orgname = null;
+    // sometimes org may not be selected
+    if (user.defaultOrganization) {
+      orgname = user.defaultOrganization.orgname
+    }
+    
     // Generate and return a JWT token
     const payload = { 
       sub: user.id, 
       username: user.username,
       fullName: user.firstName + ' ' + user.lastName,
       email: user.email,
-      orgname: user.defaultOrganization.orgname,
+      orgname: orgname,
     };
     return {
       access_token: this.jwtService.sign(payload),
