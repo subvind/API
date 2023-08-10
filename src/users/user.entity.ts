@@ -41,11 +41,11 @@ export class User {
   lastName: string;
 
   @ApiProperty({ example: 'john.doe@gmail.com', description: 'The email address of the user' })
-  @Column()
+  @Column({ select: false }) // Exclude 'password' from default selection
   email: string;
 
   @ApiProperty({ example: 'jd2023', description: 'The secret password of the user' })
-  @Column()
+  @Column({ select: false }) // Exclude 'password' from default selection
   password: string;
 
   @Column({ default: 'Pending' })
