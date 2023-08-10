@@ -64,12 +64,14 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
+    // select password is needed here because of
+    // auth bcrypt compare step at verifyPassword
     return this.userRepository.findOne({ 
       where: {
         email: email
       },
       relations: ['defaultOrganization'],
-      select: ['id', 'username', 'firstName', 'lastName', 'role', 'createdAt'] 
+      select: ['id', 'username', 'firstName', 'lastName', 'password', 'role', 'createdAt'] 
     });
   }
 
