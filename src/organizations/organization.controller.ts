@@ -1,7 +1,11 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
+
 import { OrganizationService } from './organization.service';
+import { UserService } from 'src/users/user.service';
+
 import { Organization } from './organization.entity';
+import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
@@ -10,6 +14,7 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 export class OrganizationController {
   constructor(
     private readonly organizationService: OrganizationService,
+    private readonly userService: UserService,
     private readonly amqpConnection: AmqpConnection
   ) {}
 
@@ -59,5 +64,24 @@ export class OrganizationController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     return this.organizationService.remove(id);
+  }
+
+  @ApiOperation({ summary: 'Find organizations related to a user' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('userRelated/:id')
+  async findUserOrgs(
+    @Param('id') userId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('search') search?: string,
+  ): Promise<any> {
+    const user = await this.userService.findOne(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const { data, total } = await this.organizationService.findUserOrganizations(user, page, limit, search);
+    return { data, total };
   }
 }

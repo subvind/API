@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Organization } from './organization.entity';
+import { User } from '../users/user.entity';
 
 @Injectable()
 export class OrganizationService {
@@ -72,5 +73,29 @@ export class OrganizationService {
 
   async remove(id: string): Promise<void> {
     await this.organizationRepository.delete(id);
+  }
+
+  async findUserOrganizations(user: User, page: number, limit: number, search?: string): Promise<{ data: Organization[]; total: number }> {
+    const query = this.organizationRepository.createQueryBuilder('organization');
+  
+    if (search) {
+      query.where(
+        'organization.owner = :ownerId',
+        { ownerId: user.id }
+      );
+    }
+  
+    const offset = (page - 1) * limit;
+  
+    query.select([
+      'organization.id',
+      'organization.orgname',
+      'organization.displayName',
+      'organization.createdAt'
+    ]);
+    
+    const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
+  
+    return { data, total };
   }
 }

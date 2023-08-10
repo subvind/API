@@ -1,14 +1,16 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { OrganizationController } from './organization.controller';
 import { OrganizationService } from './organization.service';
 
 import { Organization } from './organization.entity';
+import { UserModule } from '../users/user.module';
 
 @Module({
   imports: [
+    forwardRef(() => UserModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
