@@ -78,10 +78,15 @@ export class OrganizationService {
   async findUserOrganizations(user: User, page: number, limit: number, search?: string): Promise<{ data: Organization[]; total: number }> {
     const query = this.organizationRepository.createQueryBuilder('organization');
   
+    query.where(
+      'organization.ownerId = :ownerId',
+      { ownerId: user.id }
+    );
+
     if (search) {
-      query.where(
-        'organization.owner = :ownerId',
-        { ownerId: user.id }
+      query.andWhere(
+        'organization.orgname LIKE :search',
+        { search: `%${search}%` }
       );
     }
   
