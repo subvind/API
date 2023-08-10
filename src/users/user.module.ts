@@ -6,12 +6,14 @@ import { UserController } from './user.controller';
 
 import { AuthService } from '../auth/auth.service';
 import { UserService } from './user.service';
+import { OrganizationModule } from '../organizations/organization.module';
 import { JwtService } from '@nestjs/jwt';
 
 import { User } from './user.entity';
 
 @Module({
   imports: [
+    OrganizationModule,
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
