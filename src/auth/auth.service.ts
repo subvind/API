@@ -22,7 +22,7 @@ export class AuthService {
       username: user.username,
       fullName: user.firstName + ' ' + user.lastName,
       email: user.email,
-      defaultOrganization: user.defaultOrganization,
+      orgname: user.defaultOrganization.orgname,
     };
     return {
       access_token: this.jwtService.sign(payload),

@@ -75,17 +75,22 @@ export class UserController {
 
   @ApiOperation({ summary: 'Set a default organization for a user' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Patch('defaultOrganization/:id')
-  async setDefaultOrg(@Param('id') id: string, @Body() updatedUserData: User): Promise<any> {
-    let user = await this.userService.findOne(id);
-    
-    const { defaultOrganization, ...userDataWithoutEmailAndUsername } = updatedUserData;
+  @Patch('defaultOrganization/:username')
+  async setDefaultOrg(@Param('id') username: string, @Body() updatedUserData: User): Promise<any> {
+    let user = await this.userService.findByUsername(username);
     
     // TODO: make sure user is employee of org
-    user.defaultOrganization = defaultOrganization
-    
-    let result: any = this.userService.update(id, user);
 
+    // only allow this change
+    const { defaultOrganization, ...userDataWithoutDefaultOrg } = updatedUserData;
+    let change: any = {
+      defaultOrganization: defaultOrganization,
+    }
+    
+    // send changes to database
+    let result: any = this.userService.update(user.id, change);
+
+    // resend JWT
     return this.authService.login(result)
   }
 }
