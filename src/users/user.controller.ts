@@ -80,7 +80,7 @@ export class UserController {
   @ApiOperation({ summary: 'Set a default organization for a user' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('defaultOrganization/:username/:orgname')
-  async setDefaultOrg(@Param('username') username: string, @Param('orgname') orgname: string): Promise<any> {
+  async setDefaultOrg(@Param('username') username: string, @Param('orgname') orgname: string) {
     let user = await this.userService.findByUsername(username);
     let organization = await this.organizationService.findByOrgname(orgname);
 
