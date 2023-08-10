@@ -16,7 +16,7 @@ export class AuthService {
   }
 
   async login(user: User) {
-    let orgname = null;
+    let orgname = ''; // this can't be null because secretOrPrivateKey must have a value
     // sometimes org may not be selected
     if (user.defaultOrganization) {
       orgname = user.defaultOrganization.orgname
