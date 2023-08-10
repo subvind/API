@@ -86,16 +86,6 @@ export class OrganizationService {
     }
   
     const offset = (page - 1) * limit;
-  
-    query.leftJoinAndSelect('organization.owner', 'owner');
-
-    query.addSelect([
-      'organization.id',
-      'organization.orgname',
-      'organization.displayName',
-      'organization.owner',
-      'organization.createdAt'
-    ]);
     
     const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
   
