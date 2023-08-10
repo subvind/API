@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
 
 import { IsNotEmpty, Matches } from 'class-validator';
 
@@ -51,10 +51,15 @@ export class User {
   @Column({ default: 'Pending' })
   role: string; // Role can be 'admin', 'employee', etc.
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @OneToMany(() => Organization, organization => organization.owner, { nullable: true })
   organizations: Organization[]
+
+  @ManyToOne(() => Organization, organization => organization.id)
+  defaultOrganization: Organization;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

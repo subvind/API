@@ -17,7 +17,9 @@ export class SalesOrder {
   @Column()
   createdAt: Date;
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @OneToMany(() => SalesOrderItem, (item) => item.order)
   items: SalesOrderItem[];

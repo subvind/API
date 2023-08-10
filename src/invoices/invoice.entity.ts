@@ -19,7 +19,9 @@ export class Invoice {
   @Column()
   totalAmount: number;
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @BeforeInsert()
   generateUUID() {

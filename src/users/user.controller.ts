@@ -1,6 +1,7 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, BadRequestException } from '@nestjs/common';
 import { UserService } from './user.service';
+import { AuthService } from '../auth/auth.service';
 import { User } from './user.entity';
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
@@ -10,6 +11,7 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 export class UserController {
   constructor(
     private readonly userService: UserService,
+    private readonly authService: AuthService,
     private readonly amqpConnection: AmqpConnection
   ) {}
 
@@ -68,5 +70,22 @@ export class UserController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     return this.userService.remove(id);
+  }
+
+
+  @ApiOperation({ summary: 'Set a default organization for a user' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Patch('defaultOrganization/:id')
+  async setDefaultOrg(@Param('id') id: string, @Body() updatedUserData: User): Promise<any> {
+    let user = await this.userService.findOne(id);
+    
+    const { defaultOrganization, ...userDataWithoutEmailAndUsername } = updatedUserData;
+    
+    // TODO: make sure user is employee of org
+    user.defaultOrganization = defaultOrganization
+    
+    let result: any = this.userService.update(id, user);
+
+    return this.authService.login(result)
   }
 }

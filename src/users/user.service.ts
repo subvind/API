@@ -44,6 +44,7 @@ export class UserService {
       'user.firstName',
       'user.lastName',
       'user.role',
+      'user.defaultOrganization',
       'user.createdAt'
     ]);
     
@@ -57,6 +58,7 @@ export class UserService {
       where: {
         id: id
       },
+      relations: ['defaultOrganization'],
       select: ['id', 'username', 'firstName', 'lastName', 'role', 'createdAt'] 
     });
   }
@@ -66,6 +68,7 @@ export class UserService {
       where: {
         email: email
       },
+      relations: ['defaultOrganization'],
       select: ['id', 'username', 'firstName', 'lastName', 'role', 'createdAt'] 
     });
   }
@@ -75,6 +78,7 @@ export class UserService {
       where: {
         username: username
       },
+      relations: ['defaultOrganization'],
       select: ['id', 'username', 'firstName', 'lastName', 'role', 'createdAt'] 
     });
   }

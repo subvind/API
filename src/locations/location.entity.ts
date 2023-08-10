@@ -14,7 +14,9 @@ export class Location {
   @Column()
   address: string;
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @BeforeInsert()
   generateUUID() {

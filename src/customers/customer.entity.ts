@@ -21,7 +21,9 @@ export class Customer {
   @Column()
   phoneNumber: string;
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @BeforeInsert()
   generateUUID() {

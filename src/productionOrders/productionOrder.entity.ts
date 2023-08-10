@@ -22,7 +22,9 @@ export class ProductionOrder {
   @Column({ type: 'date' })
   dueDate: Date;
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @BeforeInsert()
   generateUUID() {

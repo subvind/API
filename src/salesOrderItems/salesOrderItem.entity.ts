@@ -23,7 +23,9 @@ export class SalesOrderItem {
   @Column()
   unitPrice: number;
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @BeforeInsert()
   generateUUID() {

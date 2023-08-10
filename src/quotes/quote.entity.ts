@@ -19,7 +19,9 @@ export class Quote {
   @Column()
   totalAmount: number;
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

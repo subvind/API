@@ -1,4 +1,4 @@
-import { Entity, Unique, PrimaryColumn, Column, BeforeInsert, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Unique, PrimaryColumn, Column, BeforeInsert, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 import { IsNotEmpty, Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -25,10 +25,16 @@ export class Organization {
   @Column()
   displayName: string;
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @ManyToOne(() => User, user => user.organizations)
   owner: User;
+
+  // the currectly selected organization by a user
+  @OneToMany(() => User, user => user.defaultOrganization, { nullable: true })
+  defaultOrganizations: User[]
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

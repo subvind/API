@@ -17,7 +17,9 @@ export class Product {
   @Column()
   price: number;
 
-  // Other properties and relationships as needed
+  /**
+   * Other properties and relationships as needed
+   */
 
   @BeforeInsert()
   generateUUID() {
