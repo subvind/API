@@ -3,7 +3,6 @@ import { Controller, Get, Post, Patch, Delete, Body, Param, Query, BadRequestExc
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
 
 import { UserService } from './user.service';
-import { AuthService } from '../auth/auth.service';
 import { OrganizationService } from '../organizations/organization.service';
 import { User } from './user.entity';
 
@@ -14,7 +13,6 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly authService: AuthService,
     private readonly organizationService: OrganizationService,
     private readonly amqpConnection: AmqpConnection
   ) {}
@@ -42,7 +40,7 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('username/:username')
   async findSingle(@Param('username') username: string): Promise<User> {
-    return await this.userService.findByUsername(username);
+    return this.userService.findByUsername(username);
   }
 
   @ApiOperation({ summary: 'Create a user' })
@@ -80,12 +78,12 @@ export class UserController {
   @ApiOperation({ summary: 'Set a default organization for a user' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('defaultOrganization/:username/:orgname')
-  async setDefaultOrg(@Param('username') username: string, @Param('orgname') orgname: string) {
+  async setDefaultOrg(@Param('username') username: string, @Param('orgname') orgname: string): Promise<User> {
     let user = await this.userService.findByUsername(username);
     let organization = await this.organizationService.findByOrgname(orgname);
 
-    console.log('setDefaultOrg user', user)
-    console.log('setDefaultOrg organization', organization)
+    // console.log('setDefaultOrg user', user)
+    // console.log('setDefaultOrg organization', organization)
 
     if (!user || !organization) {
       // Throw an exception if user or organization is not found
@@ -97,14 +95,9 @@ export class UserController {
       defaultOrganization: organization.id,
     }
 
-    console.log('setDefaultOrg change', change)
+    // console.log('setDefaultOrg change', change)
     
     // send changes to database
-    let result = await this.userService.update(user.id, change);
-
-    console.log('setDefaultOrg result', result)
-
-    // resend JWT
-    return this.authService.login(result)
+    return this.userService.update(user.id, change);
   }
 }
