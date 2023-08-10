@@ -1,5 +1,7 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
+
 import { UserService } from './user.service';
 import { AuthService } from '../auth/auth.service';
 import { OrganizationService } from '../organizations/organization.service';
@@ -81,6 +83,11 @@ export class UserController {
   async setDefaultOrg(@Param('username') username: string, @Param('orgname') orgname: string): Promise<any> {
     let user = await this.userService.findByUsername(username);
     let organization = await this.organizationService.findByOrgname(orgname);
+
+    if (!user || !organization) {
+      // Throw an exception if user or organization is not found
+      throw new NotFoundException('User or organization not found');
+    }
     
     // TODO: make sure user is employee of org
     let change: any = {
