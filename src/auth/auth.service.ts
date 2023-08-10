@@ -15,21 +15,20 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
-    let orgname = ''; // this can't be null because secretOrPrivateKey must have a value
-    // sometimes org may not be selected
-    if (user.defaultOrganization) {
-      orgname = user.defaultOrganization.orgname
-    }
-    
+  async login(user: User) {    
     // Generate and return a JWT token
-    const payload = { 
+    let payload: any = { 
       sub: user.id, 
       username: user.username,
       fullName: user.firstName + ' ' + user.lastName,
-      email: user.email,
-      orgname: orgname,
+      email: user.email
     };
+    
+    // sometimes org may not be selected
+    if (user.defaultOrganization) {
+      payload.orgname = user.defaultOrganization.orgname
+    }
+
     return {
       access_token: this.jwtService.sign(payload),
     };
