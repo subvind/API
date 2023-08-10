@@ -80,7 +80,7 @@ export class OrganizationService {
   
     if (search) {
       query.where(
-        'organization.owner = :ownerId',
+        'organization.ownerId = :ownerId',
         { ownerId: user.id }
       );
     }
