@@ -84,6 +84,9 @@ export class UserController {
     let user = await this.userService.findByUsername(username);
     let organization = await this.organizationService.findByOrgname(orgname);
 
+    console.log('setDefaultOrg user', user)
+    console.log('setDefaultOrg organization', organization)
+
     if (!user || !organization) {
       // Throw an exception if user or organization is not found
       throw new NotFoundException('User or organization not found');
@@ -93,9 +96,13 @@ export class UserController {
     let change: any = {
       defaultOrganization: organization.id,
     }
+
+    console.log('setDefaultOrg change', change)
     
     // send changes to database
-    let result: any = await this.userService.update(user.id, change);
+    let result = await this.userService.update(user.id, change);
+
+    console.log('setDefaultOrg result', result)
 
     // resend JWT
     return this.authService.login(result)

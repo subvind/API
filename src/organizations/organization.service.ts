@@ -4,8 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Organization } from './organization.entity';
 
-import { compare } from 'bcrypt';
-
 @Injectable()
 export class OrganizationService {
   constructor(

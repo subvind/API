@@ -15,7 +15,9 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {    
+  async login(user: User) {
+    console.log('login user', user)
+
     // Generate and return a JWT token
     const payload: any = { 
       sub: user.id, 
@@ -28,6 +30,8 @@ export class AuthService {
     if (user.defaultOrganization) {
       payload.orgname = user.defaultOrganization.orgname
     }
+
+    console.log('login payload', payload)
 
     return {
       access_token: this.jwtService.sign(payload),
