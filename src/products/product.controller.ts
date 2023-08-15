@@ -9,8 +9,8 @@ import { NotFoundException } from '@nestjs/common'; // Import the NotFoundExcept
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
-@ApiTags('product')
-@Controller('product')
+@ApiTags('products')
+@Controller('products')
 export class ProductController {
   constructor(
     private readonly productService: ProductService,
