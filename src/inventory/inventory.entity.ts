@@ -9,15 +9,19 @@ import { Location } from '../locations/location.entity';
 import { Product } from '../products/product.entity';
 import { Organization } from '../organizations/organization.entity';
 
+export enum Status {
+  ROOM = 'Room',
+  RACK = 'Rack',
+}
+
 export enum RoomStatus {
   PRODUCT = 'Product',
   CONTAINER = 'Container',
-  RACK = 'Rack',
 }
 
 export enum RackSectionStatus {
   PRODUCT = 'Product',
-  CONTAINER = 'Container'
+  CONTAINER = 'Container',
 }
 
 @Entity()
@@ -37,7 +41,7 @@ export class Inventory {
   @OneToMany(() => Product, product => product.id, { nullable: true })
   products: Product[]
 
-  @ManyToOne(() => Location, location => location.id)
+  @ManyToOne(() => Location, location => location.id, { nullable: true })
   location: Location;
 
   @ApiProperty({ example: 'A', description: 'The name of the building where this product is stocked' })
@@ -47,13 +51,17 @@ export class Inventory {
   @ApiProperty({ example: '1', description: 'The floor number of the building where this product is stocked in the building' })
   @Column()
   floor: number;
+
+  @ApiProperty({ example: 'Rack', description: 'The stocked product\'s status in the room' })
+  @Column({ default: 'Rack' })
+  status: Status;
   
   @ApiProperty({ example: '123', description: 'The name of the room where this product is stocked on the floor' })
   @Column()
   room: string;
 
-  @ApiProperty({ example: 'Product', description: 'The the stocked product\'s status in the room' })
-  @Column()
+  @ApiProperty({ example: 'Product', description: 'The stocked product\'s status in the room' })
+  @Column({ default: 'Product' })
   roomStatus: RoomStatus;
 
   @ApiProperty({ example: 'alpha', description: 'The name of the rack where this product is stocked' })
@@ -69,11 +77,11 @@ export class Inventory {
   rackSection: string;
 
   @ApiProperty({ example: 'Container', description: 'The stocked product\'s status in the rack' })
-  @Column()
+  @Column({ default: 'Product' })
   rackSectionStatus: RackSectionStatus;
 
   @ApiProperty({ example: 'toolbox', description: 'The name of the envelope, box, or bin where this product is stocked' })
-  @Column()
+  @Column({ nullable: true })
   container: string;
 
   /**
