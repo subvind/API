@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 
 import { NodeModule } from './flow/nodes/node.module';
 import { CustomerModule } from './customers/customer.module';
+import { InventoryModule } from './inventory/inventory.module';
 import { OrganizationModule } from './organizations/organization.module';
 import { UserModule } from './users/user.module';
 
@@ -37,6 +38,7 @@ import { UserModule } from './users/user.module';
     AuthModule,
     NodeModule, // flow
     CustomerModule,
+    InventoryModule,
     OrganizationModule,
     UserModule,
   ],
