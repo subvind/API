@@ -18,15 +18,15 @@ export class Product {
   stockKeepingUnit: string;
 
   @ApiProperty({ example: 'https://live.staticflickr.com/65535/53117641720_b5d5c8acfd_o.jpg', description: 'The photo URL of the product to display' })
-  @Column()
+  @Column({ nullable: true })
   photoUrl: string;
 
   @ApiProperty({ example: '', description: 'The flickr album id to display' })
-  @Column()
+  @Column({ nullable: true })
   flickrAlbum: string;
 
   @ApiProperty({ example: '', description: 'The ebay listing id to display' })
-  @Column()
+  @Column({ nullable: true })
   ebayListing: string;
 
   @ManyToOne(() => Inventory, inventory => inventory.id)
