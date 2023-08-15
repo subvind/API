@@ -58,7 +58,12 @@ export class OrganizationService {
   }
 
   async findByOrgname(orgname: string): Promise<Organization> {
-    return this.organizationRepository.findOneBy({ orgname: orgname });
+    return this.organizationRepository.findOne({
+      where: {
+        orgname: orgname,
+      },
+      relations: ['owner']
+    });
   }
 
   async create(organization: Organization): Promise<Organization> {
