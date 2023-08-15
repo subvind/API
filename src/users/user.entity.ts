@@ -11,9 +11,9 @@ import { Organization } from '../organizations/organization.entity';
 
 export enum UserRole {
   ADMIN = 'Admin',
-  Verified = 'Verified',
-  Pending = 'Pending',
-  Guest = 'Guest',
+  VERIFIED = 'Verified',
+  PENDING = 'Pending',
+  GUEST = 'Guest',
 }
 
 @Entity()
@@ -49,7 +49,7 @@ export class User {
   password: string;
 
   @Column({ default: 'Pending' })
-  role: string; // Role can be 'admin', 'employee', etc.
+  role: UserRole; // Role can be 'admin', 'employee', etc.
 
   /**
    * Other properties and relationships as needed

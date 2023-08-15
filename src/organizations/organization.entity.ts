@@ -6,6 +6,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { v4 as uuidv4 } from 'uuid';
 
 import { User } from '../users/user.entity';
+import { Inventory } from '../inventory/inventory.entity';
+import { Location } from '../locations/location.entity';
+import { Product } from '../products/product.entity';
 
 @Entity()
 @Unique(['orgname']) 
@@ -35,6 +38,18 @@ export class Organization {
   // the currectly selected organization by a user
   @OneToMany(() => User, user => user.defaultOrganization, { nullable: true })
   defaultOrganizations: User[]
+
+  // inventory
+  @OneToMany(() => Inventory, inventory => inventory.id, { nullable: true })
+  inventory: Inventory[]
+
+  // locations
+  @OneToMany(() => Location, location => location.id, { nullable: true })
+  locations: Location[]
+
+  // products
+  @OneToMany(() => Product, product => product.id, { nullable: true })
+  products: Product[]
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
