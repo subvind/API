@@ -18,6 +18,7 @@ import { NodeModule } from './flow/nodes/node.module';
 import { CustomerModule } from './customers/customer.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrganizationModule } from './organizations/organization.module';
+import { ProductModule } from './products/product.module';
 import { UserModule } from './users/user.module';
 
 @Module({
@@ -40,6 +41,7 @@ import { UserModule } from './users/user.module';
     CustomerModule,
     InventoryModule,
     OrganizationModule,
+    ProductModule,
     UserModule,
   ],
   controllers: [AppController],
