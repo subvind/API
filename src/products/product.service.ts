@@ -73,7 +73,7 @@ export class ProductService {
     if (search) {
       query.andWhere(
         'product.stockKeepingUnit LIKE :sku',
-        { search: `%${search}%` }
+        { sku: `%${search}%` }
       );
     }
     
