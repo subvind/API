@@ -31,11 +31,11 @@ export class Inventory {
   id: string;
 
   @ApiProperty({ example: '10', description: 'The number of products to keep' })
-  @Column()
+  @Column({ default: '1' })
   stock: number;
 
   @ApiProperty({ example: 'true', description: 'If this stock of inventory can be restored' })
-  @Column()
+  @Column({ default: 'true' })
   isRestockable: boolean;
   
   @OneToMany(() => Product, product => product.id, { nullable: true })
