@@ -1,45 +1,37 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { ApiProperty } from '@nestjs/swagger';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { Inventory } from '../inventory/inventory.entity';
+import { Product } from '../products/product.entity';
 import { Organization } from '../organizations/organization.entity';
-import { Category } from '../categories/category.entity';
 
 @Entity()
 @Unique(['stockKeepingUnit']) 
-export class Product {
+export class Category {
   @PrimaryColumn('uuid')
   id: string;
 
   @ApiProperty({ example: '001', description: 'The SKU that is used to identify this product' })
   @Column()
-  stockKeepingUnit: string;
+  name: string;
 
   @ApiProperty({ example: 'https://live.staticflickr.com/65535/53117641720_b5d5c8acfd_o.jpg', description: 'The photo URL of the product to display' })
   @Column({ nullable: true })
-  photoUrl: string;
+  slug: string;
 
   @ApiProperty({ example: '', description: 'The flickr album id to display' })
   @Column({ nullable: true })
-  flickrAlbum: string;
-
-  @ApiProperty({ example: '', description: 'The ebay listing id to display' })
-  @Column({ nullable: true })
-  ebayListing: string;
-
-  @ManyToOne(() => Inventory, inventory => inventory.id)
-  inventory: Inventory;
+  description: string;
 
   /**
    * Other properties and relationships as needed
    */
 
-  // category
-  @ManyToOne(() => Category, category => category.id)
-  category: Category;
+  // products
+  @OneToMany(() => Product, product => product.category, { nullable: true })
+  products: Product[]
 
   // tenant id
   @ManyToOne(() => Organization, organization => organization.id)
