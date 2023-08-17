@@ -9,9 +9,11 @@ import { User } from '../users/user.entity';
 import { Inventory } from '../inventory/inventory.entity';
 import { Location } from '../locations/location.entity';
 import { Product } from '../products/product.entity';
+import { Category } from 'src/categories/category.entity';
 
 @Entity()
 @Unique(['orgname']) 
+@Unique(['hostname']) 
 export class Organization {
   @PrimaryColumn('uuid')
   id: string;
@@ -23,6 +25,14 @@ export class Organization {
     message: 'Orgname can only contain letters, numbers, and underscores'
   })
   orgname: string;
+
+  @ApiProperty({ example: 'www.brokenrecord.store', description: 'The hostname of the organization' })
+  @Column({ type: 'varchar', length: 256 })
+  @IsNotEmpty()
+  @Matches(/^[a-z0-9.]+$/, {
+    message: 'Orgname can only contain lowercase letters, numbers, and periods'
+  })
+  hostname: string;
 
   @ApiProperty({ example: 'ACME Corp.', description: 'The display name of the organization' })
   @Column()
@@ -50,6 +60,10 @@ export class Organization {
   // products
   @OneToMany(() => Product, product => product.id, { nullable: true })
   products: Product[]
+
+  // categories
+  @OneToMany(() => Category, category => category.id, { nullable: true })
+  categories: Category[]
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

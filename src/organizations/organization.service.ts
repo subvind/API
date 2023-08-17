@@ -66,6 +66,15 @@ export class OrganizationService {
     });
   }
 
+  async findByHostname(hostname: string): Promise<Organization> {
+    return this.organizationRepository.findOne({
+      where: {
+        hostname: hostname,
+      },
+      relations: ['owner']
+    });
+  }
+
   async create(organization: Organization): Promise<Organization> {
     const newObject = this.organizationRepository.create(organization);
     return this.organizationRepository.save(newObject);
