@@ -26,7 +26,7 @@ export class Organization {
   orgname: string;
 
   @ApiProperty({ example: 'www.brokenrecord.store', description: 'The hostname of the organization' })
-  @Column({ type: 'varchar', length: 256 })
+  @Column({ type: 'varchar', length: 256, default: 'asd' })
   @Matches(/^[a-z0-9.]+$/, {
     message: 'Orgname can only contain lowercase letters, numbers, and periods'
   })
