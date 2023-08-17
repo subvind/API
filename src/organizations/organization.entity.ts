@@ -13,7 +13,6 @@ import { Category } from 'src/categories/category.entity';
 
 @Entity()
 @Unique(['orgname']) 
-@Unique(['hostname']) 
 export class Organization {
   @PrimaryColumn('uuid')
   id: string;
@@ -28,7 +27,6 @@ export class Organization {
 
   @ApiProperty({ example: 'www.brokenrecord.store', description: 'The hostname of the organization' })
   @Column({ type: 'varchar', length: 256 })
-  @IsNotEmpty()
   @Matches(/^[a-z0-9.]+$/, {
     message: 'Orgname can only contain lowercase letters, numbers, and periods'
   })
