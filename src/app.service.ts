@@ -13,6 +13,6 @@ export class AppService {
   }
   
   getHello(): string {
-    return 'Hello World!';
+    return '<footer><a href="/api">https://backend.subvind.com/api</a><br /><br /><p style="margin: 0;">backend.subvind.com © 2023.</p> <p style="margin: 0;">powered by <a href="https://subvind.com" class="svelte-8o1gnw">subvind</a></p></footer>';
   }
 }
