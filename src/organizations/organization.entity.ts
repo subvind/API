@@ -37,6 +37,10 @@ export class Organization {
   @Column()
   displayName: string;
 
+  @ApiProperty({ example: 'ACME', description: 'The short name of the organization' })
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  shortName: string;
+
   @ApiProperty({ example: 'Vintage & Antiques', description: 'The description of the organization' })
   @Column({ type: 'varchar', length: 1024, nullable: true })
   description: string;
