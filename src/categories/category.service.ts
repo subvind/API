@@ -78,6 +78,8 @@ export class CategoryService {
     }
     
     query.leftJoinAndSelect('category.products', 'products');
+    query.leftJoinAndSelect('category.parentCategory', 'parentCategory');
+    query.leftJoinAndSelect('category.subCategories', 'subCategories');
   
     const offset = (page - 1) * limit;
     

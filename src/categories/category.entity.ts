@@ -29,6 +29,12 @@ export class Category {
    * Other properties and relationships as needed
    */
 
+  // sub categories
+  @OneToMany(() => Category, category => category.parentCategory, { nullable: true })
+  subCategories: Category[]
+  @ManyToOne(() => Category, category => category.id)
+  parentCategory: Category;
+
   // products
   @OneToMany(() => Product, product => product.category, { nullable: true })
   products: Product[]
