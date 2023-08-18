@@ -44,6 +44,13 @@ export class OrganizationController {
     return await this.organizationService.findByOrgname(orgname);
   }
 
+  @ApiOperation({ summary: 'Get a organization by hostname' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('hostname/:hostname')
+  async findMain(@Param('hostname') orgname: string): Promise<Organization> {
+    return await this.organizationService.findByHostname(orgname);
+  }
+
   @ApiOperation({ summary: 'Create a organization' })
   @ApiBody({ type: Organization })
   @ApiResponse({ status: 201, description: 'Success', type: Organization })
