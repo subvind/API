@@ -7,10 +7,12 @@ import { ProductService } from './product.service';
 
 import { Product } from './product.entity';
 import { OrganizationModule } from '../organizations/organization.module';
+import { CategoryModule } from '../categories/category.module';
 
 @Module({
   imports: [
     OrganizationModule,
+    CategoryModule,
     // forwardRef(() => OrganizationModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [

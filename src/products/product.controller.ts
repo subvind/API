@@ -3,6 +3,7 @@ import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestj
 
 import { ProductService } from './product.service';
 import { OrganizationService } from '../organizations/organization.service';
+import { CategoryService } from '../categories/category.service';
 
 import { Product } from './product.entity';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
@@ -14,6 +15,7 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 export class ProductController {
   constructor(
     private readonly productService: ProductService,
+    private readonly categoryService: CategoryService,
     private readonly organizationService: OrganizationService,
     private readonly amqpConnection: AmqpConnection
   ) {}
@@ -75,6 +77,25 @@ export class ProductController {
     }
 
     const { data, total } = await this.productService.findOrgProduct(organization, page, limit, search);
+    return { data, total };
+  }
+
+  @ApiOperation({ summary: 'Find products related to a category' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('categoryRelated/:id')
+  async findCategoryProduct(
+    @Param('id') categoryId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('search') search?: string,
+  ): Promise<any> {
+    const category = await this.categoryService.findOne(categoryId);
+
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    const { data, total } = await this.productService.findCategoryProduct(category, page, limit, search);
     return { data, total };
   }
 }
