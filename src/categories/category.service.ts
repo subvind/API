@@ -48,6 +48,15 @@ export class CategoryService {
     return this.categoryRepository.findOneBy({ id: id });
   }
 
+  async findBySlug(slug: string): Promise<Category> {
+    return this.categoryRepository.findOne({ 
+      where: {
+        slug: slug
+      },
+      relations: ['parentCategory', 'subCategories', 'products']
+    });
+  }
+
   async create(category: Category): Promise<Category> {
     const newObject = this.categoryRepository.create(category);
     return this.categoryRepository.save(newObject);
