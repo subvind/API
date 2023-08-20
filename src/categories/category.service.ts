@@ -53,7 +53,12 @@ export class CategoryService {
       where: {
         slug: slug
       },
-      relations: ['parentCategory', 'subCategories', 'products']
+      relations: [
+        'parentCategory', 
+        'subCategories', 
+        'products',
+        'organization',
+      ]
     });
   }
 
