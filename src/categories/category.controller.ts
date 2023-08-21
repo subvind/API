@@ -103,4 +103,23 @@ export class CategoryController {
     const { data, total } = await this.categoryService.findOrgCategory(organization, page, limit, search);
     return { data, total };
   }
+
+  @ApiOperation({ summary: 'Find sub categories related to a category' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('categoryRelated/:id')
+  async findSubCategories(
+    @Param('id') categoryId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('search') search?: string,
+  ): Promise<any> {
+    const category = await this.categoryService.findOne(categoryId);
+
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    const { data, total } = await this.categoryService.findSubCategories(category, page, limit, search);
+    return { data, total };
+  }
 }

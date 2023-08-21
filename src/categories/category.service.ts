@@ -102,4 +102,28 @@ export class CategoryService {
   
     return { data, total };
   }
+
+  async findSubCategories(category: Category, page: number, limit: number, search?: string): Promise<{ data: Category[]; total: number }> {
+    const query = this.categoryRepository.createQueryBuilder('category');
+  
+    query.where(
+      'category.parentCategoryId = :categoryId',
+      { categoryId: category.id }
+    );
+
+    if (search) {
+      query.andWhere(
+        'category.name LIKE :name',
+        { name: `%${search}%` }
+      );
+    }
+    
+    query.leftJoinAndSelect('product.organization', 'organization');
+  
+    const offset = (page - 1) * limit;
+    
+    const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
+  
+    return { data, total };
+  }
 }
