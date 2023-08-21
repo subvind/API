@@ -30,8 +30,8 @@ export class CategoryService {
   
     if (search) {
       query.where(
-        'category.name LIKE :sku',
-        { sku: `%${search}%` }
+        'category.name LIKE :name',
+        { name: `%${search}%` }
       );
     }
   
@@ -118,7 +118,10 @@ export class CategoryService {
       );
     }
     
-    query.leftJoinAndSelect('product.organization', 'organization');
+    query.leftJoinAndSelect('category.products', 'products');
+    query.leftJoinAndSelect('category.parentCategory', 'parentCategory');
+    query.leftJoinAndSelect('category.subCategories', 'subCategories');
+    query.leftJoinAndSelect('category.organization', 'organization');
   
     const offset = (page - 1) * limit;
     
