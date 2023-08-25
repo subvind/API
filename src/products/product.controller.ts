@@ -101,7 +101,7 @@ export class ProductController {
 
   @ApiOperation({ summary: 'Find the latest products related to an organization' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Get('latestoOrgRelated/:id')
+  @Get('latestOrgRelated/:id')
   async findLatestOrgProduct(
     @Param('id') organizationId: string,
     @Query('page') page: number = 1,
