@@ -98,4 +98,23 @@ export class ProductController {
     const { data, total } = await this.productService.findCategoryProduct(category, page, limit, search);
     return { data, total };
   }
+
+  @ApiOperation({ summary: 'Find the latest products related to an organization' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('latestoOrgRelated/:id')
+  async findLatestOrgProduct(
+    @Param('id') organizationId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('search') search?: string,
+  ): Promise<any> {
+    const organization = await this.organizationService.findOne(organizationId);
+
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
+
+    const { data, total } = await this.productService.findLatestOrgProduct(organization, page, limit, search);
+    return { data, total };
+  }
 }

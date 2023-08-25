@@ -110,4 +110,31 @@ export class ProductService {
   
     return { data, total };
   }
+
+  async findLatestOrgProduct(organization: Organization, page: number, limit: number, search?: string): Promise<{ data: Product[]; total: number }> {
+    const query = this.productRepository.createQueryBuilder('product');
+  
+    query.where(
+      'product.organizationId = :tenantId',
+      { tenantId: organization.id }
+    );
+
+    if (search) {
+      query.andWhere(
+        'product.stockKeepingUnit LIKE :sku',
+        { sku: `%${search}%` }
+      );
+    }
+    
+    query.leftJoinAndSelect('product.organization', 'organization');
+
+    // Add orderBy clause to order by createdAt in descending order
+    query.orderBy('product.createdAt', 'DESC');
+  
+    const offset = (page - 1) * limit;
+    
+    const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
+  
+    return { data, total };
+  }
 }
