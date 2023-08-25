@@ -25,7 +25,7 @@ export enum RackSectionStatus {
 }
 
 @Entity()
-@Unique(['building', 'floor', 'room', 'rack', 'rackLevel', 'rackSection', 'container'])
+@Unique(['building', 'floor', 'room', 'rack', 'rackLevel', 'rackSection', 'container', 'organization'])
 export class Inventory {
   @PrimaryColumn('uuid')
   id: string;

@@ -6,8 +6,7 @@ import { Inventory } from '../inventory/inventory.entity';
 import { Organization } from '../organizations/organization.entity';
 
 @Entity()
-@Unique(['name'])
-@Unique(['address'])
+@Unique(['address', 'organization'])
 export class Location {
   @PrimaryColumn('uuid')
   id: string;

@@ -9,7 +9,7 @@ import { Organization } from '../organizations/organization.entity';
 import { Category } from '../categories/category.entity';
 
 @Entity()
-@Unique(['stockKeepingUnit']) 
+@Unique(['stockKeepingUnit', 'organization']) 
 export class Product {
   @PrimaryColumn('uuid')
   id: string;

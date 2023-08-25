@@ -8,7 +8,7 @@ import { Product } from '../products/product.entity';
 import { Organization } from '../organizations/organization.entity';
 
 @Entity()
-@Unique(['slug']) 
+@Unique(['slug', 'organization']) 
 export class Category {
   @PrimaryColumn('uuid')
   id: string;
