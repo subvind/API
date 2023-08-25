@@ -48,6 +48,14 @@ export class Organization {
   @ApiProperty({ example: 'Vintage & Antiques', description: 'The display name of the categories name' })
   @Column({ type: 'varchar', length: 24, default: 'Categories' })
   categoriesName: string;
+  
+  @ApiProperty({ example: 'brokenrecord.store', description: 'The ebay usr of the organization' })
+  @Column({ nullable: true })
+  ebayUser: string;
+
+  @ApiProperty({ example: 'brokenrecord.store', description: 'The etsy usr of the organization' })
+  @Column({ nullable: true })
+  etsyUser: string;
 
   /**
    * Other properties and relationships as needed
