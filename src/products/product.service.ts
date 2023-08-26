@@ -49,6 +49,21 @@ export class ProductService {
     return this.productRepository.findOneBy({ id: id });
   }
 
+  async findBySKU(sku: string, organizationId: string): Promise<Product> {
+    return this.productRepository.findOne({ 
+      where: {
+        stockKeepingUnit: sku,
+        organization: {
+          id: organizationId
+        }
+      },
+      relations: [
+        'category',
+        'organization',
+      ]
+    });
+  }
+
   async create(product: Product): Promise<Product> {
     const newObject = this.productRepository.create(product);
     return this.productRepository.save(newObject);

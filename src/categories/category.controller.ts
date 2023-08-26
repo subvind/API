@@ -39,9 +39,9 @@ export class CategoryController {
 
   @ApiOperation({ summary: 'Get a category by URL slug' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Get('slug/:slug')
-  async findSingle(@Param('slug') slug: string): Promise<Category> {
-    return this.categoryService.findBySlug(slug);
+  @Get('slug/:slug/:organizationId')
+  async findSingle(@Param('slug') slug: string, @Param('organizationId') organizationId: string): Promise<Category> {
+    return this.categoryService.findBySlug(slug, organizationId);
   }
 
   @ApiOperation({ summary: 'Create a category' })

@@ -39,6 +39,13 @@ export class ProductController {
     return this.productService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Get a product by SKU' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('sku/:sku/:organizationId')
+  async findSingle(@Param('sku') sku: string, @Param('organizationId') organizationId: string): Promise<Product> {
+    return this.productService.findBySKU(sku, organizationId);
+  }
+
   @ApiOperation({ summary: 'Create a product' })
   @ApiBody({ type: Product })
   @ApiResponse({ status: 201, description: 'Success', type: Product })
