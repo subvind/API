@@ -102,7 +102,7 @@ export class ProductService {
     return { data, total };
   }
 
-  async findCategoryProduct(category: Category, page: number, limit: number, search?: string): Promise<{ data: Product[]; total: number }> {
+  async findCategoryProduct(category: Category, page: number, limit: number, search?: string, type?: string): Promise<{ data: Product[]; total: number }> {
     const query = this.productRepository.createQueryBuilder('product');
   
     query.where(
@@ -118,6 +118,21 @@ export class ProductService {
     }
     
     query.leftJoinAndSelect('product.organization', 'organization');
+
+    if (type === 'Archive') {
+      query.andWhere('product.isArchive = :isArchive', { isArchive: true });
+    } else {
+      query.andWhere('product.isArchive = :isArchive', { isArchive: false });
+    }
+    
+    if (type === 'PriceLowToHigh') {
+      query.orderBy('product.price', 'ASC');
+    } else if (type === 'PriceHighToLow') {
+      query.orderBy('product.price', 'DESC');
+    } else {
+      // LatestProducts
+      query.orderBy('product.createdAt', 'DESC');
+    }
   
     const offset = (page - 1) * limit;
     
@@ -126,7 +141,7 @@ export class ProductService {
     return { data, total };
   }
 
-  async findLatestOrgProduct(organization: Organization, page: number, limit: number, search?: string): Promise<{ data: Product[]; total: number }> {
+  async findLatestOrgProduct(organization: Organization, page: number, limit: number, search?: string, type?: string): Promise<{ data: Product[]; total: number }> {
     const query = this.productRepository.createQueryBuilder('product');
   
     query.where(
@@ -142,6 +157,12 @@ export class ProductService {
     }
     
     query.leftJoinAndSelect('product.organization', 'organization');
+
+    if (type === 'Archive') {
+      query.andWhere('product.isArchive = :isArchive', { isArchive: true });
+    } else {
+      query.andWhere('product.isArchive = :isArchive', { isArchive: false });
+    }
 
     // Add orderBy clause to order by createdAt in descending order
     query.orderBy('product.createdAt', 'DESC');

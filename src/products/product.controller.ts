@@ -95,6 +95,7 @@ export class ProductController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('search') search?: string,
+    @Query('type') type?: string,
   ): Promise<any> {
     const category = await this.categoryService.findOne(categoryId);
 
@@ -102,7 +103,7 @@ export class ProductController {
       throw new NotFoundException('Category not found');
     }
 
-    const { data, total } = await this.productService.findCategoryProduct(category, page, limit, search);
+    const { data, total } = await this.productService.findCategoryProduct(category, page, limit, search, type);
     return { data, total };
   }
 
@@ -114,6 +115,7 @@ export class ProductController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('search') search?: string,
+    @Query('type') type?: string,
   ): Promise<any> {
     const organization = await this.organizationService.findOne(organizationId);
 
@@ -121,7 +123,7 @@ export class ProductController {
       throw new NotFoundException('Organization not found');
     }
 
-    const { data, total } = await this.productService.findLatestOrgProduct(organization, page, limit, search);
+    const { data, total } = await this.productService.findLatestOrgProduct(organization, page, limit, search, type);
     return { data, total };
   }
 }
