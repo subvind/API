@@ -31,8 +31,8 @@ export class ProductService {
   
     if (search) {
       query.where(
-        'product.stockKeepingUnit LIKE :sku',
-        { sku: `%${search}%` }
+        '(product.stockKeepingUnit LIKE :search OR product.name LIKE :search OR product.description LIKE :search OR product.detail LIKE :search)',
+        { search: `%${search}%` }
       );
     }
   
@@ -88,8 +88,8 @@ export class ProductService {
 
     if (search) {
       query.andWhere(
-        'product.stockKeepingUnit LIKE :sku',
-        { sku: `%${search}%` }
+        '(product.stockKeepingUnit LIKE :search OR product.name LIKE :search OR product.description LIKE :search OR product.detail LIKE :search)',
+        { search: `%${search}%` }
       );
     }
     
@@ -112,8 +112,8 @@ export class ProductService {
 
     if (search) {
       query.andWhere(
-        'product.stockKeepingUnit LIKE :sku',
-        { sku: `%${search}%` }
+        '(product.stockKeepingUnit LIKE :search OR product.name LIKE :search OR product.description LIKE :search OR product.detail LIKE :search)',
+        { search: `%${search}%` }
       );
     }
     
@@ -151,8 +151,8 @@ export class ProductService {
 
     if (search) {
       query.andWhere(
-        'product.stockKeepingUnit LIKE :sku',
-        { sku: `%${search}%` }
+        '(product.stockKeepingUnit LIKE :search OR product.name LIKE :search OR product.description LIKE :search OR product.detail LIKE :search)',
+        { search: `%${search}%` }
       );
     }
     
