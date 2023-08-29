@@ -24,9 +24,13 @@ export class Product {
   @Column({ default: 'my product' })
   name: string;
 
-  @ApiProperty({ example: '', description: 'The description of the product' })
+  @ApiProperty({ example: '', description: 'The short description about the product' })
   @Column({ nullable: true })
   description: string;
+
+  @ApiProperty({ example: '', description: 'The long detail about the product' })
+  @Column({ nullable: true })
+  detail: string;
 
   @ApiProperty({ example: 'something.jpg', description: 'The photo id of a photo in the bucket' })
   @Column({ nullable: true })
