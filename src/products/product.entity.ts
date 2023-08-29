@@ -1,5 +1,7 @@
 import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Generated } from 'typeorm';
 
+import { Expose } from 'class-transformer';
+
 import { ApiProperty } from '@nestjs/swagger';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -53,12 +55,10 @@ export class Product {
   @Column({ default: 500 })
   shippingCost: number;
 
-  @Column({
-    type: 'integer',
-    generatedType: 'STORED',
-    asExpression: `"price" + "shippingCost"`
-  })
-  totalAmount: number;
+  @Expose()
+  public get totalAmount() {
+    return this.price + this.shippingCost;
+  }
 
   /**
    * Other properties and relationships as needed
