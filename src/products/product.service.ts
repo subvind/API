@@ -36,6 +36,7 @@ export class ProductService {
       );
     }
   
+    query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
     
     const offset = (page - 1) * limit;
@@ -93,6 +94,7 @@ export class ProductService {
       );
     }
     
+    query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
   
     const offset = (page - 1) * limit;
@@ -117,6 +119,7 @@ export class ProductService {
       );
     }
     
+    query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
 
     if (type === 'Archive') {
@@ -156,6 +159,7 @@ export class ProductService {
       );
     }
     
+    query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
 
     if (type === 'Archive') {

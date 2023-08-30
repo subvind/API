@@ -1,6 +1,4 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Generated } from 'typeorm';
-
-import { Expose } from 'class-transformer';
+import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -58,11 +56,6 @@ export class Product {
   @ApiProperty({ example: '500', description: 'The shipping cost of this product in pennies.' })
   @Column({ default: 500 })
   shippingCost: number;
-
-  @Expose()
-  public get totalAmount() {
-    return this.price + this.shippingCost;
-  }
 
   /**
    * Other properties and relationships as needed
