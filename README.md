@@ -12,7 +12,6 @@ part of ecosystem...
 - [server :: backend :: subvind/isisis](https://github.com/subvind/isisis)
 - [client :: frontend :: subvind/autoide](https://github.com/subvind/autoide)
 
-
 ### deploy to railwap.app
 To deploy a NestJS app to Railway.app, you can follow these steps:
 
@@ -54,11 +53,7 @@ railway up
 Access Your Deployed App:
 After the deployment is successful, Railway.app will provide you with a unique URL where your NestJS app is hosted. You can use this URL to access your deployed application.
 
-
-
-
 ### deploy locally
-
 installing rabbitmq...
 https://www.rabbitmq.com/install-homebrew.html
 
