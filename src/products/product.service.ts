@@ -38,6 +38,8 @@ export class ProductService {
   
     query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
+    query.leftJoinAndSelect('product.bucket', 'bucket');
+    query.leftJoinAndSelect('product.coverPhoto', 'coverPhoto');
     
     const offset = (page - 1) * limit;
   
@@ -61,6 +63,8 @@ export class ProductService {
       relations: [
         'category',
         'organization',
+        'bucket',
+        'coverPhoto'
       ]
     });
   }
@@ -96,6 +100,8 @@ export class ProductService {
     
     query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
+    query.leftJoinAndSelect('product.bucket', 'bucket');
+    query.leftJoinAndSelect('product.coverPhoto', 'coverPhoto');
   
     const offset = (page - 1) * limit;
     
@@ -121,6 +127,8 @@ export class ProductService {
     
     query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
+    query.leftJoinAndSelect('product.bucket', 'bucket');
+    query.leftJoinAndSelect('product.coverPhoto', 'coverPhoto');
 
     if (type === 'Archive') {
       query.andWhere('product.isArchive = :isArchive', { isArchive: true });
@@ -161,6 +169,8 @@ export class ProductService {
     
     query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
+    query.leftJoinAndSelect('product.bucket', 'bucket');
+    query.leftJoinAndSelect('product.coverPhoto', 'coverPhoto');
 
     if (type === 'Archive') {
       query.andWhere('product.isArchive = :isArchive', { isArchive: true });
