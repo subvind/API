@@ -47,20 +47,22 @@ export class FileService {
     try {
       // Check if the bucket exists, and if not, create it
       const bucketExists = await s3.headBucket({ Bucket: bucketName }).promise();
-      
-      if (!bucketExists) {
-        console.log(`Bucket ${bucketName} does not exist.`);
-        console.log(`Creating bucket in region ${bucketRegion}`);
-        await s3.createBucket({ 
-          Bucket: bucketName,
-          CreateBucketConfiguration: {
-            LocationConstraint: bucketRegion,
-          },
-        }).promise();
-        
-        console.log(`Bucket ${bucketName} created successfully.`);
-      }
+      console.log('bucketExists', bucketExists)
+    } catch (error) {
+      console.log('bucketExists', error);
+      console.log(`Bucket ${bucketName} does not exist.`);
+      console.log(`Creating bucket in region ${bucketRegion}`);
+      await s3.createBucket({ 
+        Bucket: bucketName,
+        CreateBucketConfiguration: {
+          LocationConstraint: bucketRegion,
+        },
+      }).promise();
 
+      console.log(`Bucket ${bucketName} created successfully.`);
+    }
+
+    try {
       // Upload the file to S3
       await s3.upload(s3Params).promise();
 
