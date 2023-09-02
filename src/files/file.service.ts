@@ -49,12 +49,16 @@ export class FileService {
       const bucketExists = await s3.headBucket({ Bucket: bucketName }).promise();
       
       if (!bucketExists) {
+        console.log(`Bucket ${bucketName} does not exist.`);
+        console.log(`Creating bucket in region ${bucketRegion}`);
         await s3.createBucket({ 
           Bucket: bucketName,
           CreateBucketConfiguration: {
             LocationConstraint: bucketRegion,
           },
         }).promise();
+        
+        console.log(`Bucket ${bucketName} created successfully.`);
       }
 
       // Upload the file to S3
