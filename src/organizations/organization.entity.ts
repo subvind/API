@@ -9,7 +9,9 @@ import { User } from '../users/user.entity';
 import { Inventory } from '../inventory/inventory.entity';
 import { Location } from '../locations/location.entity';
 import { Product } from '../products/product.entity';
-import { Category } from 'src/categories/category.entity';
+import { Category } from '../categories/category.entity';
+import { Bucket } from '../buckets/bucket.entity';
+import { File } from '../files/file.entity';
 
 @Entity()
 @Unique(['orgname']) 
@@ -83,6 +85,14 @@ export class Organization {
   // categories
   @OneToMany(() => Category, category => category.id, { nullable: true })
   categories: Category[]
+
+  // buckets
+  @OneToMany(() => Bucket, bucket => bucket.id, { nullable: true })
+  buckets: Bucket[]
+
+  // files
+  @OneToMany(() => File, file => file.id, { nullable: true })
+  files: File[]
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

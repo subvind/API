@@ -15,8 +15,10 @@ import { JwtAuthModule } from './auth/jwt.module';
 import { AuthModule } from './auth/auth.module';
 
 import { NodeModule } from './flow/nodes/node.module';
+import { BucketModule } from './buckets/bucket.module';
 import { CategoryModule } from './categories/category.module';
 import { CustomerModule } from './customers/customer.module';
+import { FileModule } from './files/file.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrganizationModule } from './organizations/organization.module';
 import { ProductModule } from './products/product.module';
@@ -39,8 +41,10 @@ import { UserModule } from './users/user.module';
     JwtAuthModule,
     AuthModule,
     NodeModule, // flow
+    BucketModule,
     CategoryModule,
     CustomerModule,
+    FileModule,
     InventoryModule,
     OrganizationModule,
     ProductModule,
