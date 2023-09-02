@@ -36,6 +36,7 @@ export class OrganizationService {
     }
   
     query.leftJoinAndSelect('organization.owner', 'owner');
+    query.leftJoinAndSelect('organization.orgPhoto', 'orgPhoto');
     
     query.addSelect([
       'owner.id',
@@ -58,7 +59,10 @@ export class OrganizationService {
       where: {
         id: id
       },
-      relations: ['owner']
+      relations: [
+        'owner',
+        'orgPhoto'
+      ]
     });
   }
 
@@ -67,7 +71,10 @@ export class OrganizationService {
       where: {
         orgname: orgname,
       },
-      relations: ['owner']
+      relations: [
+        'owner',
+        'orgPhoto'
+      ]
     });
   }
 
@@ -76,7 +83,10 @@ export class OrganizationService {
       where: {
         hostname: hostname,
       },
-      relations: ['owner']
+      relations: [
+        'owner',
+        'orgPhoto'
+      ]
     });
   }
 
@@ -108,6 +118,8 @@ export class OrganizationService {
         { search: `%${search}%` }
       );
     }
+
+    query.leftJoinAndSelect('organization.orgPhoto', 'orgPhoto');
   
     const offset = (page - 1) * limit;
     
