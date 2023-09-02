@@ -41,6 +41,7 @@ export class FileService {
       Bucket: bucketName,
       Key: filename,
       Body: fileBuffer,
+      ACL: 'public-read', // Set ACL to make the object publicly readable
     };
 
     try {
@@ -60,31 +61,6 @@ export class FileService {
 
       console.log(`Bucket ${bucketName} created successfully.`);
     }
-
-    let policy: any = {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Sid": "PublicReadGetObject",
-          "Effect": "Allow",
-          "Principal": "*",
-          "Action": "s3:GetObject",
-          "Resource": `arn:aws:s3:::${bucketName}/*`
-        }
-      ]
-    }
-
-    // try {
-    //   // make sure bucket policy is set for ACL
-    //   await s3.putBucketPolicy({
-    //     Bucket: bucketName,
-    //     Policy: JSON.stringify(policy),
-    //   }).promise();
-    //   console.log(`Bucket policy set successfully for bucket: ${bucketName}`);
-    // } catch (error) {
-    //   console.error(`Error setting bucket policy for bucket: ${bucketName}`, error);
-    //   throw error; // Handle the error as needed
-    // }
 
     try {
       // Upload the file to S3
