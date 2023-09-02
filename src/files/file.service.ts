@@ -39,9 +39,17 @@ export class FileService {
       Bucket: bucketName,
       Key: filename,
       Body: fileBuffer,
+      ACL: 'public-read', // Set ACL to make objects public
     };
 
     try {
+      // Check if the bucket exists, and if not, create it
+      const bucketExists = await s3.headBucket({ Bucket: bucketName }).promise();
+      
+      if (!bucketExists) {
+        await s3.createBucket({ Bucket: bucketName }).promise();
+      }
+
       // Upload the file to S3
       await s3.upload(s3Params).promise();
 
