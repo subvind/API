@@ -6,7 +6,7 @@ import { File } from './file.entity';
 import { Organization } from '../organizations/organization.entity';
 import { Bucket } from '../buckets/bucket.entity';
 
-import * as Minio from 'minio';
+import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class FileService {
@@ -28,31 +28,39 @@ export class FileService {
     return 'Hello World!';
   }
 
-  async uploadFileToMinio(fileBuffer: Buffer, filename: string, bucket: Bucket, organization: Organization): Promise<File> {
-    const minioClient = new Minio.Client({
-      endPoint: process.env.MINIO_HOST, // Replace with your MinIO host
-      port: 9000, // Replace with your MinIO port
-      useSSL: true, // Set to true if you're using SSL
-      accessKey: process.env.MINIO_ACCESS_KEY, // Replace with your MinIO access key
-      secretKey: process.env.MINIO_SECRET_KEY, // Replace with your MinIO secret key
+  async uploadFileToMinio(fileBuffer: Buffer, filename: string, bucket: Bucket, organization: Organization): Promise<File> {    
+    const s3 = new AWS.S3({
+      accessKeyId: process.env.AWS_ACCESS_KEY, // Replace with your AWS access key
+      secretAccessKey: process.env.AWS_SECRET_KEY, // Replace with your AWS secret key
     });
 
-    let bucketName = `${organization.orgname}.${bucket.name}`
-    await minioClient.makeBucket(bucketName, 'us-east-1'); // Replace with your desired region
-    await minioClient.putObject(bucketName, filename, fileBuffer);
+    const bucketName = `${organization.orgname}.${bucket.name}`;
+    const s3Params = {
+      Bucket: bucketName,
+      Key: filename,
+      Body: fileBuffer,
+    };
 
-    // Save the file information to the database
-    const file = this.fileRepository.create({ 
-      filename, 
-      bucket: {
-        id: bucket.id
-      },
-      organization: {
-        id: organization.id
-      }
-    });
+    try {
+      // Upload the file to S3
+      await s3.upload(s3Params).promise();
 
-    return this.fileRepository.save(file);
+      // Save the file information to the database
+      const file = this.fileRepository.create({ 
+        filename, 
+        bucket: {
+          id: bucket.id
+        },
+        organization: {
+          id: organization.id
+        }
+      });
+
+      return this.fileRepository.save(file);
+    } catch (error) {
+      // Handle the error, e.g., log it or throw an exception
+      throw new Error(`Error uploading file to S3: ${error.message}`);
+    }
   }
 
   async findAll(page: number, limit: number, search?: string): Promise<{ data: File[]; total: number }> {
