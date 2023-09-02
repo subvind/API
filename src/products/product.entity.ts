@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Inventory } from '../inventory/inventory.entity';
 import { Organization } from '../organizations/organization.entity';
 import { Category } from '../categories/category.entity';
+import { Bucket } from '../buckets/bucket.entity';
+import { File } from '../files/file.entity';
 
 @Entity()
 @Unique(['stockKeepingUnit', 'organization']) 
@@ -30,13 +32,11 @@ export class Product {
   @Column({ nullable: true })
   detail: string;
 
-  @ApiProperty({ example: 'something.jpg', description: 'The photo id of a photo in the bucket' })
-  @Column({ nullable: true })
-  coverPhoto: string;
+  @ManyToOne(() => File, file => file.id)
+  coverPhoto: File;
 
-  @ApiProperty({ example: '', description: 'The bucket where photos are stored' })
-  @Column({ nullable: true })
-  bucket: string;
+  @ManyToOne(() => Bucket, bucket => bucket.id)
+  bucket: Bucket;
 
   @ApiProperty({ example: '', description: 'The ebay listing id to display' })
   @Column({ nullable: true })

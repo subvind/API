@@ -21,7 +21,7 @@ export class SalesOrder {
    * Other properties and relationships as needed
    */
 
-  @OneToMany(() => SalesOrderItem, (item) => item.order)
+  @OneToMany(() => SalesOrderItem, (item) => item.order, { nullable: true })
   items: SalesOrderItem[];
 
   @BeforeInsert()

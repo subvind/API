@@ -59,6 +59,9 @@ export class Organization {
   @Column({ nullable: true })
   etsyUser: string;
 
+  @ManyToOne(() => File, file => file.id)
+  orgPhoto: File;
+
   /**
    * Other properties and relationships as needed
    */
@@ -71,27 +74,27 @@ export class Organization {
   defaultOrganizations: User[]
 
   // inventory
-  @OneToMany(() => Inventory, inventory => inventory.id, { nullable: true })
+  @OneToMany(() => Inventory, inventory => inventory.organization, { nullable: true })
   inventory: Inventory[]
 
   // locations
-  @OneToMany(() => Location, location => location.id, { nullable: true })
+  @OneToMany(() => Location, location => location.organization, { nullable: true })
   locations: Location[]
 
   // products
-  @OneToMany(() => Product, product => product.id, { nullable: true })
+  @OneToMany(() => Product, product => product.organization, { nullable: true })
   products: Product[]
 
   // categories
-  @OneToMany(() => Category, category => category.id, { nullable: true })
+  @OneToMany(() => Category, category => category.organization, { nullable: true })
   categories: Category[]
 
   // buckets
-  @OneToMany(() => Bucket, bucket => bucket.id, { nullable: true })
+  @OneToMany(() => Bucket, bucket => bucket.organization, { nullable: true })
   buckets: Bucket[]
 
   // files
-  @OneToMany(() => File, file => file.id, { nullable: true })
+  @OneToMany(() => File, file => file.organization, { nullable: true })
   files: File[]
 
   @CreateDateColumn({ type: 'timestamp' })

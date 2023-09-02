@@ -22,7 +22,7 @@ export class Location {
    */
 
   // one location to many products in stock
-  @OneToMany(() => Inventory, inventory => inventory.id, { nullable: true })
+  @OneToMany(() => Inventory, inventory => inventory.location, { nullable: true })
   inventory: Inventory[]
 
   // tenant id
