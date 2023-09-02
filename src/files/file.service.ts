@@ -32,6 +32,7 @@ export class FileService {
     const s3 = new AWS.S3({
       accessKeyId: process.env.AWS_ACCESS_KEY, // Replace with your AWS access key
       secretAccessKey: process.env.AWS_SECRET_KEY, // Replace with your AWS secret key
+      region: 'us-east-1', // Replace with your desired AWS region
     });
 
     const bucketName = `${organization.orgname}.${bucket.name}`;
