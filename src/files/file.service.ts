@@ -6,6 +6,8 @@ import { File } from './file.entity';
 import { Organization } from '../organizations/organization.entity';
 import { Bucket } from '../buckets/bucket.entity';
 
+import * as Minio from 'minio';
+
 @Injectable()
 export class FileService {
   constructor(
@@ -25,7 +27,34 @@ export class FileService {
   getHello(): string {
     return 'Hello World!';
   }
-  
+
+  async uploadFileToMinio(fileBuffer: Buffer, filename: string, bucket: Bucket, organization: Organization): Promise<File> {
+    const minioClient = new Minio.Client({
+      endPoint: process.env.MINIO_HOST, // Replace with your MinIO host
+      port: 80, // Replace with your MinIO port
+      useSSL: true, // Set to true if you're using SSL
+      accessKey: process.env.MINIO_ACCESS_KEY, // Replace with your MinIO access key
+      secretKey: process.env.MINIO_SECRET_KEY, // Replace with your MinIO secret key
+    });
+
+    let bucketName = `${organization.id}.${bucket.id}`
+    await minioClient.makeBucket(bucketName, 'us-east-1'); // Replace with your desired region
+    await minioClient.putObject(bucketName, filename, fileBuffer);
+
+    // Save the file information to the database
+    const file = this.fileRepository.create({ 
+      filename, 
+      bucket: {
+        id: bucket.id
+      },
+      organization: {
+        id: organization.id
+      }
+    });
+
+    return this.fileRepository.save(file);
+  }
+
   async findAll(page: number, limit: number, search?: string): Promise<{ data: File[]; total: number }> {
     const query = this.fileRepository.createQueryBuilder('file');
   

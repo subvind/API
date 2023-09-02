@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 
 import { FileService } from './file.service';
 import { OrganizationService } from '../organizations/organization.service';
@@ -7,6 +7,7 @@ import { BucketService } from '../buckets/bucket.service';
 
 import { File } from './file.entity';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
@@ -19,6 +20,20 @@ export class FileController {
     private readonly organizationService: OrganizationService,
     private readonly amqpConnection: AmqpConnection
   ) {}
+
+  @ApiOperation({ summary: 'Upload a file' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Post('upload/:bucketId/:organizationId')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@UploadedFile() file: Express.Multer.File, @Param('bucketId') bucketId: string, @Param('organizationId') organizationId: string): Promise<File> {
+    const buffer = file.buffer;
+    const filename = file.originalname;
+
+    let organization = await this.organizationService.findOne(organizationId);
+    let bucket = await this.bucketService.findOne(bucketId);
+    
+    return this.fileService.uploadFileToMinio(buffer, filename, bucket, organization);
+  }
 
   @ApiOperation({ summary: 'Get all files' })
   @ApiResponse({ status: 200, description: 'Success' })
