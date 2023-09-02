@@ -78,7 +78,7 @@ export class FileService {
       // make sure bucket policy is set for ACL
       await s3.putBucketPolicy({
         Bucket: bucketName,
-        Policy: policy,
+        Policy: JSON.stringify(policy),
       }).promise();
       console.log(`Bucket policy set successfully for bucket: ${bucketName}`);
     } catch (error) {
