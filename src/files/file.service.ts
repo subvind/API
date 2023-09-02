@@ -41,7 +41,6 @@ export class FileService {
       Bucket: bucketName,
       Key: filename,
       Body: fileBuffer,
-      ACL: 'public-read', // Set ACL to make the object publicly readable
     };
 
     try {
@@ -60,6 +59,23 @@ export class FileService {
       }).promise();
 
       console.log(`Bucket ${bucketName} created successfully.`);
+    }
+
+    const params = {
+      Bucket: bucketName,
+      PublicAccessBlockConfiguration: {
+        BlockPublicAcls: false, // Disable "Block all public access"
+        IgnorePublicAcls: false, // Enable ACLs
+      },
+    };
+
+    try {
+      // enable public access
+      await s3.putPublicAccessBlock(params).promise();
+      console.log(`Bucket configuration updated for: ${bucketName}`);
+    } catch (error) {
+      console.error(`Error configuring bucket: ${bucketName}`, error);
+      throw error; // Handle the error as needed
     }
 
     try {
