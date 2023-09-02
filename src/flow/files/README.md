@@ -1,1 +1,0 @@
-git repositories or projects

@@ -14,7 +14,6 @@ import { TypeOrmExceptionFilter } from './typeorm-exception.filter';
 import { JwtAuthModule } from './auth/jwt.module';
 import { AuthModule } from './auth/auth.module';
 
-import { NodeModule } from './flow/nodes/node.module';
 import { BucketModule } from './buckets/bucket.module';
 import { CategoryModule } from './categories/category.module';
 import { CustomerModule } from './customers/customer.module';
@@ -40,7 +39,6 @@ import { UserModule } from './users/user.module';
     TypeOrmModule.forRoot(config),
     JwtAuthModule,
     AuthModule,
-    NodeModule, // flow
     BucketModule,
     CategoryModule,
     CustomerModule,
