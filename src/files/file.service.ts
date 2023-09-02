@@ -37,7 +37,7 @@ export class FileService {
       secretKey: process.env.MINIO_SECRET_KEY, // Replace with your MinIO secret key
     });
 
-    let bucketName = `${organization.id}.${bucket.id}`
+    let bucketName = `${organization.orgname}.${bucket.name}`
     await minioClient.makeBucket(bucketName, 'us-east-1'); // Replace with your desired region
     await minioClient.putObject(bucketName, filename, fileBuffer);
 
