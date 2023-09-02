@@ -29,7 +29,7 @@ export class FileService {
   }
 
   async uploadFileToMinio(fileBuffer: Buffer, filename: string, bucket: Bucket, organization: Organization): Promise<File> {    
-    const bucketRegion = 'us-east-1';  // Replace with your AWS region
+    const bucketRegion = 'us-east-2';  // Replace with your AWS region
     const s3 = new AWS.S3({
       accessKeyId: process.env.AWS_ACCESS_KEY,
       secretAccessKey: process.env.AWS_SECRET_KEY,
