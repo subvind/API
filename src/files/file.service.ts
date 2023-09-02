@@ -90,24 +90,24 @@ export class FileService {
       // Upload the file to S3
       await s3.upload(s3Params).promise();
       console.log(`Success uploading file to S3: ${bucketName}`);
-
-      // Save the file information to the database
-      const file = this.fileRepository.create({ 
-        filename, 
-        bucket: {
-          id: bucket.id
-        },
-        organization: {
-          id: organization.id
-        }
-      });
-
-      return this.fileRepository.save(file);
     } catch (error) {
       // Handle the error, e.g., log it or throw an exception
       console.error('Error uploading file to S3:', error);
       throw new Error(`Error uploading file to S3: ${error.message}`);
     }
+
+    // Save the file information to the database
+    const file = this.fileRepository.create({ 
+      filename, 
+      bucket: {
+        id: bucket.id
+      },
+      organization: {
+        id: organization.id
+      }
+    });
+
+    return this.fileRepository.save(file);
   }
 
   async findAll(page: number, limit: number, search?: string): Promise<{ data: File[]; total: number }> {
