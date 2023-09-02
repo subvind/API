@@ -61,7 +61,8 @@ export class OrganizationService {
       },
       relations: [
         'owner',
-        'orgPhoto'
+        'orgPhoto',
+        'orgPhoto.bucket',
       ]
     });
   }
@@ -73,7 +74,8 @@ export class OrganizationService {
       },
       relations: [
         'owner',
-        'orgPhoto'
+        'orgPhoto',
+        'orgPhoto.bucket',
       ]
     });
   }
@@ -85,7 +87,8 @@ export class OrganizationService {
       },
       relations: [
         'owner',
-        'orgPhoto'
+        'orgPhoto',
+        'orgPhoto.bucket',
       ]
     });
   }
@@ -120,6 +123,7 @@ export class OrganizationService {
     }
 
     query.leftJoinAndSelect('organization.orgPhoto', 'orgPhoto');
+    query.leftJoinAndSelect('orgPhoto.bucket', 'bucket');
   
     const offset = (page - 1) * limit;
     
