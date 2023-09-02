@@ -74,17 +74,17 @@ export class FileService {
       ]
     }
 
-    try {
-      // make sure bucket policy is set for ACL
-      await s3.putBucketPolicy({
-        Bucket: bucketName,
-        Policy: JSON.stringify(policy),
-      }).promise();
-      console.log(`Bucket policy set successfully for bucket: ${bucketName}`);
-    } catch (error) {
-      console.error(`Error setting bucket policy for bucket: ${bucketName}`, error);
-      throw error; // Handle the error as needed
-    }
+    // try {
+    //   // make sure bucket policy is set for ACL
+    //   await s3.putBucketPolicy({
+    //     Bucket: bucketName,
+    //     Policy: JSON.stringify(policy),
+    //   }).promise();
+    //   console.log(`Bucket policy set successfully for bucket: ${bucketName}`);
+    // } catch (error) {
+    //   console.error(`Error setting bucket policy for bucket: ${bucketName}`, error);
+    //   throw error; // Handle the error as needed
+    // }
 
     try {
       // Upload the file to S3
