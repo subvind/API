@@ -3,7 +3,7 @@ import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestj
 
 import { FileService } from './file.service';
 import { OrganizationService } from '../organizations/organization.service';
-import { CategoryService } from '../categories/category.service';
+import { BucketService } from '../buckets/bucket.service';
 
 import { File } from './file.entity';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
@@ -15,7 +15,7 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 export class FileController {
   constructor(
     private readonly fileService: FileService,
-    private readonly categoryService: CategoryService,
+    private readonly bucketService: BucketService,
     private readonly organizationService: OrganizationService,
     private readonly amqpConnection: AmqpConnection
   ) {}
@@ -39,7 +39,7 @@ export class FileController {
     return this.fileService.findOne(id);
   }
 
-  @ApiOperation({ summary: 'Get a file by SKU' })
+  @ApiOperation({ summary: 'Get a file by filename' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('filename/:filename/:organizationId')
   async findSingle(@Param('filename') filename: string, @Param('organizationId') organizationId: string): Promise<File> {
@@ -87,23 +87,22 @@ export class FileController {
     return { data, total };
   }
 
-  @ApiOperation({ summary: 'Find files related to a category' })
+  @ApiOperation({ summary: 'Find files related to a bucket' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Get('categoryRelated/:id')
-  async findCategoryFile(
-    @Param('id') categoryId: string,
+  @Get('bucketRelated/:id')
+  async findBucketFile(
+    @Param('id') bucketId: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
-    @Query('search') search?: string,
-    @Query('type') type?: string,
+    @Query('search') search?: string
   ): Promise<any> {
-    const category = await this.categoryService.findOne(categoryId);
+    const bucket = await this.bucketService.findOne(bucketId);
 
-    if (!category) {
-      throw new NotFoundException('Category not found');
+    if (!bucket) {
+      throw new NotFoundException('Bucket not found');
     }
 
-    const { data, total } = await this.fileService.findCategoryFile(category, page, limit, search, type);
+    const { data, total } = await this.fileService.findBucketFile(bucket, page, limit, search);
     return { data, total };
   }
 }

@@ -39,7 +39,7 @@ export class BucketController {
     return this.bucketService.findOne(id);
   }
 
-  @ApiOperation({ summary: 'Get a bucket by SKU' })
+  @ApiOperation({ summary: 'Get a bucket by name' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('name/:name/:organizationId')
   async findSingle(@Param('name') name: string, @Param('organizationId') organizationId: string): Promise<Bucket> {

@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { File } from './file.entity';
 import { Organization } from '../organizations/organization.entity';
-import { Category } from '../categories/category.entity';
+import { Bucket } from '../buckets/bucket.entity';
 
 @Injectable()
 export class FileService {
@@ -104,12 +104,12 @@ export class FileService {
     return { data, total };
   }
 
-  async findCategoryFile(category: Category, page: number, limit: number, search?: string, type?: string): Promise<{ data: File[]; total: number }> {
+  async findBucketFile(bucket: Bucket, page: number, limit: number, search?: string): Promise<{ data: File[]; total: number }> {
     const query = this.fileRepository.createQueryBuilder('file');
   
     query.where(
-      'file.categoryId = :categoryId',
-      { categoryId: category.id }
+      'file.bucketId = :bucketId',
+      { bucketId: bucket.id }
     );
 
     if (search) {

@@ -7,12 +7,12 @@ import { FileService } from './file.service';
 
 import { File } from './file.entity';
 import { OrganizationModule } from '../organizations/organization.module';
-import { CategoryModule } from '../categories/category.module';
+import { BucketModule } from '../buckets/bucket.module';
 
 @Module({
   imports: [
     OrganizationModule,
-    CategoryModule,
+    BucketModule,
     // forwardRef(() => OrganizationModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
