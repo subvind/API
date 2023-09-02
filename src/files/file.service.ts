@@ -70,11 +70,36 @@ export class FileService {
     };
 
     try {
-      // enable public access
+      // enable public access on the bucket
       await s3.putPublicAccessBlock(params).promise();
       console.log(`Bucket configuration updated for: ${bucketName}`);
     } catch (error) {
       console.error(`Error configuring bucket: ${bucketName}`, error);
+      throw error; // Handle the error as needed
+    }
+
+    const bucketPolicy = {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Sid: 'PublicReadGetObject',
+          Effect: 'Allow',
+          Principal: '*',
+          Action: 's3:GetObject',
+          Resource: `arn:aws:s3:::${bucketName}/*`,
+        },
+      ],
+    };
+
+    try {
+      // update the bucket policy so that files are publicly accessible
+      await s3.putBucketPolicy({
+        Bucket: bucketName,
+        Policy: JSON.stringify(bucketPolicy),
+      }).promise();
+      console.log(`Bucket policy updated for: ${bucketName}`);
+    } catch (error) {
+      console.error(`Error updating bucket policy for: ${bucketName}`, error);
       throw error; // Handle the error as needed
     }
 
