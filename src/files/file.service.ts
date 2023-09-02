@@ -31,7 +31,7 @@ export class FileService {
   async uploadFileToMinio(fileBuffer: Buffer, filename: string, bucket: Bucket, organization: Organization): Promise<File> {
     const minioClient = new Minio.Client({
       endPoint: process.env.MINIO_HOST, // Replace with your MinIO host
-      port: 9090, // Replace with your MinIO port
+      port: 9000, // Replace with your MinIO port
       useSSL: true, // Set to true if you're using SSL
       accessKey: process.env.MINIO_ACCESS_KEY, // Replace with your MinIO access key
       secretKey: process.env.MINIO_SECRET_KEY, // Replace with your MinIO secret key
