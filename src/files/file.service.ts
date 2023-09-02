@@ -67,6 +67,7 @@ export class FileService {
       return this.fileRepository.save(file);
     } catch (error) {
       // Handle the error, e.g., log it or throw an exception
+      console.error('Error uploading file to S3:', error);
       throw new Error(`Error uploading file to S3: ${error.message}`);
     }
   }
