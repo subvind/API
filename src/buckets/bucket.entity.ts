@@ -18,8 +18,9 @@ export class Bucket {
   @Column()
   name: string;
 
-  @ManyToOne(() => File, file => file.id)
-  files: File;
+  // files
+  @OneToMany(() => File, file => file.bucket, { nullable: true })
+  files: File[];
 
   // products
   @OneToMany(() => Product, product => product.bucket, { nullable: true })
