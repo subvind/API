@@ -62,6 +62,10 @@ export class Organization {
   @ManyToOne(() => File, file => file.id)
   orgPhoto: File;
 
+  @ApiProperty({ example: 'false', description: 'Turn on and off branding' })
+  @Column({ default: true })
+  isBranding: boolean;
+
   /**
    * Other properties and relationships as needed
    */
