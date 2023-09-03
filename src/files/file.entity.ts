@@ -14,9 +14,17 @@ export class File {
   @PrimaryColumn('uuid')
   id: string;
 
-  @ApiProperty({ example: '', description: 'The name of the file' })
+  @ApiProperty({ example: 'my-file.txt', description: 'The name of the file' })
   @Column({ default: 'my-file.txt' })
   filename: string;
+
+  @ApiProperty({ example: '500', description: 'The width of the image file' })
+  @Column({ default: 500 })
+  width: number;
+
+  @ApiProperty({ example: '500', description: 'The height of the image file' })
+  @Column({ default: 500 })
+  height: number;
 
   // category
   @ManyToOne(() => Bucket, bucket => bucket.id)

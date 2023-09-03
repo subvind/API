@@ -7,6 +7,7 @@ import { Organization } from '../organizations/organization.entity';
 import { Bucket } from '../buckets/bucket.entity';
 
 import * as AWS from 'aws-sdk';
+import * as sharp from 'sharp';
 
 @Injectable()
 export class FileService {
@@ -113,9 +114,14 @@ export class FileService {
       throw new Error(`Error uploading file to S3: ${error.message}`);
     }
 
+    // Use sharp to get the width and height of the image
+    const imageInfo = await sharp(fileBuffer).metadata();
+
     // Save the file information to the database
     const file = this.fileRepository.create({ 
-      filename, 
+      filename,
+      width: imageInfo.width,
+      height: imageInfo.height,
       bucket: {
         id: bucket.id
       },
