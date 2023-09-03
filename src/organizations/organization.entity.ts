@@ -57,7 +57,7 @@ export class Organization {
 
   @ApiProperty({ example: 'brokenrecord.store', description: 'The etsy usr of the organization' })
   @Column({ nullable: true })
-  etsyUser: string;
+  etsyShop: string;
 
   @ManyToOne(() => File, file => file.id)
   orgPhoto: File;
