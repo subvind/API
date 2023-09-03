@@ -39,7 +39,9 @@ export class ProductService {
     query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
     query.leftJoinAndSelect('product.bucket', 'bucket');
+    query.leftJoinAndSelect('bucket.files', 'bucketFiles');
     query.leftJoinAndSelect('product.coverPhoto', 'coverPhoto');
+    query.leftJoinAndSelect('coverPhoto.bucket', 'coverPhotoBucket');
     
     const offset = (page - 1) * limit;
   
@@ -64,7 +66,9 @@ export class ProductService {
         'category',
         'organization',
         'bucket',
-        'coverPhoto'
+        'bucket.files',
+        'coverPhoto',
+        'coverPhoto.bucket'
       ]
     });
   }
@@ -101,7 +105,9 @@ export class ProductService {
     query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
     query.leftJoinAndSelect('product.bucket', 'bucket');
+    query.leftJoinAndSelect('bucket.files', 'bucketFiles');
     query.leftJoinAndSelect('product.coverPhoto', 'coverPhoto');
+    query.leftJoinAndSelect('coverPhoto.bucket', 'coverPhotoBucket');
   
     const offset = (page - 1) * limit;
     
@@ -128,7 +134,9 @@ export class ProductService {
     query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
     query.leftJoinAndSelect('product.bucket', 'bucket');
+    query.leftJoinAndSelect('bucket.files', 'bucketFiles');
     query.leftJoinAndSelect('product.coverPhoto', 'coverPhoto');
+    query.leftJoinAndSelect('coverPhoto.bucket', 'coverPhotoBucket');
 
     if (type === 'Archive') {
       query.andWhere('product.isArchive = :isArchive', { isArchive: true });
@@ -170,7 +178,9 @@ export class ProductService {
     query.leftJoinAndSelect('product.category', 'category');
     query.leftJoinAndSelect('product.organization', 'organization');
     query.leftJoinAndSelect('product.bucket', 'bucket');
+    query.leftJoinAndSelect('bucket.files', 'bucketFiles');
     query.leftJoinAndSelect('product.coverPhoto', 'coverPhoto');
+    query.leftJoinAndSelect('coverPhoto.bucket', 'coverPhotoBucket');
 
     if (type === 'Archive') {
       query.andWhere('product.isArchive = :isArchive', { isArchive: true });
