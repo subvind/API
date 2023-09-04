@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Product } from '../products/product.entity';
 import { Organization } from '../organizations/organization.entity';
+import { File } from '../files/file.entity';
 
 @Entity()
 @Unique(['slug', 'organization']) 
@@ -24,6 +25,9 @@ export class Category {
   @ApiProperty({ example: '', description: 'The flickr album id to display' })
   @Column({ nullable: true })
   description: string;
+
+  @ManyToOne(() => File, file => file.id)
+  mainPhoto: File;
 
   /**
    * Other properties and relationships as needed

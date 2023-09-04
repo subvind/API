@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Organization } from '../organizations/organization.entity';
 import { Bucket } from '../buckets/bucket.entity';
 import { Product } from '../products/product.entity';
+import { Category } from '../categories/category.entity';
 
 @Entity()
 @Unique(['filename', 'organization']) 
@@ -37,6 +38,10 @@ export class File {
   // orgPhotos
   @OneToMany(() => Organization, organization => organization.orgPhoto, { nullable: true })
   orgPhotos: Organization[]
+
+  // mainPhotos
+  @OneToMany(() => Category, category => category.mainPhoto, { nullable: true })
+  mainPhotos: Category[]
 
   /**
    * Other properties and relationships as needed
