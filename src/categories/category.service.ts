@@ -35,7 +35,11 @@ export class CategoryService {
       );
     }
   
+    query.leftJoinAndSelect('category.products', 'products');
     query.leftJoinAndSelect('category.organization', 'organization');
+    query.leftJoinAndSelect('category.parentCategory', 'parentCategory');
+    query.leftJoinAndSelect('category.subCategories', 'subCategories');
+    query.leftJoinAndSelect('category.mainPhoto', 'mainPhoto');
     
     const offset = (page - 1) * limit;
   
@@ -61,6 +65,7 @@ export class CategoryService {
         'subCategories', 
         'products',
         'organization',
+        'mainPhoto'
       ]
     });
   }
@@ -98,6 +103,7 @@ export class CategoryService {
     query.leftJoinAndSelect('category.parentCategory', 'parentCategory');
     query.leftJoinAndSelect('category.subCategories', 'subCategories');
     query.leftJoinAndSelect('category.organization', 'organization');
+    query.leftJoinAndSelect('category.mainPhoto', 'mainPhoto');
   
     const offset = (page - 1) * limit;
     
@@ -125,6 +131,7 @@ export class CategoryService {
     query.leftJoinAndSelect('category.parentCategory', 'parentCategory');
     query.leftJoinAndSelect('category.subCategories', 'subCategories');
     query.leftJoinAndSelect('category.organization', 'organization');
+    query.leftJoinAndSelect('category.mainPhoto', 'mainPhoto');
   
     const offset = (page - 1) * limit;
     
