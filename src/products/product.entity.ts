@@ -38,9 +38,9 @@ export class Product {
   @ManyToOne(() => Bucket, bucket => bucket.id)
   bucket: Bucket;
 
-  @ApiProperty({ example: '', description: 'The ebay listing id to display' })
+  @ApiProperty({ example: '', description: 'The ebay item id to display' })
   @Column({ nullable: true })
-  ebayListing: string;
+  ebayItem: string;
 
   @ManyToOne(() => Inventory, inventory => inventory.id)
   inventory: Inventory;
