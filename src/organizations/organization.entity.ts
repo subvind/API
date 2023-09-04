@@ -66,6 +66,26 @@ export class Organization {
   @Column({ default: true })
   isBranding: boolean;
 
+  @ApiProperty({ example: '/', description: 'The homepage url link of the organization' })
+  @Column({ nullable: true })
+  homepageLink: string;
+
+  @ApiProperty({ example: '/categories', description: 'The shop url link of the organization' })
+  @Column({ nullable: true })
+  shopLink: string;
+
+  @ApiProperty({ example: 'www.brokenrecord.store@gmail.com', description: 'The contact center email of the organization' })
+  @Column({ nullable: true })
+  contactCenterEmail: string;
+
+  @ApiProperty({ example: 'Everyone needs to respect one another.', description: 'The privacy policy of the organization' })
+  @Column({ nullable: true })
+  privacyPolicy: string;
+
+  @ApiProperty({ example: 'Everyone needs to behave.', description: 'The terms and conditions of the organization' })
+  @Column({ nullable: true })
+  termsAndConditions: string;
+
   /**
    * Other properties and relationships as needed
    */
