@@ -8,6 +8,7 @@ import { Organization } from '../organizations/organization.entity';
 import { Bucket } from '../buckets/bucket.entity';
 import { Product } from '../products/product.entity';
 import { Category } from '../categories/category.entity';
+import { Showcase } from '../showcases/showcase.entity';
 
 @Entity()
 @Unique(['filename', 'organization']) 
@@ -42,6 +43,10 @@ export class File {
   // mainPhotos
   @OneToMany(() => Category, category => category.mainPhoto, { nullable: true })
   mainPhotos: Category[]
+
+  // bannerPhotos
+  @OneToMany(() => Showcase, showcase => showcase.bannerPhoto, { nullable: true })
+  bannerPhotos: Showcase[]
 
   /**
    * Other properties and relationships as needed

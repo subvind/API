@@ -3,7 +3,6 @@ import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestj
 
 import { ShowcaseService } from './showcase.service';
 import { OrganizationService } from '../organizations/organization.service';
-import { CategoryService } from '../categories/category.service';
 
 import { Showcase } from './showcase.entity';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
@@ -15,7 +14,6 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 export class ShowcaseController {
   constructor(
     private readonly showcaseService: ShowcaseService,
-    private readonly categoryService: CategoryService,
     private readonly organizationService: OrganizationService,
     private readonly amqpConnection: AmqpConnection
   ) {}
@@ -37,13 +35,6 @@ export class ShowcaseController {
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Showcase> {
     return this.showcaseService.findOne(id);
-  }
-
-  @ApiOperation({ summary: 'Get a showcase by SKU' })
-  @ApiResponse({ status: 200, description: 'Success' })
-  @Get('sku/:sku/:organizationId')
-  async findSingle(@Param('sku') sku: string, @Param('organizationId') organizationId: string): Promise<Showcase> {
-    return this.showcaseService.findBySKU(sku, organizationId);
   }
 
   @ApiOperation({ summary: 'Create a showcase' })
@@ -87,26 +78,6 @@ export class ShowcaseController {
     return { data, total };
   }
 
-  @ApiOperation({ summary: 'Find showcases related to a category' })
-  @ApiResponse({ status: 200, description: 'Success' })
-  @Get('categoryRelated/:id')
-  async findCategoryShowcase(
-    @Param('id') categoryId: string,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
-    @Query('search') search?: string,
-    @Query('type') type?: string,
-  ): Promise<any> {
-    const category = await this.categoryService.findOne(categoryId);
-
-    if (!category) {
-      throw new NotFoundException('Category not found');
-    }
-
-    const { data, total } = await this.showcaseService.findCategoryShowcase(category, page, limit, search, type);
-    return { data, total };
-  }
-
   @ApiOperation({ summary: 'Find the latest showcases related to an organization' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('latestOrgRelated/:id')
@@ -114,8 +85,7 @@ export class ShowcaseController {
     @Param('id') organizationId: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
-    @Query('search') search?: string,
-    @Query('type') type?: string,
+    @Query('search') search?: string
   ): Promise<any> {
     const organization = await this.organizationService.findOne(organizationId);
 
@@ -123,7 +93,7 @@ export class ShowcaseController {
       throw new NotFoundException('Organization not found');
     }
 
-    const { data, total } = await this.showcaseService.findLatestOrgShowcase(organization, page, limit, search, type);
+    const { data, total } = await this.showcaseService.findLatestOrgShowcase(organization, page, limit, search);
     return { data, total };
   }
 }

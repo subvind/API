@@ -21,6 +21,7 @@ import { FileModule } from './files/file.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrganizationModule } from './organizations/organization.module';
 import { ProductModule } from './products/product.module';
+import { ShowcaseModule } from './showcases/showcase.module';
 import { UserModule } from './users/user.module';
 
 @Module({
@@ -46,6 +47,7 @@ import { UserModule } from './users/user.module';
     InventoryModule,
     OrganizationModule,
     ProductModule,
+    ShowcaseModule,
     UserModule,
   ],
   controllers: [AppController],

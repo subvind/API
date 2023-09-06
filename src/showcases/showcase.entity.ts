@@ -4,58 +4,34 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { Inventory } from '../inventory/inventory.entity';
 import { Organization } from '../organizations/organization.entity';
 import { Category } from '../categories/category.entity';
-import { Bucket } from '../buckets/bucket.entity';
 import { File } from '../files/file.entity';
 
 @Entity()
-@Unique(['stockKeepingUnit', 'organization']) 
+@Unique(['startAt', 'finishAt']) 
 export class Showcase {
   @PrimaryColumn('uuid')
   id: string;
 
-  @ApiProperty({ example: '001', description: 'The SKU that is used to identify this showcase' })
-  @Column()
-  stockKeepingUnit: string;
-
   @ApiProperty({ example: '', description: 'The name of the showcase' })
   @Column({ default: 'my showcase' })
-  name: string;
-
-  @ApiProperty({ example: '', description: 'The short description about the showcase' })
-  @Column({ nullable: true })
-  description: string;
-
-  @ApiProperty({ example: '', description: 'The long detail about the showcase' })
-  @Column({ nullable: true })
-  detail: string;
+  title: string;
 
   @ManyToOne(() => File, file => file.id)
-  coverPhoto: File;
+  bannerPhoto: File;
 
-  @ManyToOne(() => Bucket, bucket => bucket.id)
-  bucket: Bucket;
-
-  @ApiProperty({ example: '', description: 'The ebay item id to display' })
+  @ApiProperty({ example: '', description: 'The url of the showcase' })
   @Column({ nullable: true })
-  ebayItem: string;
+  url: string;
 
-  @ManyToOne(() => Inventory, inventory => inventory.id)
-  inventory: Inventory;
+  @ApiProperty({ example: '', description: 'The start showing time of the showcase' })
+  @Column({ type: 'timestamp' })
+  startAt: Date;
 
-  @ApiProperty({ example: 'true', description: 'If this showcase has been archived' })
-  @Column({ default: 'false' })
-  isArchive: boolean;
-
-  @ApiProperty({ example: '2000', description: 'The price of this showcase in pennies.' })
-  @Column({ default: 2000 })
-  price: number;
-
-  @ApiProperty({ example: '500', description: 'The shipping cost of this showcase in pennies.' })
-  @Column({ default: 500 })
-  shippingCost: number;
+  @ApiProperty({ example: '', description: 'The finish showing time of the showcase' })
+  @Column({ type: 'timestamp' })
+  finishAt: Date;
 
   /**
    * Other properties and relationships as needed

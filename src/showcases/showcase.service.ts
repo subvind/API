@@ -36,12 +36,9 @@ export class ShowcaseService {
       );
     }
   
-    query.leftJoinAndSelect('showcase.category', 'category');
     query.leftJoinAndSelect('showcase.organization', 'organization');
-    query.leftJoinAndSelect('showcase.bucket', 'bucket');
-    query.leftJoinAndSelect('bucket.files', 'bucketFiles');
-    query.leftJoinAndSelect('showcase.coverPhoto', 'coverPhoto');
-    query.leftJoinAndSelect('coverPhoto.bucket', 'coverPhotoBucket');
+    query.leftJoinAndSelect('showcase.bannerPhoto', 'bannerPhoto');
+    query.leftJoinAndSelect('bannerPhoto.bucket', 'bannerPhotoBucket');
     
     const offset = (page - 1) * limit;
   
@@ -52,25 +49,6 @@ export class ShowcaseService {
 
   async findOne(id: string): Promise<Showcase> {
     return this.showcaseRepository.findOneBy({ id: id });
-  }
-
-  async findBySKU(sku: string, organizationId: string): Promise<Showcase> {
-    return this.showcaseRepository.findOne({ 
-      where: {
-        stockKeepingUnit: sku,
-        organization: {
-          id: organizationId
-        }
-      },
-      relations: [
-        'category',
-        'organization',
-        'bucket',
-        'bucket.files',
-        'coverPhoto',
-        'coverPhoto.bucket'
-      ]
-    });
   }
 
   async create(showcase: Showcase): Promise<Showcase> {
@@ -102,12 +80,9 @@ export class ShowcaseService {
       );
     }
     
-    query.leftJoinAndSelect('showcase.category', 'category');
     query.leftJoinAndSelect('showcase.organization', 'organization');
-    query.leftJoinAndSelect('showcase.bucket', 'bucket');
-    query.leftJoinAndSelect('bucket.files', 'bucketFiles');
-    query.leftJoinAndSelect('showcase.coverPhoto', 'coverPhoto');
-    query.leftJoinAndSelect('coverPhoto.bucket', 'coverPhotoBucket');
+    query.leftJoinAndSelect('showcase.bannerPhoto', 'bannerPhoto');
+    query.leftJoinAndSelect('bannerPhoto.bucket', 'bannerPhotoBucket');
   
     const offset = (page - 1) * limit;
     
@@ -116,51 +91,7 @@ export class ShowcaseService {
     return { data, total };
   }
 
-  async findCategoryShowcase(category: Category, page: number, limit: number, search?: string, type?: string): Promise<{ data: Showcase[]; total: number }> {
-    const query = this.showcaseRepository.createQueryBuilder('showcase');
-  
-    query.where(
-      'showcase.categoryId = :categoryId',
-      { categoryId: category.id }
-    );
-
-    if (search) {
-      query.andWhere(
-        '(showcase.stockKeepingUnit LIKE :search OR showcase.name LIKE :search OR showcase.description LIKE :search OR showcase.detail LIKE :search)',
-        { search: `%${search}%` }
-      );
-    }
-    
-    query.leftJoinAndSelect('showcase.category', 'category');
-    query.leftJoinAndSelect('showcase.organization', 'organization');
-    query.leftJoinAndSelect('showcase.bucket', 'bucket');
-    query.leftJoinAndSelect('bucket.files', 'bucketFiles');
-    query.leftJoinAndSelect('showcase.coverPhoto', 'coverPhoto');
-    query.leftJoinAndSelect('coverPhoto.bucket', 'coverPhotoBucket');
-
-    if (type === 'Archive') {
-      query.andWhere('showcase.isArchive = :isArchive', { isArchive: true });
-    } else {
-      query.andWhere('showcase.isArchive = :isArchive', { isArchive: false });
-    }
-    
-    if (type === 'PriceLowToHigh') {
-      query.orderBy('showcase.price', 'ASC');
-    } else if (type === 'PriceHighToLow') {
-      query.orderBy('showcase.price', 'DESC');
-    } else {
-      // LatestShowcases
-      query.orderBy('showcase.createdAt', 'DESC');
-    }
-  
-    const offset = (page - 1) * limit;
-    
-    const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
-  
-    return { data, total };
-  }
-
-  async findLatestOrgShowcase(organization: Organization, page: number, limit: number, search?: string, type?: string): Promise<{ data: Showcase[]; total: number }> {
+  async findLatestOrgShowcase(organization: Organization, page: number, limit: number, search?: string): Promise<{ data: Showcase[]; total: number }> {
     const query = this.showcaseRepository.createQueryBuilder('showcase');
   
     query.where(
@@ -168,28 +99,22 @@ export class ShowcaseService {
       { tenantId: organization.id }
     );
 
+    // Add condition to filter showcases between startAt and finishAt
+    query.andWhere('showcase.startAt <= NOW() AND showcase.finishAt >= NOW()');
+
     if (search) {
       query.andWhere(
-        '(showcase.stockKeepingUnit LIKE :search OR showcase.name LIKE :search OR showcase.description LIKE :search OR showcase.detail LIKE :search)',
+        '(showcase.title LIKE :search)',
         { search: `%${search}%` }
       );
     }
     
-    query.leftJoinAndSelect('showcase.category', 'category');
     query.leftJoinAndSelect('showcase.organization', 'organization');
-    query.leftJoinAndSelect('showcase.bucket', 'bucket');
-    query.leftJoinAndSelect('bucket.files', 'bucketFiles');
-    query.leftJoinAndSelect('showcase.coverPhoto', 'coverPhoto');
-    query.leftJoinAndSelect('coverPhoto.bucket', 'coverPhotoBucket');
-
-    if (type === 'Archive') {
-      query.andWhere('showcase.isArchive = :isArchive', { isArchive: true });
-    } else {
-      query.andWhere('showcase.isArchive = :isArchive', { isArchive: false });
-    }
+    query.leftJoinAndSelect('showcase.bannerPhoto', 'bannerPhoto');
+    query.leftJoinAndSelect('bannerPhoto.bucket', 'bannerPhotoBucket');
 
     // Add orderBy clause to order by createdAt in descending order
-    query.orderBy('showcase.createdAt', 'DESC');
+    query.orderBy('showcase.startAt', 'ASC');
   
     const offset = (page - 1) * limit;
     

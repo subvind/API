@@ -12,6 +12,7 @@ import { Product } from '../products/product.entity';
 import { Category } from '../categories/category.entity';
 import { Bucket } from '../buckets/bucket.entity';
 import { File } from '../files/file.entity';
+import { Showcase } from '../showcases/showcase.entity'
 
 @Entity()
 @Unique(['orgname']) 
@@ -120,6 +121,10 @@ export class Organization {
   // files
   @OneToMany(() => File, file => file.organization, { nullable: true })
   files: File[]
+
+  // showcases
+  @OneToMany(() => Showcase, showcase => showcase.organization, { nullable: true })
+  showcases: Showcase[]
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
