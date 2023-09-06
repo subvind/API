@@ -81,16 +81,37 @@ export class OrganizationService {
   }
 
   async findByHostname(hostname: string): Promise<Organization> {
-    return this.organizationRepository.findOne({
-      where: {
-        hostname: hostname,
-      },
-      relations: [
-        'owner',
-        'orgPhoto',
-        'orgPhoto.bucket',
-      ]
-    });
+    function isSubdomainOfErpnomy(hostname) {
+      const pattern = /^[\w-]+\.erpnomy\.com$/i; // Case-insensitive match
+      return pattern.test(hostname);
+    }
+    
+    let org: any;
+    if (isSubdomainOfErpnomy(hostname)) {
+      org = this.organizationRepository.findOne({
+        where: {
+          orgname: hostname.split('.')[0],
+        },
+        relations: [
+          'owner',
+          'orgPhoto',
+          'orgPhoto.bucket',
+        ]
+      });
+    } else {
+      org = this.organizationRepository.findOne({
+        where: {
+          hostname: hostname,
+        },
+        relations: [
+          'owner',
+          'orgPhoto',
+          'orgPhoto.bucket',
+        ]
+      });
+    }
+    
+    return org
   }
 
   async create(organization: Organization): Promise<Organization> {
