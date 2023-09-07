@@ -50,7 +50,19 @@ export class CategoryService {
   }
 
   async findOne(id: string): Promise<Category> {
-    return this.categoryRepository.findOneBy({ id: id });
+    return this.categoryRepository.findOne({ 
+      where: {
+        id: id
+      },
+      relations: [
+        'parentCategory', 
+        'subCategories', 
+        'products',
+        'organization',
+        'mainPhoto',
+        'mainPhoto.bucket'
+      ]
+    });
   }
 
   async findBySlug(slug: string, organizationId: string): Promise<Category> {
