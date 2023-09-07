@@ -42,6 +42,10 @@ export class Product {
   @Column({ nullable: true })
   ebayItem: string;
 
+  @ApiProperty({ example: '', description: 'The etsy item id to display' })
+  @Column({ nullable: true })
+  etsyItem: string;
+
   @ManyToOne(() => Inventory, inventory => inventory.id)
   inventory: Inventory;
 
