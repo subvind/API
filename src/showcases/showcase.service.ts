@@ -48,7 +48,16 @@ export class ShowcaseService {
   }
 
   async findOne(id: string): Promise<Showcase> {
-    return this.showcaseRepository.findOneBy({ id: id });
+    return this.showcaseRepository.findOne({
+      where: { 
+        id: id 
+      },
+      relations: [
+        'organization',
+        'bannerPhoto',
+        'bannerPhoto.bucket'
+      ]
+    });
   }
 
   async create(showcase: Showcase): Promise<Showcase> {
