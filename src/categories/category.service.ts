@@ -30,8 +30,8 @@ export class CategoryService {
   
     if (search) {
       query.where(
-        'category.name LIKE :name',
-        { name: `%${search}%` }
+        'category.name LIKE :search OR category.description LIKE :search',
+        { search: `%${search}%` }
       );
     }
   
@@ -108,8 +108,8 @@ export class CategoryService {
 
     if (search) {
       query.andWhere(
-        'category.name LIKE :sku',
-        { sku: `%${search}%` }
+        'category.name LIKE :search OR category.description LIKE :search',
+        { search: `%${search}%` }
       );
     }
     
@@ -137,8 +137,8 @@ export class CategoryService {
 
     if (search) {
       query.andWhere(
-        'category.name LIKE :name',
-        { name: `%${search}%` }
+        'category.name LIKE :search OR category.description LIKE :search',
+        { search: `%${search}%` }
       );
     }
     
