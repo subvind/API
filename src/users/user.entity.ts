@@ -51,6 +51,14 @@ export class User {
   @Column({ default: 'Pending' })
   role: UserRole; // Role can be 'admin', 'employee', etc.
 
+  @ApiProperty({ example: 'TravisBurandt', description: 'The twitter url slug of the user' })
+  @Column({ nullable: true })
+  twitter: string;
+
+  @ApiProperty({ example: 'Traveco504', description: 'The youtube url slug of the user' })
+  @Column({ nullable: true })
+  youtube: string;
+
   /**
    * Other properties and relationships as needed
    */
