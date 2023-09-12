@@ -9,7 +9,7 @@ import { Organization } from '../organizations/organization.entity';
 import { Product } from '../products/product.entity';
 
 @Entity()
-@Unique(['name']) 
+@Unique(['name', 'organization']) 
 export class Bucket {
   @PrimaryColumn('uuid')
   id: string;
