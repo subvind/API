@@ -14,6 +14,8 @@ export class AuthStatusGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const statuses = this.reflector.get(AuthStatus, context.getHandler());
+    console.log('statuses', statuses)
+
     if (!statuses || statuses.length === 0) {
       return true; // No authStatus decorator found or no statuses specified, allowing access by default
     }
@@ -32,7 +34,9 @@ export class AuthStatusGuard implements CanActivate {
     try {
       // Verify and decode the token using the JwtService
       decoded = this.jwtService.verify(token);
+      console.log('decoded', decoded)
     } catch (error) {
+      console.log('Token verification failed', error)
       return false; // Token verification failed, denying access
     }
 
@@ -42,6 +46,7 @@ export class AuthStatusGuard implements CanActivate {
 
     // authorization logic
     let user = await this.userService.findOne(userId)
+    console.log('authorization logic', user)
 
     if (!user) {
       return false; // User not found, denying access
@@ -49,8 +54,10 @@ export class AuthStatusGuard implements CanActivate {
 
     // Check if the user's authStatus matches any of the allowed statuses
     if (statuses.includes(user.authStatus)) {
+      console.log('statuses.includes true', user.authStatus)
       return true; // Grant access if authStatus matches
     } else {
+      console.log('statuses.includes false', user.authStatus)
       return false; // Deny access if authStatus does not match
     }
   }
