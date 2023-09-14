@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 
+const expiresInInSeconds = 356 * 24 * 60 * 60; // 356 days in seconds
+
 @Module({
   imports: [
     JwtModule.registerAsync({
@@ -9,7 +11,7 @@ import { ConfigModule } from '@nestjs/config';
       useFactory: async () => ({
         secret: process.env.JWT_SECRET,
         signOptions: { 
-          expiresIn: 365 * 24 * 60 * 60 // Token expiration time in seconds
+          expiresIn: expiresInInSeconds
         }
       }),
     }),
