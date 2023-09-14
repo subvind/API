@@ -24,6 +24,7 @@ export class AuthStatusGuard implements CanActivate {
     const authHeader = request.headers['authorization'];
 
     if (!authHeader) {
+      console.log('no auth header')
       return false; // No Authorization header found, denying access
     }
 
