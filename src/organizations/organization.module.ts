@@ -8,6 +8,8 @@ import { OrganizationService } from './organization.service';
 import { Organization } from './organization.entity';
 import { UserModule } from '../users/user.module';
 
+import { AuthStatusGuard } from '../auth-status.guard';
+
 @Module({
   imports: [
     forwardRef(() => UserModule),
@@ -27,6 +29,9 @@ import { UserModule } from '../users/user.module';
     OrganizationService
   ],
   controllers: [OrganizationController],
-  providers: [OrganizationService],
+  providers: [
+    OrganizationService,
+    AuthStatusGuard
+  ],
 })
 export class OrganizationModule {}
