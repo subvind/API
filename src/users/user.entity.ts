@@ -9,11 +9,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Organization } from '../organizations/organization.entity';
 
-export enum UserRole {
-  ADMIN = 'Admin',
+export enum AuthStatus {
+  BANNED = 'Banned',
   VERIFIED = 'Verified',
   PENDING = 'Pending',
-  GUEST = 'Guest',
 }
 
 @Entity()
@@ -49,7 +48,7 @@ export class User {
   password: string;
 
   @Column({ default: 'Pending' })
-  role: UserRole; // Role can be 'admin', 'employee', etc.
+  authStatus: AuthStatus; // status can be 'admin', 'employee', etc.
 
   @ApiProperty({ example: 'TravisBurandt', description: 'The twitter url slug of the user' })
   @Column({ nullable: true })

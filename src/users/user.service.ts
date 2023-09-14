@@ -43,7 +43,7 @@ export class UserService {
       'user.username',
       'user.firstName',
       'user.lastName',
-      'user.role',
+      'user.authStatus',
       'user.twitter',
       'user.youtube',
       'user.defaultOrganization',
@@ -61,7 +61,7 @@ export class UserService {
         id: id
       },
       relations: ['defaultOrganization'],
-      select: ['id', 'username', 'firstName', 'lastName', 'role', 'twitter', 'youtube', 'createdAt'] 
+      select: ['id', 'username', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'createdAt'] 
     });
   }
 
@@ -73,7 +73,7 @@ export class UserService {
         email: email
       },
       relations: ['defaultOrganization'],
-      select: ['id', 'username', 'firstName', 'lastName', 'password', 'role', 'twitter', 'youtube', 'createdAt'] 
+      select: ['id', 'username', 'firstName', 'lastName', 'password', 'authStatus', 'twitter', 'youtube', 'createdAt'] 
     });
   }
 
@@ -83,7 +83,7 @@ export class UserService {
         username: username
       },
       relations: ['defaultOrganization'],
-      select: ['id', 'username', 'firstName', 'lastName', 'role', 'twitter', 'youtube', 'createdAt'] 
+      select: ['id', 'username', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'createdAt'] 
     });
   }
 

@@ -8,6 +8,8 @@ import { User } from './user.entity';
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
+import { AuthStatus } from '../auth-status.decorator';
+
 @ApiTags('users')
 @Controller('users')
 export class UserController {
@@ -47,6 +49,7 @@ export class UserController {
   @ApiBody({ type: User })
   @ApiResponse({ status: 201, description: 'Success', type: User })
   @Post()
+  @AuthStatus(['Pending', 'Verified'])
   async create(@Body() userData: User): Promise<User> {
     return this.userService.create(userData);
   }
@@ -54,6 +57,7 @@ export class UserController {
   @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
+  @AuthStatus(['Pending', 'Verified'])
   async update(@Param('id') id: string, @Body() updatedUserData: User): Promise<User> {
     let user = await this.userService.findOne(id);
     let data
@@ -70,6 +74,7 @@ export class UserController {
   @ApiOperation({ summary: 'Delete a user' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
+  @AuthStatus(['Pending', 'Verified'])
   async remove(@Param('id') id: string): Promise<void> {
     return this.userService.remove(id);
   }

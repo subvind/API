@@ -9,6 +9,8 @@ import { NotFoundException } from '@nestjs/common'; // Import the NotFoundExcept
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
+import { AuthStatus } from '../auth-status.decorator';
+
 @ApiTags('organizations')
 @Controller('organizations')
 export class OrganizationController {
@@ -55,6 +57,7 @@ export class OrganizationController {
   @ApiBody({ type: Organization })
   @ApiResponse({ status: 201, description: 'Success', type: Organization })
   @Post()
+  @AuthStatus(['Verified'])
   async create(@Body() organizationData: Organization): Promise<Organization> {
     return this.organizationService.create(organizationData);
   }
@@ -62,6 +65,7 @@ export class OrganizationController {
   @ApiOperation({ summary: 'Update a organization' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
+  @AuthStatus(['Verified'])
   async update(@Param('id') id: string, @Body() updatedOrganizationData: Organization): Promise<Organization> {
     return this.organizationService.update(id, updatedOrganizationData);
   }
@@ -69,6 +73,7 @@ export class OrganizationController {
   @ApiOperation({ summary: 'Delete a organization' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
+  @AuthStatus(['Verified'])
   async remove(@Param('id') id: string): Promise<void> {
     return this.organizationService.remove(id);
   }
