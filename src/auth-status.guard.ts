@@ -30,6 +30,7 @@ export class AuthStatusGuard implements CanActivate {
 
     // Extract the token (remove "Bearer " prefix if present)
     const token = authHeader.replace('Bearer ', '');
+    console.log('token', token)
 
     let decoded
     try {
