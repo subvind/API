@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
 
 import { UserService } from './user.service';
@@ -9,6 +9,7 @@ import { User } from './user.entity';
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
 import { AuthStatus } from '../auth-status.decorator';
+import { AuthStatusGuard } from '../auth-status.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -50,6 +51,7 @@ export class UserController {
   @ApiResponse({ status: 201, description: 'Success', type: User })
   @Post()
   @AuthStatus(['Pending', 'Verified'])
+  @UseGuards(AuthStatusGuard)
   async create(@Body() userData: User): Promise<User> {
     return this.userService.create(userData);
   }
@@ -58,6 +60,7 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
   @AuthStatus(['Pending', 'Verified'])
+  @UseGuards(AuthStatusGuard)
   async update(@Param('id') id: string, @Body() updatedUserData: User): Promise<User> {
     let user = await this.userService.findOne(id);
     let data
@@ -75,6 +78,7 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
   @AuthStatus(['Pending', 'Verified'])
+  @UseGuards(AuthStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.userService.remove(id);
   }
