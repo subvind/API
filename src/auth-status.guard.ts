@@ -35,7 +35,9 @@ export class AuthStatusGuard implements CanActivate {
     let decoded
     try {
       // Verify and decode the token using the JwtService
-      decoded = this.jwtService.verify(token);
+      decoded = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET
+      });
       console.log('decoded', decoded)
     } catch (error) {
       console.log('Token verification failed', error)
