@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 
 import { OrganizationService } from './organization.service';
 import { UserService } from 'src/users/user.service';
@@ -10,6 +10,7 @@ import { NotFoundException } from '@nestjs/common'; // Import the NotFoundExcept
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
 import { AuthStatus } from '../auth-status.decorator';
+import { AuthStatusGuard } from '../auth-status.guard';
 
 @ApiTags('organizations')
 @Controller('organizations')
@@ -58,6 +59,7 @@ export class OrganizationController {
   @ApiResponse({ status: 201, description: 'Success', type: Organization })
   @Post()
   @AuthStatus(['Verified'])
+  @UseGuards(AuthStatusGuard)
   async create(@Body() organizationData: Organization): Promise<Organization> {
     return this.organizationService.create(organizationData);
   }
@@ -66,6 +68,7 @@ export class OrganizationController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
   @AuthStatus(['Verified'])
+  @UseGuards(AuthStatusGuard)
   async update(@Param('id') id: string, @Body() updatedOrganizationData: Organization): Promise<Organization> {
     return this.organizationService.update(id, updatedOrganizationData);
   }
@@ -74,6 +77,7 @@ export class OrganizationController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
   @AuthStatus(['Verified'])
+  @UseGuards(AuthStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.organizationService.remove(id);
   }
