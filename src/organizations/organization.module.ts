@@ -9,6 +9,7 @@ import { Organization } from './organization.entity';
 import { UserModule } from '../users/user.module';
 
 import { AuthStatusGuard } from '../auth-status.guard';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { AuthStatusGuard } from '../auth-status.guard';
   controllers: [OrganizationController],
   providers: [
     OrganizationService,
-    AuthStatusGuard
+    AuthStatusGuard,
+    JwtService
   ],
 })
 export class OrganizationModule {}
