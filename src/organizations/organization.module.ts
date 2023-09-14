@@ -10,11 +10,14 @@ import { UserModule } from '../users/user.module';
 
 import { AuthStatusGuard } from '../auth-status.guard';
 import { JwtService } from '@nestjs/jwt';
-import { JwtAuthModule } from '../auth/jwt.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    JwtAuthModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET, // Replace with your actual secret key
+      signOptions: { expiresIn: '1h' }, // You can customize other options here
+    }),
     forwardRef(() => UserModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
