@@ -34,6 +34,6 @@ export class Payment {
     if (!this.id) {
       this.id = uuidv4();
     }
-    console.log('before insert', this.id)
+    console.log('payment insert', this.id)
   }
 }

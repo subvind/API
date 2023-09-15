@@ -40,6 +40,6 @@ export class Location {
     if (!this.id) {
       this.id = uuidv4();
     }
-    console.log('before insert', this.id)
+    console.log('location insert', this.id)
   }
 }

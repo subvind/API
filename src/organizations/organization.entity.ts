@@ -137,6 +137,6 @@ export class Organization {
     if (!this.id) {
       this.id = uuidv4();
     }
-    console.log('before insert', this.id)
+    console.log('organization insert', this.id)
   }
 }

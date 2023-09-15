@@ -58,6 +58,12 @@ export class User {
   @Column({ nullable: true })
   youtube: string;
 
+  @Column({ nullable: true })
+  emailVerificationToken: string;
+
+  @Column({ default: false })
+  isEmailVerified: boolean;
+
   /**
    * Other properties and relationships as needed
    */
@@ -84,6 +90,14 @@ export class User {
     if (!this.id) {
       this.id = uuidv4();
     }
-    console.log('before insert', this.id)
+    console.log('user insert', this.id)
+  }
+
+  @BeforeInsert()
+  generateEmailVerificationToken() {
+    if (!this.emailVerificationToken) {
+      this.emailVerificationToken = uuidv4();
+    }
+    console.log('user email verification token', this.emailVerificationToken)
   }
 }

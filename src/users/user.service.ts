@@ -47,6 +47,7 @@ export class UserService {
       'user.twitter',
       'user.youtube',
       'user.defaultOrganization',
+      'user.isEmailVerified',
       'user.createdAt'
     ]);
     
@@ -61,7 +62,7 @@ export class UserService {
         id: id
       },
       relations: ['defaultOrganization'],
-      select: ['id', 'username', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'createdAt'] 
+      select: ['id', 'username', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
 
@@ -73,7 +74,7 @@ export class UserService {
         email: email
       },
       relations: ['defaultOrganization'],
-      select: ['id', 'username', 'firstName', 'lastName', 'password', 'authStatus', 'twitter', 'youtube', 'createdAt'] 
+      select: ['id', 'username', 'firstName', 'lastName', 'password', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
 
@@ -83,7 +84,7 @@ export class UserService {
         username: username
       },
       relations: ['defaultOrganization'],
-      select: ['id', 'username', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'createdAt'] 
+      select: ['id', 'username', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
 

@@ -103,6 +103,6 @@ export class Inventory {
     if (!this.id) {
       this.id = uuidv4();
     }
-    console.log('before insert', this.id)
+    console.log('inventory insert', this.id)
   }
 }
