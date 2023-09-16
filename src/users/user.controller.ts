@@ -12,6 +12,7 @@ import { AuthStatus } from '../auth-status.decorator';
 import { AuthStatusGuard } from '../auth-status.guard';
 
 import { v4 as uuidv4 } from 'uuid';
+import { hash } from 'bcrypt';
 
 @ApiTags('users')
 @Controller('users')
@@ -192,7 +193,7 @@ export class UserController {
       if (updatedUserData.recoverPasswordToken === user.recoverPasswordToken) {
         // update secure info
         data = {
-          password: updatedUserData.password
+          password: await hash(updatedUserData.password, 10)
         }
       } else {
         // do nothing

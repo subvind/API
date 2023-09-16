@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert, BeforeUpdate, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
 
 import { IsNotEmpty, Matches } from 'class-validator';
 
@@ -86,17 +86,6 @@ export class User {
   @BeforeInsert()
   async hashPassword() {
     this.password = await hash(this.password, 10);
-  }
-  
-  @BeforeUpdate()
-  async hashPasswordOnReset() {
-    function isBcryptHash(value) {
-      return /^\$2[abyx]\$[0-9]{2}\$[A-Za-z0-9./]{53}$/.test(value);
-    }
-    // only hash the password if it is not type bcrypt
-    if (!isBcryptHash(this.password)) {
-      this.password = await hash(this.password, 10);
-    }
   }
 
   @BeforeInsert()
