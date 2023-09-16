@@ -50,8 +50,7 @@ export class UserController {
   @ApiBody({ type: User })
   @ApiResponse({ status: 201, description: 'Success', type: User })
   @Post()
-  @AuthStatus(['Pending', 'Verified'])
-  @UseGuards(AuthStatusGuard)
+  // @UseGuards() // anyone can create a user
   async create(@Body() userData: User): Promise<User> {
     return this.userService.create(userData);
   }
