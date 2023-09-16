@@ -69,7 +69,8 @@ export class UserService {
       where: {
         id: id
       },
-      relations: ['defaultOrganization']
+      relations: ['defaultOrganization'],
+      select: ['id', 'username', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt']
     });
   }
 

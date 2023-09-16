@@ -113,7 +113,7 @@ export class UserController {
   @ApiOperation({ summary: 'Verify a user\'s email address' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('verifyEmail/:id')
-  async verifyEmail(@Param('id') id: string) {
+  async verifyEmail(@Param('id') id: string): Promise<Boolean> {
     let user = await this.userService.findRecord(id);
 
     if (!user) {
@@ -123,6 +123,6 @@ export class UserController {
     // Send the verification email
     await this.userService.sendVerificationEmail(user.email, user.emailVerificationToken);
 
-    return user;
+    return true;
   }
 }
