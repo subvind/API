@@ -70,7 +70,7 @@ export class UserService {
         id: id
       },
       relations: ['defaultOrganization'],
-      select: ['id', 'username', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt']
+      select: ['id', 'username', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'emailVerificationToken', 'isEmailVerified', 'createdAt']
     });
   }
 
