@@ -61,7 +61,7 @@ export class UserController {
   @AuthStatus(['Pending', 'Verified'])
   @UseGuards(AuthStatusGuard)
   async update(@Param('id') id: string, @Body() updatedUserData: User): Promise<User> {
-    let user = await this.userService.findOne(id);
+    let user = await this.userService.findRecord(id);
     let data
     const { password, ...userDataWithoutPassword } = updatedUserData;
     if (user.email === 'test@test.com') {
