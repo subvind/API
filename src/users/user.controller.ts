@@ -63,11 +63,33 @@ export class UserController {
   async update(@Param('id') id: string, @Body() updatedUserData: User): Promise<User> {
     let user = await this.userService.findOne(id);
     let data
-    const { username, email, password, ...userDataWithoutEmailAndUsername } = updatedUserData;
-    if (user.username === 'testing' || user.email === 'test@test.com') {
-      data = userDataWithoutEmailAndUsername
+    const { password, ...userDataWithoutPassword } = updatedUserData;
+    if (user.email === 'test@test.com') {
+      // don't allow the password to be changed on test account
+      data = userDataWithoutPassword 
     } else {
+      // allow password to be changed this is not a test account
       data = updatedUserData
+    }
+
+    // for security reasons don't allow these values to be changed
+    const { email, isEmailVerified, authStatus, ...userDataWithoutSecureInfo } = data;
+    data = userDataWithoutSecureInfo
+
+    // if emailVerificationToken is being submitted then
+    if (data.emailVerificationToken) {
+      // check to make sure it matches with what is already there
+      // if it matches then set authStatus to Verified
+      // and then set isEmailVerified to true
+      if (data.emailVerificationToken === user.emailVerificationToken) {
+        // update secure info
+        data.authStatus = 'Verified'
+        data.isEmailVerified = true
+      } else {
+        // update secure info
+        data.authStatus = 'Pending'
+        data.isEmailVerified = false
+      }
     }
 
     return this.userService.update(id, data);
