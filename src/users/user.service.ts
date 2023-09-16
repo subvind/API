@@ -128,7 +128,7 @@ export class UserService {
     const data = {
       from: 'subscribers@mail.subvind.com', // Replace with your sender email
       to: email,
-      subject: 'Email Verification - subvind.com',
+      subject: 'Email Verification - Powered by subvind.com',
       text: `Copy/paste the following token to verify your email: ${verificationToken}`,
     };
 
