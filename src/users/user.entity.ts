@@ -58,7 +58,7 @@ export class User {
   @Column({ nullable: true })
   youtube: string;
 
-  @Column({ nullable: true })
+  @Column({ select: false, nullable: true })
   emailVerificationToken: string;
 
   @Column({ default: false })
