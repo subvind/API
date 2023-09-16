@@ -174,4 +174,32 @@ export class UserController {
 
     return true;
   }
+
+  @ApiOperation({ summary: 'Reset a user\'s password' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Patch('resetPassword/:email')
+  async resetPassword(@Param('email') email: string, @Body() updatedUserData: User): Promise<User> {
+    let user = await this.userService.findByEmail(email)
+    if (user) {
+      user = await this.userService.findRecord(user.id);
+    }
+    let data: any = {}
+
+    // if recoverPasswordToken is being submitted then
+    if (updatedUserData.recoverPasswordToken) {
+      // check to make sure it matches with what is already there
+      // if it matches then set password to new password
+      if (updatedUserData.recoverPasswordToken === user.recoverPasswordToken) {
+        // update secure info
+        data = {
+          password: updatedUserData.password
+        }
+      } else {
+        // do nothing
+        throw new NotFoundException('Recover Password Token not found.')
+      }
+    }
+
+    return this.userService.update(user.id, data);
+  }
 }
