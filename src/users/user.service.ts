@@ -64,6 +64,15 @@ export class UserService {
     return { data, total };
   }
 
+  async findRecord(id: string): Promise<User> {
+    return this.userRepository.findOne({ 
+      where: {
+        id: id
+      },
+      relations: ['defaultOrganization']
+    });
+  }
+
   async findOne(id: string): Promise<User> {
     return this.userRepository.findOne({ 
       where: {
@@ -114,12 +123,12 @@ export class UserService {
     return compare(password, user.password);
   }
 
-  async sendVerificationEmail(email: string, verificationCode: string): Promise<void> {
+  async sendVerificationEmail(email: string, verificationToken: string): Promise<void> {
     const data = {
       from: 'subscribers@mail.subvind.com', // Replace with your sender email
       to: email,
       subject: 'Email Verification - subvind.com',
-      text: `Copy/paste the following token to verify your email: ${verificationCode}`,
+      text: `Copy/paste the following token to verify your email: ${verificationToken}`,
     };
 
     try {

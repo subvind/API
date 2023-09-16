@@ -114,7 +114,7 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('verifyEmail/:id')
   async verifyEmail(@Param('id') id: string) {
-    let user = await this.userService.findOne(id);
+    let user = await this.userService.findRecord(id);
 
     if (!user) {
       throw new NotFoundException('User or organization not found');
