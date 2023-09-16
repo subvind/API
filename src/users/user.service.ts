@@ -5,13 +5,21 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 
 import { compare } from 'bcrypt';
+import * as mailgun from 'mailgun-js';
 
 @Injectable()
 export class UserService {
+  private readonly mg;
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) {
+    this.mg = mailgun({
+      apiKey: process.env.MAILGUN_API_KEY || '123',
+      domain: process.env.MAILGUN_DOMAIN || '123',
+    });
+  }
 
   @RabbitSubscribe({
     exchange: 'exchange1',
@@ -104,5 +112,22 @@ export class UserService {
 
   async verifyPassword(user: User, password: string): Promise<boolean> {
     return compare(password, user.password);
+  }
+
+  async sendVerificationEmail(email: string, verificationCode: string): Promise<void> {
+    const data = {
+      from: 'subscribers@mail.subvind.com', // Replace with your sender email
+      to: email,
+      subject: 'Email Verification - subvind.com',
+      text: `Copy/paste the following token to verify your email: ${verificationCode}`,
+    };
+
+    try {
+      await this.mg.messages().send(data);
+      console.log('Verification email sent successfully');
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+      throw error;
+    }
   }
 }

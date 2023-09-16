@@ -109,4 +109,20 @@ export class UserController {
     // send changes to database
     return this.userService.update(user.id, change);
   }
+
+  @ApiOperation({ summary: 'Verify a user\'s email address' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Post('verifyEmail/:id')
+  async verifyEmail(@Param('id') id: string) {
+    let user = await this.userService.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('User or organization not found');
+    }
+
+    // Send the verification email
+    await this.userService.sendVerificationEmail(user.email, user.emailVerificationToken);
+
+    return user;
+  }
 }
