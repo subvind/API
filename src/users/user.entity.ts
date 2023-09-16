@@ -64,6 +64,9 @@ export class User {
   @Column({ default: false })
   isEmailVerified: boolean;
 
+  @Column({ select: false, nullable: true })
+  recoverPasswordToken: string;
+
   /**
    * Other properties and relationships as needed
    */

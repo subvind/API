@@ -70,7 +70,7 @@ export class UserService {
         id: id
       },
       relations: ['defaultOrganization'],
-      select: ['id', 'username', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'emailVerificationToken', 'isEmailVerified', 'createdAt']
+      select: ['id', 'username', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'emailVerificationToken', 'isEmailVerified', 'recoverPasswordToken', 'createdAt']
     });
   }
 
@@ -124,12 +124,29 @@ export class UserService {
     return compare(password, user.password);
   }
 
-  async sendVerificationEmail(email: string, verificationToken: string): Promise<void> {
+  async sendVerificationEmail(email: string, emailVerificationToken: string): Promise<void> {
     const data = {
       from: 'subscribers@mail.subvind.com', // Replace with your sender email
       to: email,
       subject: 'Email Verification - Powered by subvind.com',
-      text: `Copy/paste the following token to verify your email: ${verificationToken}`,
+      text: `Copy/paste the following token to verify this email: ${emailVerificationToken}`,
+    };
+
+    try {
+      await this.mg.messages().send(data);
+      console.log('Verification email sent successfully');
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+      throw error;
+    }
+  }
+
+  async sendPasswordRevocery(email: string, recoverPasswordToken: string): Promise<void> {
+    const data = {
+      from: 'subscribers@mail.subvind.com', // Replace with your sender email
+      to: email,
+      subject: 'Password Recovery - Powered by subvind.com',
+      text: `Copy/paste the following token to verify this email: ${recoverPasswordToken}`,
     };
 
     try {

@@ -11,6 +11,8 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { AuthStatus } from '../auth-status.decorator';
 import { AuthStatusGuard } from '../auth-status.guard';
 
+import { v4 as uuidv4 } from 'uuid';
+
 @ApiTags('users')
 @Controller('users')
 export class UserController {
@@ -143,6 +145,32 @@ export class UserController {
 
     // Send the verification email
     await this.userService.sendVerificationEmail(user.email, user.emailVerificationToken);
+
+    return true;
+  }
+
+
+  @ApiOperation({ summary: 'Recover a user\'s password by email address' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Post('recoverPassword/:email')
+  async recoverPassword(@Param('email') email: string): Promise<Boolean> {
+    let user = await this.userService.findByEmail(email)
+    if (user) {
+      user = await this.userService.findRecord(user.id);
+    }
+    
+    if (!user) {
+      throw new NotFoundException('User or organization not found');
+    }
+
+    // change
+    user.recoverPasswordToken = uuidv4()
+    
+    // send changes to database
+    await this.userService.update(user.id, user);
+
+    // Send the verification email
+    await this.userService.sendPasswordRevocery(user.email, user.recoverPasswordToken);
 
     return true;
   }
