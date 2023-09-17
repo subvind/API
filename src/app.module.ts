@@ -14,9 +14,9 @@ import { TypeOrmExceptionFilter } from './typeorm-exception.filter';
 import { JwtAuthModule } from './auth/jwt.module';
 import { AuthModule } from './auth/auth.module';
 
+import { AccountModule } from './accounts/account.module';
 import { BucketModule } from './buckets/bucket.module';
 import { CategoryModule } from './categories/category.module';
-import { CustomerModule } from './customers/customer.module';
 import { FileModule } from './files/file.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrganizationModule } from './organizations/organization.module';
@@ -40,9 +40,9 @@ import { UserModule } from './users/user.module';
     TypeOrmModule.forRoot(config),
     JwtAuthModule,
     AuthModule,
+    AccountModule,
     BucketModule,
     CategoryModule,
-    CustomerModule,
     FileModule,
     InventoryModule,
     OrganizationModule,

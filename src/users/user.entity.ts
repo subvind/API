@@ -48,7 +48,7 @@ export class User {
   password: string;
 
   @Column({ default: 'Pending' })
-  authStatus: AuthStatus; // status can be 'admin', 'employee', etc.
+  authStatus: AuthStatus; // status can be 'Pending', 'Verified', 'Banned'
 
   @ApiProperty({ example: 'TravisBurandt', description: 'The twitter url slug of the user' })
   @Column({ nullable: true })
