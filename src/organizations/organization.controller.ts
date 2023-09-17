@@ -61,6 +61,7 @@ export class OrganizationController {
   @AuthStatus(['Verified'])
   @UseGuards(AuthStatusGuard)
   async create(@Body() organizationData: Organization): Promise<Organization> {
+    // TODO: auto add onwer to list of accounts and make them admin
     return this.organizationService.create(organizationData);
   }
 
