@@ -43,7 +43,6 @@ export class OrganizationService {
       'owner.username',
       'owner.firstName',
       'owner.lastName',
-      'owner.role',
       'owner.createdAt'
     ]);
     
