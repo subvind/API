@@ -107,31 +107,24 @@ export class AccountController {
     return this.accountService.remove(id);
   }
 
-
-  @ApiOperation({ summary: 'Set a default organization for a account' })
+  @ApiOperation({ summary: 'Find accounts related to an organization' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Get('defaultOrganization/:accountname/:orgname')
-  async setDefaultOrg(@Param('accountname') accountname: string, @Param('orgname') orgname: string): Promise<Account> {
-    let account = await this.accountService.findByAccountname(accountname);
-    let organization = await this.organizationService.findByOrgname(orgname);
+  @Get('type/:type/orgRelated/:id')
+  async findOrgProduct(
+    @Param('type') type: string,
+    @Param('id') organizationId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('search') search?: string,
+  ): Promise<any> {
+    const organization = await this.organizationService.findOne(organizationId);
 
-    // console.log('setDefaultOrg account', account)
-    // console.log('setDefaultOrg organization', organization)
-
-    if (!account || !organization) {
-      // Throw an exception if account or organization is not found
-      throw new NotFoundException('Account or organization not found');
-    }
-    
-    // TODO: make sure account is employee of org
-    let change: any = {
-      defaultOrganization: organization.id,
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
     }
 
-    // console.log('setDefaultOrg change', change)
-    
-    // send changes to database
-    return this.accountService.update(account.id, change);
+    const { data, total } = await this.accountService.findOrgAccount(type, organization, page, limit, search);
+    return { data, total };
   }
 
   @ApiOperation({ summary: 'Verify a account\'s email address' })

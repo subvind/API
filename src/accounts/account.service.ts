@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Account } from './account.entity';
+import { Organization } from '../organizations/organization.entity';
 
 import { compare } from 'bcrypt';
 import * as mailgun from 'mailgun-js';
@@ -54,7 +55,7 @@ export class AccountService {
       'account.authStatus',
       'account.twitter',
       'account.youtube',
-      'account.defaultOrganization',
+      'account.organization',
       'account.isEmailVerified',
       'account.createdAt'
     ]);
@@ -69,7 +70,7 @@ export class AccountService {
       where: {
         id: id
       },
-      relations: ['defaultOrganization'],
+      relations: ['organization', 'suppleir', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'emailVerificationToken', 'isEmailVerified', 'recoverPasswordToken', 'createdAt']
     });
   }
@@ -79,7 +80,7 @@ export class AccountService {
       where: {
         id: id
       },
-      relations: ['defaultOrganization'],
+      relations: ['organization', 'suppleir', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
@@ -91,7 +92,7 @@ export class AccountService {
       where: {
         email: email
       },
-      relations: ['defaultOrganization'],
+      relations: ['organization', 'suppleir', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'password', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
@@ -101,7 +102,7 @@ export class AccountService {
       where: {
         accountname: accountname
       },
-      relations: ['defaultOrganization'],
+      relations: ['organization', 'suppleir', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
@@ -118,6 +119,52 @@ export class AccountService {
 
   async remove(id: string): Promise<void> {
     await this.accountRepository.delete(id);
+  }
+
+  async findOrgAccount(type: string, organization: Organization, page: number, limit: number, search?: string): Promise<{ data: Account[]; total: number }> {
+    const query = this.accountRepository.createQueryBuilder('account');
+  
+    query.where(
+      'account.organizationId = :tenantId',
+      { tenantId: organization.id }
+    );
+
+    if (search) {
+      query.andWhere(
+        '(account.accountname LIKE :search OR account.firstName LIKE :search OR account.lastName LIKE :search)',
+        { search: `%${search}%` }
+      );
+    }
+
+    if (type === 'customer') {
+      query.where(
+        'account.customer.customerStatus != :status',
+        { status: 'Void' }
+      );
+    } else if (type === 'employee') {
+      query.where(
+        'account.employee.employeeStatus != :status',
+        { status: 'Void' }
+      );
+    } else if (type === 'supplier') {
+      query.where(
+        'account.supplier.supplierStatus != :status',
+        { status: 'Void' }
+      );
+    } else {
+      // fetch all
+    }
+    
+    query.leftJoinAndSelect('account.organization', 'organization');
+    query.leftJoinAndSelect('account.customer', 'customer');
+    query.leftJoinAndSelect('account.employee', 'employee');
+    query.leftJoinAndSelect('account.supplier', 'supplier');
+  
+    const offset = (page - 1) * limit;
+    
+    const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
+  
+    return { data, total };
   }
 
   async verifyPassword(account: Account, password: string): Promise<boolean> {
