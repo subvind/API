@@ -137,17 +137,17 @@ export class AccountService {
     }
 
     if (type === 'customer') {
-      query.where(
+      query.andWhere(
         'customer.customerStatus != :status',
         { status: 'Void' }
       );
     } else if (type === 'employee') {
-      query.where(
+      query.andWhere(
         'employee.employeeStatus != :status',
         { status: 'Void' }
       );
     } else if (type === 'supplier') {
-      query.where(
+      query.andWhere(
         'supplier.supplierStatus != :status',
         { status: 'Void' }
       );
