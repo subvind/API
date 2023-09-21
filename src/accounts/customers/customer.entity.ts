@@ -8,7 +8,7 @@ export enum CustomerStatus {
   VOID = 'Void', // we don't know
   NEW = 'New', // this account wants to be a customer
   ESTABLISHED = 'Established', // this customer has done business at least once
-  RECURRING = 'Recurring', // this customer has had recuring business
+  RECURRING = 'Recurring', // this customer has had recurring business
   SUSPENDED = 'Suspended', // this customer has been absent for a while
   BANNED = 'Banned', // this customer has done something wrong
 }
