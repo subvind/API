@@ -14,6 +14,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
+    console.log('validateUser', email, password)
     const user = await this.userService.findByEmail(email);
     if (user && (await this.userService.verifyPassword(user, password))) {
       return user;
@@ -22,6 +23,7 @@ export class AuthService {
   }
 
   async validateAccount(email: string, organizationId: string, password: string): Promise<Account | null> {
+    console.log('validateAccount', email, organizationId, password)
     const account = await this.accountService.findByEmail(email, organizationId);
     if (account && (await this.accountService.verifyPassword(account, password))) {
       return account;
@@ -30,6 +32,8 @@ export class AuthService {
   }
 
   async userLogin(user: User) {
+    console.log('userLogin', user)
+
     // Generate and return a JWT token
     const payload: any = { 
       sub: user.id, 
@@ -54,6 +58,8 @@ export class AuthService {
   }
 
   async accountLogin(account: Account) {
+    console.log('accountLogin', account)
+    
     // Generate and return a JWT token
     const payload: any = { 
       sub: account.id, 
