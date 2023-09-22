@@ -70,7 +70,7 @@ export class AccountService {
       where: {
         id: id
       },
-      relations: ['organization', 'suppleir', 'employee', 'customer'],
+      relations: ['organization', 'supplier', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'emailVerificationToken', 'isEmailVerified', 'recoverPasswordToken', 'createdAt']
     });
   }
@@ -80,7 +80,7 @@ export class AccountService {
       where: {
         id: id
       },
-      relations: ['organization', 'suppleir', 'employee', 'customer'],
+      relations: ['organization', 'supplier', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
@@ -95,7 +95,7 @@ export class AccountService {
           id: organizationId
         }
       },
-      relations: ['organization', 'suppleir', 'employee', 'customer'],
+      relations: ['organization', 'supplier', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'password', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
@@ -108,7 +108,7 @@ export class AccountService {
           id: organizationId
         }
       },
-      relations: ['organization', 'suppleir', 'employee', 'customer'],
+      relations: ['organization', 'supplier', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
