@@ -14,10 +14,13 @@ export class LocalAccountStrategy extends PassportStrategy(Strategy, 'account-lo
 
   async validate(request, email: string, password: string): Promise<any> {
     // Access the request object, e.g., request.user for user information
-    console.log('LocalAccountStrategy request:', request);
+    console.log('LocalAccountStrategy request.body:', request.body);
+
+    // Access body parameters from the request object
+    const { organizationId } = request.body;
 
     console.log('LocalAccountStrategy', email, password)
-    const user = await this.authService.validateAccount(email, password, request.organizationId);
+    const user = await this.authService.validateAccount(email, password, organizationId);
     if (!user) {
       throw new UnauthorizedException();
     }
