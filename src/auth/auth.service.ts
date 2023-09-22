@@ -62,7 +62,8 @@ export class AuthService {
 
     // Generate and return a JWT token
     const payload: any = { 
-      sub: account.id, 
+      sub: account.id,
+      ownername: account.organization.owner.username,
       accountname: account.accountname,
       fullName: account.firstName + ' ' + account.lastName,
       email: account.email,

@@ -70,7 +70,13 @@ export class AccountService {
       where: {
         id: id
       },
-      relations: ['organization', 'supplier', 'employee', 'customer'],
+      relations: [
+        'organization',
+        'organization.owner',
+        'supplier',
+        'employee',
+        'customer'
+      ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'emailVerificationToken', 'isEmailVerified', 'recoverPasswordToken', 'createdAt']
     });
   }
@@ -80,7 +86,13 @@ export class AccountService {
       where: {
         id: id
       },
-      relations: ['organization', 'supplier', 'employee', 'customer'],
+      relations: [
+        'organization',
+        'organization.owner',
+        'supplier',
+        'employee',
+        'customer'
+      ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
@@ -95,7 +107,13 @@ export class AccountService {
           id: organizationId
         }
       },
-      relations: ['organization', 'supplier', 'employee', 'customer'],
+      relations: [
+        'organization',
+        'organization.owner',
+        'supplier',
+        'employee',
+        'customer'
+      ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'password', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
@@ -108,7 +126,13 @@ export class AccountService {
           id: organizationId
         }
       },
-      relations: ['organization', 'supplier', 'employee', 'customer'],
+      relations: [
+        'organization',
+        'organization.owner',
+        'supplier',
+        'employee',
+        'customer'
+      ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
