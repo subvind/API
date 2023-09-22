@@ -22,8 +22,8 @@ export class AuthService {
     return null;
   }
 
-  async validateAccount(email: string, organizationId: string, password: string): Promise<Account | null> {
-    console.log('validateAccount', email, organizationId, password)
+  async validateAccount(email: string, password: string, organizationId: string): Promise<Account | null> {
+    console.log('validateAccount', email, password, organizationId)
     const account = await this.accountService.findByEmail(email, organizationId);
     if (account && (await this.accountService.verifyPassword(account, password))) {
       return account;
@@ -59,7 +59,7 @@ export class AuthService {
 
   async accountLogin(account: Account) {
     console.log('accountLogin', account)
-    
+
     // Generate and return a JWT token
     const payload: any = { 
       sub: account.id, 
