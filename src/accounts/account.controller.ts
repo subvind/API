@@ -44,9 +44,9 @@ export class AccountController {
 
   @ApiOperation({ summary: 'Get a account by accountname' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Get('accountname/:accountname')
-  async findSingle(@Param('accountname') accountname: string): Promise<Account> {
-    return this.accountService.findByAccountname(accountname);
+  @Get('accountname/:accountname/:organizationId')
+  async findSingle(@Param('accountname') accountname: string, @Param('organizationId') organizationId: string): Promise<Account> {
+    return this.accountService.findByAccountname(accountname, organizationId);
   }
 
   @ApiOperation({ summary: 'Create a account' })
@@ -146,9 +146,9 @@ export class AccountController {
 
   @ApiOperation({ summary: 'Recover a account\'s password by email address' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Post('recoverPassword/:email')
-  async recoverPassword(@Param('email') email: string): Promise<Boolean> {
-    let account = await this.accountService.findByEmail(email)
+  @Post('recoverPassword/:email/:organizationId')
+  async recoverPassword(@Param('email') email: string, @Param('organizationId') organizationId: string): Promise<Boolean> {
+    let account = await this.accountService.findByEmail(email, organizationId)
     if (account) {
       account = await this.accountService.findRecord(account.id);
     }
@@ -171,9 +171,9 @@ export class AccountController {
 
   @ApiOperation({ summary: 'Reset a account\'s password' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Patch('resetPassword/:email')
-  async resetPassword(@Param('email') email: string, @Body() updatedAccountData: Account): Promise<Account> {
-    let account = await this.accountService.findByEmail(email)
+  @Patch('resetPassword/:email/:organizationId')
+  async resetPassword(@Param('email') email: string, @Param('organizationId') organizationId: string, @Body() updatedAccountData: Account): Promise<Account> {
+    let account = await this.accountService.findByEmail(email, organizationId)
     if (account) {
       account = await this.accountService.findRecord(account.id);
     }

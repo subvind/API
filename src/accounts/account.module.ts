@@ -14,7 +14,7 @@ import { UserModule } from '../users/user.module';
 
 @Module({
   imports: [
-    UserModule,
+    forwardRef(() => UserModule),
     forwardRef(() => OrganizationModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [

@@ -85,22 +85,28 @@ export class AccountService {
     });
   }
 
-  async findByEmail(email: string): Promise<Account> {
+  async findByEmail(email: string, organizationId: string): Promise<Account> {
     // select password is needed here because of
     // auth bcrypt compare step at verifyPassword
     return this.accountRepository.findOne({ 
       where: {
-        email: email
+        email: email,
+        organization: {
+          id: organizationId
+        }
       },
       relations: ['organization', 'suppleir', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'password', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
   }
 
-  async findByAccountname(accountname: string): Promise<Account> {
+  async findByAccountname(accountname: string, organizationId: string): Promise<Account> {
     return this.accountRepository.findOne({ 
       where: {
-        accountname: accountname
+        accountname: accountname,
+        organization: {
+          id: organizationId
+        }
       },
       relations: ['organization', 'suppleir', 'employee', 'customer'],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 

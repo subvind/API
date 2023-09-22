@@ -10,9 +10,13 @@ import { OrganizationModule } from '../organizations/organization.module';
 import { JwtService } from '@nestjs/jwt';
 
 import { User } from './user.entity';
+import { AuthModule } from '../auth/auth.module';
+import { AccountModule } from '../accounts/account.module';
 
 @Module({
   imports: [
+    forwardRef(() => AccountModule),
+    forwardRef(() => AuthModule),
     forwardRef(() => OrganizationModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
