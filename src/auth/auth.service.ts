@@ -21,10 +21,8 @@ export class AuthService {
     return null;
   }
 
-  async validateAccount(email: string, password: string): Promise<Account | null> {
-    let organizationId = email.split(':')[0]
-    let emailId = email.split(':')[1]
-    const account = await this.accountService.findByEmail(emailId, organizationId);
+  async validateAccount(email: string, organizationId: string, password: string): Promise<Account | null> {
+    const account = await this.accountService.findByEmail(email, organizationId);
     if (account && (await this.accountService.verifyPassword(account, password))) {
       return account;
     }
