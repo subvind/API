@@ -10,10 +10,12 @@ import { UserModule } from '../users/user.module';
 
 import { AuthStatusGuard } from '../auth-status.guard';
 import { JwtService } from '@nestjs/jwt';
+import { AccountModule } from '../accounts/account.module';
 
 @Module({
   imports: [
     forwardRef(() => UserModule),
+    forwardRef(() => AccountModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
