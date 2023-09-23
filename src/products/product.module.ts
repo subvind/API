@@ -1,6 +1,7 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { JwtService } from '@nestjs/jwt';
 import { Module, forwardRef } from '@nestjs/common';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
@@ -8,11 +9,15 @@ import { ProductService } from './product.service';
 import { Product } from './product.entity';
 import { OrganizationModule } from '../organizations/organization.module';
 import { CategoryModule } from '../categories/category.module';
+import { UserModule } from 'src/users/user.module';
+import { AccountModule } from 'src/accounts/account.module';
 
 @Module({
   imports: [
     OrganizationModule,
     CategoryModule,
+    UserModule,
+    AccountModule,
     // forwardRef(() => OrganizationModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
@@ -30,6 +35,6 @@ import { CategoryModule } from '../categories/category.module';
     ProductService
   ],
   controllers: [ProductController],
-  providers: [ProductService],
+  providers: [ProductService, JwtService],
 })
 export class ProductModule {}
