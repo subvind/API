@@ -107,11 +107,11 @@ export class EmployeeStatusGuard implements CanActivate {
 
       if (match) {
         // Check if the user's/account's employeeStatus matches any of the allowed statuses
-        if (statuses.includes(person.employeeStatus)) {
-          console.log('authorization employeeStatus includes true', person.employeeStatus)
+        if (statuses.includes(person.employee.employeeStatus)) {
+          console.log('authorization employeeStatus includes true', person.employee.employeeStatus)
           return true; // Grant access if employeeStatus matches
         } else {
-          console.log('authorization employeeStatus includes false', person.employeeStatus)
+          console.log('authorization employeeStatus includes false', person.employee.employeeStatus)
           return false; // Deny access if employeeStatus does not match
         }
       } else {
