@@ -57,7 +57,7 @@ export class Account {
   password: string;
 
   @Column({ default: 'Pending' })
-  authStatus: AuthStatus; // status can be 'admin', 'employee', etc.
+  authStatus: AuthStatus; // status can be 'Banned', 'Verified', 'Pending'
 
   @ApiProperty({ example: 'TravisBurandt', description: 'The twitter url slug of the account' })
   @Column({ nullable: true })

@@ -3,13 +3,15 @@ import { Reflector } from '@nestjs/core';
 import { AuthStatus } from './auth-status.decorator';
 import { JwtService } from '@nestjs/jwt'; 
 import { UserService } from './users/user.service';
+import { AccountService } from './accounts/account.service';
 
 @Injectable()
 export class AuthStatusGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
-    private userService: UserService
+    private userService: UserService,
+    private accountService: AccountService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -44,24 +46,33 @@ export class AuthStatusGuard implements CanActivate {
       return false; // Token verification failed, denying access
     }
 
+    let person: any;
+
     // Access the properties from the decoded token
-    const userId = decoded.sub;
+    const personId = decoded.sub;
     const email = decoded.email;
 
     // authorization logic
-    let user = await this.userService.findOne(userId)
-    console.log('authorization logic', user)
-
-    if (!user) {
-      return false; // User not found, denying access
+    if (decoded.type === 'user') {
+      person = await this.userService.findOne(personId)
+      console.log('userService', person)
+    } else if (decoded.type === 'account') {
+      person = await this.accountService.findOne(personId)
+      console.log('accountService', person)
+    } else {
+      return false; // type === 'other'
     }
 
-    // Check if the user's authStatus matches any of the allowed statuses
-    if (statuses.includes(user.authStatus)) {
-      console.log('statuses.includes true', user.authStatus)
+    if (!person) {
+      return false; // Person not found, denying access
+    }
+
+    // Check if the user's/account's authStatus matches any of the allowed statuses
+    if (statuses.includes(person.authStatus)) {
+      console.log('statuses.includes true', person.authStatus)
       return true; // Grant access if authStatus matches
     } else {
-      console.log('statuses.includes false', user.authStatus)
+      console.log('statuses.includes false', person.authStatus)
       return false; // Deny access if authStatus does not match
     }
   }
