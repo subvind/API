@@ -68,7 +68,7 @@ export class EmployeeStatusGuard implements CanActivate {
         return false; // product not found, denying access
       }
       let product = await this.productService.findOne(productId)
-      organization = product.organization
+      organization = await this.organizationService.findRecord(product.organization.id)
     }
     console.log('authorization organization', organization)
 
