@@ -36,7 +36,7 @@ export class EmployeeStatusGuard implements CanActivate {
 
     // Extract the token (remove "Bearer " prefix if present)
     const token = authHeader.replace('Bearer ', '');
-    console.log('authorization token', token)
+    // console.log('authorization token', token)
 
     let decoded
     try {
@@ -44,7 +44,7 @@ export class EmployeeStatusGuard implements CanActivate {
       decoded = this.jwtService.verify(token, {
         secret: process.env.JWT_SECRET
       });
-      console.log('authorization decoded', decoded)
+      // console.log('authorization decoded', decoded)
     } catch (error) {
       console.log('authorization token verification failed', error)
       return false; // Token verification failed, denying access
@@ -70,7 +70,7 @@ export class EmployeeStatusGuard implements CanActivate {
       let product = await this.productService.findOne(productId)
       organization = await this.organizationService.findRecord(product.organization.id)
     }
-    console.log('authorization organization', organization)
+    // console.log('authorization organization', organization)
 
     let person: any;
 
@@ -81,7 +81,7 @@ export class EmployeeStatusGuard implements CanActivate {
     // authorization logic
     if (decoded.type === 'user') {
       person = await this.userService.findRecord(personId)
-      console.log('authorization userService', person)
+      // console.log('authorization userService', person)
       /**
        * is this person the owner of this org?
        */
@@ -94,7 +94,7 @@ export class EmployeeStatusGuard implements CanActivate {
       }
     } else if (decoded.type === 'account') {
       person = await this.accountService.findRecord(personId)
-      console.log('authorization accountService', person)
+      // console.log('authorization accountService', person)
       /**
        * is this person an employee of this org?
        */
@@ -108,10 +108,10 @@ export class EmployeeStatusGuard implements CanActivate {
       if (match) {
         // Check if the user's/account's employeeStatus matches any of the allowed statuses
         if (statuses.includes(person.employee.employeeStatus)) {
-          console.log('authorization employeeStatus includes true', person.employee.employeeStatus)
+          console.log('authorization employeeStatus includes true', person.employee.employeeStatus, 'should be', statuses)
           return true; // Grant access if employeeStatus matches
         } else {
-          console.log('authorization employeeStatus includes false', person.employee.employeeStatus)
+          console.log('authorization employeeStatus includes false', person.employee.employeeStatus, 'should be', statuses)
           return false; // Deny access if employeeStatus does not match
         }
       } else {
