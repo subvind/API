@@ -66,6 +66,23 @@ export class OrganizationService {
     });
   }
 
+  async findRecord(id: string): Promise<Organization> {
+    return this.organizationRepository.findOne({ 
+      where: {
+        id: id
+      },
+      relations: [
+        'owner',
+        'accounts',
+        'accounts.customer',
+        'accounts.employee',
+        'accounts.supplier',
+        'orgPhoto',
+        'orgPhoto.bucket',
+      ]
+    });
+  }
+
   async findByOrgname(orgname: string): Promise<Organization> {
     return this.organizationRepository.findOne({
       where: {

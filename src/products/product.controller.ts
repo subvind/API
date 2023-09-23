@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 
 import { ProductService } from './product.service';
 import { OrganizationService } from '../organizations/organization.service';
@@ -9,6 +9,8 @@ import { Product } from './product.entity';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
+import { EmployeeStatusGuard } from './employee-status.guard';
+import { EmployeeStatus } from './employee-status.decorator';
 
 @ApiTags('products')
 @Controller('products')
@@ -50,6 +52,8 @@ export class ProductController {
   @ApiBody({ type: Product })
   @ApiResponse({ status: 201, description: 'Success', type: Product })
   @Post()
+  @EmployeeStatus(['Working'])
+  @UseGuards(EmployeeStatusGuard)
   async create(@Body() productData: Product): Promise<Product> {
     return this.productService.create(productData);
   }
@@ -57,6 +61,8 @@ export class ProductController {
   @ApiOperation({ summary: 'Update a product' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
+  @EmployeeStatus(['Working'])
+  @UseGuards(EmployeeStatusGuard)
   async update(@Param('id') id: string, @Body() updatedProductData: Product): Promise<Product> {
     return this.productService.update(id, updatedProductData);
   }
@@ -64,6 +70,8 @@ export class ProductController {
   @ApiOperation({ summary: 'Delete a product' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
+  @EmployeeStatus(['Working'])
+  @UseGuards(EmployeeStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.productService.remove(id);
   }

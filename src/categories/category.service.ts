@@ -59,6 +59,7 @@ export class CategoryService {
         'subCategories', 
         'products',
         'organization',
+        'organization.owner',
         'mainPhoto',
         'mainPhoto.bucket'
       ]
@@ -78,6 +79,7 @@ export class CategoryService {
         'subCategories', 
         'products',
         'organization',
+        'organization.owner',
         'mainPhoto',
         'mainPhoto.bucket'
       ]

@@ -59,6 +59,7 @@ export class BucketService {
       relations: [
         'files',
         'organization',
+        'organization.owner',
       ]
     });
   }

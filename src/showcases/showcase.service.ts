@@ -54,6 +54,7 @@ export class ShowcaseService {
       },
       relations: [
         'organization',
+        'organization.owner',
         'bannerPhoto',
         'bannerPhoto.bucket'
       ]

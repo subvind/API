@@ -58,6 +58,7 @@ export class ProductService {
       relations: [
         'category',
         'organization',
+        'organization.owner',
         'bucket',
         'bucket.files',
         'coverPhoto',
@@ -77,6 +78,7 @@ export class ProductService {
       relations: [
         'category',
         'organization',
+        'organization.owner',
         'bucket',
         'bucket.files',
         'coverPhoto',

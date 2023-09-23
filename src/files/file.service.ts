@@ -168,6 +168,7 @@ export class FileService {
       relations: [
         'bucket',
         'organization',
+        'organization.owner',
       ]
     });
   }
