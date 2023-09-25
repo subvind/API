@@ -57,7 +57,11 @@ export class EmployeeStatusGuard implements CanActivate {
         return false; // org not found, denying access
       }
       let org = await this.organizationService.findByOrgname(organizationId)
-      organization = await this.organizationService.findRecord(org.id)
+      if (org) {
+        return false; // this orgname already exists, denying access
+      } else {
+        return true; // this orgname may be created, granting access
+      }
       
     } else if (request.method === 'GET' || request.method === 'DELETE' || request.method === 'PATCH') {
       // get org from request.params.id object
