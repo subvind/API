@@ -51,12 +51,13 @@ export class EmployeeStatusGuard implements CanActivate {
     let organization: any;
     if (request.method === 'POST') {
       // get org from request.body.organization.id
-      let organizationId = request.body.organization.id
+      let organizationId = request.body.orgname
       console.log('authorization org id found', organizationId)
       if (!organizationId) {
         return false; // org not found, denying access
       }
-      organization = await this.organizationService.findRecord(organizationId)
+      let org = await this.organizationService.findByOrgname(organizationId)
+      organization = await this.organizationService.findRecord(org.id)
       
     } else if (request.method === 'GET' || request.method === 'DELETE' || request.method === 'PATCH') {
       // get org from request.params.id object
