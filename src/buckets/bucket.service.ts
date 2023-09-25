@@ -45,7 +45,16 @@ export class BucketService {
   }
 
   async findOne(id: string): Promise<Bucket> {
-    return this.bucketRepository.findOneBy({ id: id });
+    return this.bucketRepository.findOne({ 
+      where: { 
+        id: id 
+      },
+      relations: [
+        'files',
+        'organization',
+        'organization.owner',
+      ]
+    });
   }
 
   async findByName(name: string, organizationId: string): Promise<Bucket> {

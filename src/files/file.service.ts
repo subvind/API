@@ -154,7 +154,16 @@ export class FileService {
   }
 
   async findOne(id: string): Promise<File> {
-    return this.fileRepository.findOneBy({ id: id });
+    return this.fileRepository.findOne({ 
+      where: {
+        id: id
+      },
+      relations: [
+        'bucket',
+        'organization',
+        'organization.owner',
+      ]
+    });
   }
 
   async findByFilename(filename: string, organizationId: string): Promise<File> {
