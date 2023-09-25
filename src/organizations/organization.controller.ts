@@ -11,6 +11,8 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
 import { AuthStatus } from '../auth-status.decorator';
 import { AuthStatusGuard } from '../auth-status.guard';
+import { EmployeeStatusGuard } from './employee-status.guard';
+import { EmployeeStatus } from './employee-status.decorator';
 
 @ApiTags('organizations')
 @Controller('organizations')
@@ -59,7 +61,8 @@ export class OrganizationController {
   @ApiResponse({ status: 201, description: 'Success', type: Organization })
   @Post()
   @AuthStatus(['Verified'])
-  @UseGuards(AuthStatusGuard)
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async create(@Body() organizationData: Organization): Promise<Organization> {
     // TODO: auto add onwer to list of accounts and make them admin
     return this.organizationService.create(organizationData);
@@ -69,7 +72,8 @@ export class OrganizationController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
   @AuthStatus(['Verified'])
-  @UseGuards(AuthStatusGuard)
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async update(@Param('id') id: string, @Body() updatedOrganizationData: Organization): Promise<Organization> {
     return this.organizationService.update(id, updatedOrganizationData);
   }
@@ -78,7 +82,8 @@ export class OrganizationController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
   @AuthStatus(['Verified'])
-  @UseGuards(AuthStatusGuard)
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.organizationService.remove(id);
   }

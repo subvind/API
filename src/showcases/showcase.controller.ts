@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 
 import { ShowcaseService } from './showcase.service';
 import { OrganizationService } from '../organizations/organization.service';
@@ -8,6 +8,11 @@ import { Showcase } from './showcase.entity';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
+
+import { AuthStatus } from '../auth-status.decorator';
+import { AuthStatusGuard } from '../auth-status.guard';
+import { EmployeeStatusGuard } from './employee-status.guard';
+import { EmployeeStatus } from './employee-status.decorator';
 
 @ApiTags('showcases')
 @Controller('showcases')
@@ -41,6 +46,9 @@ export class ShowcaseController {
   @ApiBody({ type: Showcase })
   @ApiResponse({ status: 201, description: 'Success', type: Showcase })
   @Post()
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async create(@Body() showcaseData: Showcase): Promise<Showcase> {
     return this.showcaseService.create(showcaseData);
   }
@@ -48,6 +56,9 @@ export class ShowcaseController {
   @ApiOperation({ summary: 'Update a showcase' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async update(@Param('id') id: string, @Body() updatedShowcaseData: Showcase): Promise<Showcase> {
     return this.showcaseService.update(id, updatedShowcaseData);
   }
@@ -55,6 +66,9 @@ export class ShowcaseController {
   @ApiOperation({ summary: 'Delete a showcase' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.showcaseService.remove(id);
   }

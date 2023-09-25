@@ -9,8 +9,8 @@ import { ProductService } from './product.service';
 import { Product } from './product.entity';
 import { OrganizationModule } from '../organizations/organization.module';
 import { CategoryModule } from '../categories/category.module';
-import { UserModule } from 'src/users/user.module';
-import { AccountModule } from 'src/accounts/account.module';
+import { UserModule } from '../users/user.module';
+import { AccountModule } from '../accounts/account.module';
 
 @Module({
   imports: [

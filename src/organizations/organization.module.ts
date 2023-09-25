@@ -1,15 +1,15 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { JwtService } from '@nestjs/jwt';
 import { Module, forwardRef } from '@nestjs/common';
 import { OrganizationController } from './organization.controller';
 import { OrganizationService } from './organization.service';
 
 import { Organization } from './organization.entity';
-import { UserModule } from '../users/user.module';
 
 import { AuthStatusGuard } from '../auth-status.guard';
-import { JwtService } from '@nestjs/jwt';
+import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
 
 @Module({

@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UploadedFile, UseInterceptors, UseGuards } from '@nestjs/common';
 
 import { FileService } from './file.service';
 import { OrganizationService } from '../organizations/organization.service';
@@ -10,6 +10,11 @@ import { NotFoundException } from '@nestjs/common'; // Import the NotFoundExcept
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
+
+import { AuthStatus } from '../auth-status.decorator';
+import { AuthStatusGuard } from '../auth-status.guard';
+import { EmployeeStatusGuard } from './employee-status.guard';
+import { EmployeeStatus } from './employee-status.decorator';
 
 @ApiTags('files')
 @Controller('files')
@@ -25,6 +30,9 @@ export class FileController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('upload/:bucketId/:organizationId')
   @UseInterceptors(FileInterceptor('file'))
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async uploadFile(@UploadedFile() file: Express.Multer.File, @Param('bucketId') bucketId: string, @Param('organizationId') organizationId: string): Promise<File> {
     const buffer = file.buffer;
     const filename = file.originalname;
@@ -65,6 +73,9 @@ export class FileController {
   @ApiBody({ type: File })
   @ApiResponse({ status: 201, description: 'Success', type: File })
   @Post()
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async create(@Body() fileData: File): Promise<File> {
     return this.fileService.create(fileData);
   }
@@ -72,6 +83,9 @@ export class FileController {
   @ApiOperation({ summary: 'Update a file' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async update(@Param('id') id: string, @Body() updatedFileData: File): Promise<File> {
     return this.fileService.update(id, updatedFileData);
   }
@@ -79,6 +93,9 @@ export class FileController {
   @ApiOperation({ summary: 'Delete a file' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.fileService.remove(id);
   }

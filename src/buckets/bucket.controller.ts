@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 
 import { BucketService } from './bucket.service';
 import { OrganizationService } from '../organizations/organization.service';
@@ -9,6 +9,11 @@ import { Bucket } from './bucket.entity';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
+
+import { AuthStatus } from '../auth-status.decorator';
+import { AuthStatusGuard } from '../auth-status.guard';
+import { EmployeeStatusGuard } from './employee-status.guard';
+import { EmployeeStatus } from './employee-status.decorator';
 
 @ApiTags('buckets')
 @Controller('buckets')
@@ -50,6 +55,9 @@ export class BucketController {
   @ApiBody({ type: Bucket })
   @ApiResponse({ status: 201, description: 'Success', type: Bucket })
   @Post()
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async create(@Body() bucketData: Bucket): Promise<Bucket> {
     return this.bucketService.create(bucketData);
   }
@@ -57,6 +65,9 @@ export class BucketController {
   @ApiOperation({ summary: 'Update a bucket' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async update(@Param('id') id: string, @Body() updatedBucketData: Bucket): Promise<Bucket> {
     return this.bucketService.update(id, updatedBucketData);
   }
@@ -64,6 +75,9 @@ export class BucketController {
   @ApiOperation({ summary: 'Delete a bucket' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.bucketService.remove(id);
   }
