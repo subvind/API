@@ -10,6 +10,8 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
 import { AuthStatus } from '../auth-status.decorator';
 import { AuthStatusGuard } from '../auth-status.guard';
+import { EmployeeStatusGuard } from './employee-status.guard';
+import { EmployeeStatus } from './employee-status.decorator';
 
 import { v4 as uuidv4 } from 'uuid';
 import { hash } from 'bcrypt';
@@ -35,34 +37,37 @@ export class AccountController {
     return { data, total };
   }
 
-  @ApiOperation({ summary: 'Get a account by id' })
+  @ApiOperation({ summary: 'Get an account by id' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Account> {
     return this.accountService.findOne(id);
   }
 
-  @ApiOperation({ summary: 'Get a account by accountname' })
+  @ApiOperation({ summary: 'Get an account by accountname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('accountname/:accountname/:organizationId')
   async findSingle(@Param('accountname') accountname: string, @Param('organizationId') organizationId: string): Promise<Account> {
     return this.accountService.findByAccountname(accountname, organizationId);
   }
 
-  @ApiOperation({ summary: 'Create a account' })
+  @ApiOperation({ summary: 'Create an account' })
   @ApiBody({ type: Account })
   @ApiResponse({ status: 201, description: 'Success', type: Account })
   @Post()
-  // @UseGuards() // anyone can create a account
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async create(@Body() accountData: Account): Promise<Account> {
     return this.accountService.create(accountData);
   }
 
-  @ApiOperation({ summary: 'Update a account' })
+  @ApiOperation({ summary: 'Update an account' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
-  @AuthStatus(['Pending', 'Verified'])
-  @UseGuards(AuthStatusGuard)
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async update(@Param('id') id: string, @Body() updatedAccountData: Account): Promise<Account> {
     let account = await this.accountService.findRecord(id);
     let data
@@ -98,10 +103,12 @@ export class AccountController {
     return this.accountService.update(id, data);
   }
 
-  @ApiOperation({ summary: 'Delete a account' })
+  @ApiOperation({ summary: 'Delete an account' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
-  @AuthStatus(['Pending', 'Verified'])
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   @UseGuards(AuthStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.accountService.remove(id);
@@ -127,7 +134,7 @@ export class AccountController {
     return { data, total };
   }
 
-  @ApiOperation({ summary: 'Verify a account\'s email address' })
+  @ApiOperation({ summary: 'Verify an account\'s email address' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('verifyEmail/:id')
   async verifyEmail(@Param('id') id: string): Promise<Boolean> {
@@ -143,8 +150,7 @@ export class AccountController {
     return true;
   }
 
-
-  @ApiOperation({ summary: 'Recover a account\'s password by email address' })
+  @ApiOperation({ summary: 'Recover an account\'s password by email address' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('recoverPassword/:email/:organizationId')
   async recoverPassword(@Param('email') email: string, @Param('organizationId') organizationId: string): Promise<Boolean> {
@@ -169,7 +175,7 @@ export class AccountController {
     return true;
   }
 
-  @ApiOperation({ summary: 'Reset a account\'s password' })
+  @ApiOperation({ summary: 'Reset an account\'s password' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch('resetPassword/:email/:organizationId')
   async resetPassword(@Param('email') email: string, @Param('organizationId') organizationId: string, @Body() updatedAccountData: Account): Promise<Account> {
