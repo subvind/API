@@ -60,7 +60,11 @@ export class EmployeeStatusGuard implements CanActivate {
       if (org) {
         return false; // this orgname already exists, denying access
       } else {
-        return true; // this orgname may be created, granting access
+        if (decoded.type === 'user') {
+          return true; // this orgname may be created, granting access
+        } else {
+          return false; // this is not a root user, denying access
+        }
       }
       
     } else if (request.method === 'GET' || request.method === 'DELETE' || request.method === 'PATCH') {
