@@ -9,6 +9,9 @@ import { Product } from './product.entity';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
 
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
+
+import { AuthStatus } from '../auth-status.decorator';
+import { AuthStatusGuard } from '../auth-status.guard';
 import { EmployeeStatusGuard } from './employee-status.guard';
 import { EmployeeStatus } from './employee-status.decorator';
 
@@ -52,8 +55,9 @@ export class ProductController {
   @ApiBody({ type: Product })
   @ApiResponse({ status: 201, description: 'Success', type: Product })
   @Post()
+  @AuthStatus(['Verified'])
   @EmployeeStatus(['Working'])
-  @UseGuards(EmployeeStatusGuard)
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async create(@Body() productData: Product): Promise<Product> {
     return this.productService.create(productData);
   }
@@ -61,8 +65,9 @@ export class ProductController {
   @ApiOperation({ summary: 'Update a product' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
+  @AuthStatus(['Verified'])
   @EmployeeStatus(['Working'])
-  @UseGuards(EmployeeStatusGuard)
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async update(@Param('id') id: string, @Body() updatedProductData: Product): Promise<Product> {
     return this.productService.update(id, updatedProductData);
   }
@@ -70,8 +75,9 @@ export class ProductController {
   @ApiOperation({ summary: 'Delete a product' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
+  @AuthStatus(['Verified'])
   @EmployeeStatus(['Working'])
-  @UseGuards(EmployeeStatusGuard)
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.productService.remove(id);
   }

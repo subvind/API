@@ -16,7 +16,7 @@ export class AuthStatusGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const statuses = this.reflector.get(AuthStatus, context.getHandler());
-    console.log('statuses', statuses)
+    console.log('authorization statuses', statuses)
 
     if (!statuses || statuses.length === 0) {
       return true; // No authStatus decorator found or no statuses specified, allowing access by default
@@ -26,13 +26,13 @@ export class AuthStatusGuard implements CanActivate {
     const authHeader = request.headers['authorization'];
 
     if (!authHeader) {
-      console.log('no authorization header')
+      console.log('authorization no header')
       return false; // No Authorization header found, denying access
     }
 
     // Extract the token (remove "Bearer " prefix if present)
     const token = authHeader.replace('Bearer ', '');
-    console.log('token', token)
+    // console.log('authorization token', token)
 
     let decoded
     try {
@@ -40,9 +40,9 @@ export class AuthStatusGuard implements CanActivate {
       decoded = this.jwtService.verify(token, {
         secret: process.env.JWT_SECRET
       });
-      console.log('decoded', decoded)
+      // console.log('authorization decoded', decoded)
     } catch (error) {
-      console.log('Token verification failed', error)
+      console.log('authorization token verification failed', error)
       return false; // Token verification failed, denying access
     }
 
@@ -55,10 +55,10 @@ export class AuthStatusGuard implements CanActivate {
     // authorization logic
     if (decoded.type === 'user') {
       person = await this.userService.findOne(personId)
-      console.log('userService', person)
+      console.log('authorization userService', person.id)
     } else if (decoded.type === 'account') {
       person = await this.accountService.findOne(personId)
-      console.log('accountService', person)
+      console.log('authorization accountService', person.id)
     } else {
       return false; // type === 'other'
     }
@@ -69,10 +69,10 @@ export class AuthStatusGuard implements CanActivate {
 
     // Check if the user's/account's authStatus matches any of the allowed statuses
     if (statuses.includes(person.authStatus)) {
-      console.log('statuses.includes true', person.authStatus)
+      console.log('authorization authStatus includes true', person.authStatus)
       return true; // Grant access if authStatus matches
     } else {
-      console.log('statuses.includes false', person.authStatus)
+      console.log('authorization authStatus includes false', person.authStatus)
       return false; // Deny access if authStatus does not match
     }
   }
