@@ -142,8 +142,37 @@ export class AccountService {
     return this.accountRepository.save(newObject);
   }
 
-  async update(id: string, account: Account): Promise<Account> {
-    await this.accountRepository.update(id, account);
+  async update(id: string, newAccount: Partial<Account>): Promise<Account> {
+    // await this.accountRepository.update(id, account);
+
+    const account: any = await this.accountRepository.findOne({
+      where: {
+        id: id
+      },
+      relations: [
+        'supplier',
+        'employee',
+        'customer',
+      ]
+    });
+
+    if (account) {
+      // Update user properties
+      this.accountRepository.merge(account, newAccount);
+  
+      // Update related profile properties
+      if (newAccount.supplier) {
+        this.accountRepository.merge(account.supplier, newAccount.supplier);
+      }
+      if (newAccount.employee) {
+        this.accountRepository.merge(account.employee, newAccount.employee);
+      }
+      if (newAccount.customer) {
+        this.accountRepository.merge(account.customer, newAccount.customer);
+      }
+  
+      await this.accountRepository.save(account);
+    }
     return this.findOne(id);
   }
 
