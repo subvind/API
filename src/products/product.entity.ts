@@ -50,9 +50,6 @@ export class Product {
   @Column({ nullable: true })
   etsyItem: string;
 
-  @ManyToOne(() => Inventory, inventory => inventory.id)
-  inventory: Inventory;
-
   @ApiProperty({ example: 'true', description: 'If this product has been archived' })
   @Column({ default: 'false' })
   isArchive: boolean;
