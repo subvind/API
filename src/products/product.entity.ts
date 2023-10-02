@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, BeforeInsert, Unique, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -19,6 +19,10 @@ export class Product {
   @ApiProperty({ example: '001', description: 'The SKU that is used to identify this product' })
   @Column()
   stockKeepingUnit: string;
+
+  @OneToOne(() => Inventory, { eager: true, cascade: true })
+  @JoinColumn()
+  inventory: Inventory;
 
   @ApiProperty({ example: '', description: 'The name of the product' })
   @Column({ default: 'my product' })

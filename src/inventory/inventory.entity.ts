@@ -38,8 +38,8 @@ export class Inventory {
   @Column({ default: 'true' })
   isRestockable: boolean;
   
-  @OneToMany(() => Product, product => product.inventory, { nullable: true })
-  products: Product[]
+  // OneToOne
+  product: Product
 
   @ManyToOne(() => Location, location => location.id, { nullable: true })
   location: Location;
