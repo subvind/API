@@ -69,17 +69,6 @@ export class FileController {
     return this.fileService.findByFilename(filename, organizationId);
   }
 
-  @ApiOperation({ summary: 'Create a file' })
-  @ApiBody({ type: File })
-  @ApiResponse({ status: 201, description: 'Success', type: File })
-  @Post()
-  @AuthStatus(['Verified'])
-  @EmployeeStatus(['Working'])
-  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
-  async create(@Body() fileData: File): Promise<File> {
-    return this.fileService.create(fileData);
-  }
-
   @ApiOperation({ summary: 'Update a file' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
