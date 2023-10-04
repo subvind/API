@@ -62,6 +62,15 @@ export class Product {
   @Column({ default: 500 })
   shippingCost: number;
 
+  @ApiProperty({ example: `{
+    Brand: 'Example Brand',
+    Color: 'Red',
+    Material: 'Cotton',
+    Size: 'Large',
+  }`, description: 'A json key value list of aspects about this product.' })
+  @Column('json', { nullable: true })
+  aspects: Record<string, any>;
+
   /**
    * Other properties and relationships as needed
    */
