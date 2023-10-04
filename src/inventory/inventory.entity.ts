@@ -90,7 +90,6 @@ export enum WeightUnitOfMeasure {
 }
 
 @Entity()
-@Unique(['building', 'floor', 'room', 'rack', 'rackLevel', 'rackSection', 'container', 'organization'])
 export class Inventory {
   @PrimaryColumn('uuid')
   id: string;
