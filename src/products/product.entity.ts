@@ -54,11 +54,11 @@ export class Product {
   @Column({ default: 'false' })
   isArchive: boolean;
 
-  @ApiProperty({ example: '2000', description: 'The price of this product in pennies.' })
+  @ApiProperty({ example: '2000', description: 'The price of this product in pennies' })
   @Column({ default: 2000 })
   price: number;
 
-  @ApiProperty({ example: '500', description: 'The shipping cost of this product in pennies.' })
+  @ApiProperty({ example: '500', description: 'The shipping cost of this product in pennies' })
   @Column({ default: 500 })
   shippingCost: number;
 
@@ -67,9 +67,13 @@ export class Product {
     Color: 'Red',
     Material: 'Cotton',
     Size: 'Large',
-  }`, description: 'A json key value list of aspects about this product.' })
+  }`, description: 'A json key value list of aspects about this product' })
   @Column('json', { nullable: true })
   aspects: Record<string, any>;
+
+  @ApiProperty({ example: '["https://", "https://"]', description: 'The image urls from ebay for this product' })
+  @Column('json', { nullable: true })
+  ebayImageUrls: string[];
 
   /**
    * Other properties and relationships as needed
