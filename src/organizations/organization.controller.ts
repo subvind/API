@@ -78,6 +78,32 @@ export class OrganizationController {
     return this.organizationService.update(id, updatedOrganizationData);
   }
 
+  @ApiOperation({ summary: 'Update ebay access token for a organization' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Patch('ebayAccessToken/:id')
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
+  async updateEbayAccessToken(@Param('id') id: string, @Query('code') code: string): Promise<Organization> {
+
+    const EbayAuthToken = require('ebay-oauth-nodejs-client');
+
+    const ebayAuthToken = new EbayAuthToken({
+        clientId: process.env.EBAY_CLIENT_ID,
+        clientSecret: process.env.EBAY_CLIENT_SECRET,
+        redirectUri: 'https://erpnomy.com'
+    });
+    
+    const accessToken = await ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', code);
+    console.log('ebay access token', accessToken);
+
+    let organization: any = {
+      ebayAccessToken: accessToken
+    }
+
+    return this.organizationService.update(id, organization);
+  }
+
   @ApiOperation({ summary: 'Delete a organization' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')

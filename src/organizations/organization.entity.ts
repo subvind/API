@@ -88,6 +88,10 @@ export class Organization {
   @Column({ nullable: true })
   termsAndConditions: string;
 
+  @ApiProperty({ example: 'wefljfjjkjuqqbfjjdsdkjc', description: 'The ebay access token of the organization' })
+  @Column({ nullable: true })
+  ebayAccessToken: string;
+
   /**
    * Other properties and relationships as needed
    */
