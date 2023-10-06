@@ -98,11 +98,16 @@ export class OrganizationController {
     const accessToken = await ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', code);
     console.log('ebay access token', accessToken);
 
-    let organization: any = {
-      ebayAccessToken: accessToken
+    let organization: any;
+    if (accessToken.accessToken) {
+      organization = {
+        ebayAccessToken: accessToken.accessToken
+      }
+    } else {
+      throw new NotFoundException(accessToken.error_description)
     }
 
-    return this.organizationService.update(id, organization);
+    return await this.organizationService.update(id, organization);
   }
 
   @ApiOperation({ summary: 'Delete a organization' })
