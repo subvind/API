@@ -107,7 +107,7 @@ export class OrganizationController {
       throw new NotFoundException(accessToken.error_description)
     }
 
-    return await this.organizationService.update(id, organization);
+    return this.organizationService.update(id, organization);
   }
 
   @ApiOperation({ summary: 'Delete a organization' })
