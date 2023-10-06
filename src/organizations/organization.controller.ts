@@ -86,6 +86,7 @@ export class OrganizationController {
   @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async updateEbayAccessToken(@Param('id') id: string, @Query('code') code: string): Promise<Organization> {
 
+    console.log('ebay code', code);
     const EbayAuthToken = require('ebay-oauth-nodejs-client');
 
     const ebayAuthToken = new EbayAuthToken({
