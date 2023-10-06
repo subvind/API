@@ -99,9 +99,9 @@ export class OrganizationController {
     console.log('ebay access token', accessToken);
 
     let organization: any;
-    if (accessToken.accessToken) {
+    if (accessToken.access_token) {
       organization = {
-        ebayAccessToken: accessToken.accessToken
+        ebayAccessToken: accessToken.access_token
       }
     } else {
       throw new NotFoundException(accessToken.error_description)
