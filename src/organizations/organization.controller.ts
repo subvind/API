@@ -95,15 +95,18 @@ export class OrganizationController {
         redirectUri: 'Travis_Burandt-TravisBu-subvin-ufmnppv'
     });
     
-    const accessToken = await ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', code);
+    const at = await ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', code);
+    let accessToken = JSON.parse(at)
     console.log('ebay access token', accessToken);
 
     let organization: any;
     if (accessToken.access_token) {
+      console.log('access token found')
       organization = {
         ebayAccessToken: accessToken.access_token
       }
     } else {
+      console.log('access token not found')
       throw new NotFoundException(accessToken.error_description)
     }
 
