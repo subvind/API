@@ -92,7 +92,7 @@ export class OrganizationController {
     const ebayAuthToken = new EbayAuthToken({
         clientId: process.env.EBAY_CLIENT_ID,
         clientSecret: process.env.EBAY_CLIENT_SECRET,
-        redirectUri: 'https://auth.ebay.com/oauth2/authorize?client_id=TravisBu-subvind-PRD-efcb77900-ac00e58c&response_type=code&redirect_uri=Travis_Burandt-TravisBu-subvin-ufmnppv&scope=https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/sell.marketing.readonly https://api.ebay.com/oauth/api_scope/sell.marketing https://api.ebay.com/oauth/api_scope/sell.inventory.readonly https://api.ebay.com/oauth/api_scope/sell.inventory https://api.ebay.com/oauth/api_scope/sell.account.readonly https://api.ebay.com/oauth/api_scope/sell.account https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly https://api.ebay.com/oauth/api_scope/sell.fulfillment https://api.ebay.com/oauth/api_scope/sell.analytics.readonly https://api.ebay.com/oauth/api_scope/sell.finances https://api.ebay.com/oauth/api_scope/sell.payment.dispute https://api.ebay.com/oauth/api_scope/commerce.identity.readonly https://api.ebay.com/oauth/api_scope/commerce.notification.subscription https://api.ebay.com/oauth/api_scope/commerce.notification.subscription.readonly'
+        redirectUri: 'Travis_Burandt-TravisBu-subvin-ufmnppv'
     });
     
     const accessToken = await ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', code);
