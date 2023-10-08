@@ -1,5 +1,4 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
 
 import { AccountService } from './account.service';
@@ -16,39 +15,80 @@ import { EmployeeStatus } from './employee-status.decorator';
 import { v4 as uuidv4 } from 'uuid';
 import { hash } from 'bcrypt';
 
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { AccountEvent, CRUDType, ChargeType } from './account.event';
+
 @ApiTags('accounts')
 @Controller('accounts')
 export class AccountController {
   constructor(
     private readonly accountService: AccountService,
     private readonly organizationService: OrganizationService,
-    private readonly amqpConnection: AmqpConnection
+    private readonly eventEmitter: EventEmitter2
   ) {}
 
   @ApiOperation({ summary: 'Get all accounts' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get()
   async findAll(
+    @Req() req: Request,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('search') search?: string,
   ) {
     const { data, total } = await this.accountService.findAll(page, limit, search);
-    return { data, total };
+
+    const payload = { data, total }
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.READ;
+    event.charge = ChargeType.WEBMASTER;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.findAll', event);
+
+    return payload;
   }
 
   @ApiOperation({ summary: 'Get an account by id' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Account> {
-    return this.accountService.findOne(id);
+  async findOne(
+    @Req() req: Request,
+    @Param('id') id: string,
+  ): Promise<Account> {
+    const payload = await this.accountService.findOne(id);
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.READ;
+    event.charge = ChargeType.ORGANIZATION;
+    event.organizationId = payload.organization.id;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.findOne', event);
+
+    return payload;
   }
 
   @ApiOperation({ summary: 'Get an account by accountname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('accountname/:accountname/:organizationId')
-  async findSingle(@Param('accountname') accountname: string, @Param('organizationId') organizationId: string): Promise<Account> {
-    return this.accountService.findByAccountname(accountname, organizationId);
+  async findSingle(
+    @Req() req: Request,
+    @Param('accountname') accountname: string,
+    @Param('organizationId') organizationId: string
+  ): Promise<Account> {
+    const payload = await this.accountService.findByAccountname(accountname, organizationId);
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.READ;
+    event.charge = ChargeType.ORGANIZATION;
+    event.organizationId = payload.organization.id;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.findSingle', event);
+
+    return payload;
   }
 
   @ApiOperation({ summary: 'Create an account' })
@@ -58,8 +98,21 @@ export class AccountController {
   @AuthStatus(['Verified'])
   @EmployeeStatus(['Working'])
   @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
-  async create(@Body() accountData: Account): Promise<Account> {
-    return this.accountService.create(accountData);
+  async create(
+    @Req() req: Request,
+    @Body() accountData: Account
+  ): Promise<Account> {
+    const payload = await this.accountService.create(accountData);
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.CREATE;
+    event.charge = ChargeType.ORGANIZATION;
+    event.organizationId = accountData.organization.id;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.create', event);
+
+    return payload;
   }
 
   @ApiOperation({ summary: 'Update an account' })
@@ -68,7 +121,11 @@ export class AccountController {
   @AuthStatus(['Verified'])
   @EmployeeStatus(['Working'])
   @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
-  async update(@Param('id') id: string, @Body() updatedAccountData: Account): Promise<Account> {
+  async update(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Body() updatedAccountData: Account
+  ): Promise<Account> {
     let account = await this.accountService.findRecord(id);
     let data
     const { password, ...accountDataWithoutPassword } = updatedAccountData;
@@ -100,7 +157,17 @@ export class AccountController {
       }
     }
 
-    return this.accountService.update(id, data);
+    const payload = await this.accountService.update(id, data);
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.UPDATE;
+    event.charge = ChargeType.ORGANIZATION;
+    event.organizationId = account.organization.id;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.update', event);
+
+    return payload;
   }
 
   @ApiOperation({ summary: 'Delete an account' })
@@ -110,14 +177,29 @@ export class AccountController {
   @EmployeeStatus(['Working'])
   @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   @UseGuards(AuthStatusGuard)
-  async remove(@Param('id') id: string): Promise<void> {
-    return this.accountService.remove(id);
+  async remove(
+    @Req() req: Request,
+    @Param('id') id: string
+  ): Promise<void> {
+    const record = await this.accountService.findRecord(id);
+    const payload = await this.accountService.remove(id);
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.DELETE;
+    event.charge = ChargeType.ORGANIZATION;
+    event.organizationId = record.organization.id;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.remove', event);
+
+    return payload;
   }
 
   @ApiOperation({ summary: 'Find accounts related to an organization' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('type/:type/orgRelated/:id')
   async findOrgProduct(
+    @Req() req: Request,
     @Param('type') type: string,
     @Param('id') organizationId: string,
     @Query('page') page: number = 1,
@@ -131,13 +213,26 @@ export class AccountController {
     }
 
     const { data, total } = await this.accountService.findOrgAccount(type, organization, page, limit, search);
-    return { data, total };
+    const payload = { data, total };
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.READ;
+    event.charge = ChargeType.ORGANIZATION;
+    event.organizationId = organizationId;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.findOrgProduct', event);
+
+    return payload;
   }
 
   @ApiOperation({ summary: 'Verify an account\'s email address' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('verifyEmail/:id')
-  async verifyEmail(@Param('id') id: string): Promise<Boolean> {
+  async verifyEmail(
+    @Req() req: Request,
+    @Param('id') id: string,
+  ): Promise<Boolean> {
     let account = await this.accountService.findRecord(id);
 
     if (!account) {
@@ -147,13 +242,27 @@ export class AccountController {
     // Send the verification email
     await this.accountService.sendVerificationEmail(account.email, account.emailVerificationToken);
 
-    return true;
+    const payload = true;
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.CREATE;
+    event.charge = ChargeType.ORGANIZATION;
+    event.organizationId = account.organization.id;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.verifyEmail', event);
+
+    return payload;
   }
 
   @ApiOperation({ summary: 'Recover an account\'s password by email address' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('recoverPassword/:email/:organizationId')
-  async recoverPassword(@Param('email') email: string, @Param('organizationId') organizationId: string): Promise<Boolean> {
+  async recoverPassword(
+    @Req() req: Request,
+    @Param('email') email: string,
+    @Param('organizationId') organizationId: string,
+  ): Promise<Boolean> {
     let account = await this.accountService.findByEmail(email, organizationId)
     if (account) {
       account = await this.accountService.findRecord(account.id);
@@ -172,13 +281,28 @@ export class AccountController {
     // Send the verification email
     await this.accountService.sendPasswordRevocery(account.email, account.recoverPasswordToken);
 
-    return true;
+    const payload = true;
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.CREATE;
+    event.charge = ChargeType.ORGANIZATION;
+    event.organizationId = organizationId;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.recoverPassword', event);
+
+    return payload;
   }
 
   @ApiOperation({ summary: 'Reset an account\'s password' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch('resetPassword/:email/:organizationId')
-  async resetPassword(@Param('email') email: string, @Param('organizationId') organizationId: string, @Body() updatedAccountData: Account): Promise<Account> {
+  async resetPassword(
+    @Req() req: Request,
+    @Param('email') email: string,
+    @Param('organizationId') organizationId: string,
+    @Body() updatedAccountData: Account,
+  ): Promise<Account> {
     let account = await this.accountService.findByEmail(email, organizationId)
     if (account) {
       account = await this.accountService.findRecord(account.id);
@@ -200,6 +324,16 @@ export class AccountController {
       }
     }
 
-    return this.accountService.update(account.id, data);
+    const payload = await this.accountService.update(account.id, data);
+
+    const event = new AccountEvent();
+    event.url = req.url;
+    event.crud = CRUDType.UPDATE;
+    event.charge = ChargeType.ORGANIZATION;
+    event.organizationId = organizationId;
+    event.payload = payload;
+    this.eventEmitter.emit('accounts.resetPassword', event);
+
+    return payload;
   }
 }

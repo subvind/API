@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { Account } from './account.entity';
 import { UserModule } from '../users/user.module';
+import { AccountListener } from './account.listener';
 
 @Module({
   imports: [
@@ -32,6 +33,6 @@ import { UserModule } from '../users/user.module';
     AccountService
   ],
   controllers: [AccountController],
-  providers: [AccountService, AuthService, JwtService],
+  providers: [AccountService, AuthService, JwtService, AccountListener],
 })
 export class AccountModule {}
