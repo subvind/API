@@ -86,7 +86,9 @@ export class AccountController {
     event.charge = ChargeType.ORGANIZATION;
     event.organizationId = payload.organization.id;
     event.payload = payload;
-    this.eventEmitter.emit('accounts.findSingle', event);
+    let ee = this.eventEmitter.emit('accounts.findSingle', event);
+
+    console.log('findSingle', ee)
 
     return payload;
   }

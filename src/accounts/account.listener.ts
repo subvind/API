@@ -6,7 +6,11 @@ import { AccountEvent } from './account.event';
 export class AccountListener {
   @OnEvent('accounts.*')
   handleAccountEvent(event: AccountEvent) {
-    // handle and process "AccountEvent" event
-    console.log(event);
+    try {
+      // handle and process "AccountEvent" event
+      console.log(event);
+    } catch (error) {
+      console.error('Error in handleAccountEvent:', error);
+    }
   }
 }
