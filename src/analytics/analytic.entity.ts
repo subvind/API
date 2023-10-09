@@ -4,38 +4,61 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { Product } from '../products/product.entity';
 import { Organization } from '../organizations/organization.entity';
-import { File } from '../files/file.entity';
+
+export enum ChargeType {
+  ORGANIZATION = 'Organization',
+  WEBMASTER = 'Webmaster',
+}
+
+export enum CRUDType {
+  CREATE = 'Create',
+  READ = 'Read',
+  UPDATE = 'Update',
+  DELETE = 'Delete',
+}
 
 @Entity()
-@Unique(['slug', 'organization']) 
 export class Analytic {
   @PrimaryColumn('uuid')
   id: string;
 
-  @ApiProperty({ example: '001', description: 'The SKU that is used to identify this product' })
-  @Column()
-  name: string;
-
-  @ApiProperty({ example: 'https://live.staticflickr.com/65535/53117641720_b5d5c8acfd_o.jpg', description: 'The photo URL of the product to display' })
+  @ApiProperty({ example: '', description: 'The url of the analytic' })
   @Column({ nullable: true })
-  slug: string;
+  url: string;
 
-  @ApiProperty({ example: '', description: 'The flickr album id to display' })
+  @ApiProperty({ example: '', description: 'The method of the analytic' })
   @Column({ nullable: true })
-  description: string;
+  method: string;
 
-  @ManyToOne(() => File, file => file.id)
-  mainPhoto: File;
+  @ApiProperty({ example: '', description: 'The headers of the analytic' })
+  @Column({ nullable: true })
+  headers: string;
+
+  @ApiProperty({ example: '', description: 'The body of the analytic' })
+  @Column({ nullable: true })
+  body: string;
+
+  @ApiProperty({ example: '', description: 'The CRUD type of the analytic' })
+  crud: CRUDType;
+
+  @ApiProperty({ example: '', description: 'The charge type of the analytic' })
+  charge: ChargeType;
+
+  @ManyToOne(() => Organization, organization => organization.id, { nullable: true })
+  organization: Organization;
+
+  @ApiProperty({ example: '', description: 'The payload of the analytic' })
+  @Column({ nullable: true })
+  payload: string;
+
+  @ApiProperty({ example: '', description: 'The event at of the analytic' })
+  @Column({ nullable: true })
+  eventAt: string;
 
   /**
    * Other properties and relationships as needed
    */
-
-  // tenant id
-  @ManyToOne(() => Organization, organization => organization.id)
-  organization: Organization;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

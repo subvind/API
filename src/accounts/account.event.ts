@@ -12,12 +12,12 @@ export enum CRUDType {
 
 export class AccountEvent {
   url: string;
-  method: any;
+  method: string;
   headers: any;
   body: any;
   crud: CRUDType;
   charge: ChargeType;
   organizationId: any;
   payload: any;
-  createdAt: string;
+  eventAt: string;
 }

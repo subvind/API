@@ -42,13 +42,6 @@ export class AnalyticController {
     return this.analyticService.findOne(id);
   }
 
-  @ApiOperation({ summary: 'Get a analytic by URL slug' })
-  @ApiResponse({ status: 200, description: 'Success' })
-  @Get('slug/:slug/:organizationId')
-  async findSingle(@Param('slug') slug: string, @Param('organizationId') organizationId: string): Promise<Analytic> {
-    return this.analyticService.findBySlug(slug, organizationId);
-  }
-
   @ApiOperation({ summary: 'Create a analytic' })
   @ApiBody({ type: Analytic })
   @ApiResponse({ status: 201, description: 'Success', type: Analytic })
@@ -115,25 +108,6 @@ export class AnalyticController {
     }
 
     const { data, total } = await this.analyticService.findOrgAnalytic(organization, page, limit, search);
-    return { data, total };
-  }
-
-  @ApiOperation({ summary: 'Find sub analytics related to a analytic' })
-  @ApiResponse({ status: 200, description: 'Success' })
-  @Get('analyticRelated/:id')
-  async findSubCategories(
-    @Param('id') analyticId: string,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
-    @Query('search') search?: string,
-  ): Promise<any> {
-    const analytic = await this.analyticService.findOne(analyticId);
-
-    if (!analytic) {
-      throw new NotFoundException('Analytic not found');
-    }
-
-    const { data, total } = await this.analyticService.findSubCategories(analytic, page, limit, search);
     return { data, total };
   }
 }

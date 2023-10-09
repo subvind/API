@@ -49,7 +49,7 @@ export class AccountController {
       event.crud = CRUDType.READ;
       event.charge = ChargeType.WEBMASTER;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.findAll', event);
     } catch (e) {
       console.log(e)
@@ -77,7 +77,7 @@ export class AccountController {
       event.charge = ChargeType.ORGANIZATION;
       event.organizationId = payload.organization.id;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.findOne', event);
     } catch (e) {
       console.log(e)
@@ -106,7 +106,7 @@ export class AccountController {
       event.charge = ChargeType.ORGANIZATION;
       event.organizationId = payload.organization.id;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.findSingle', event);
     } catch (e) {
       console.log(e)
@@ -138,7 +138,7 @@ export class AccountController {
       event.charge = ChargeType.ORGANIZATION;
       event.organizationId = accountData.organization.id;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.create', event);
     } catch (e) {
       console.log(e)
@@ -201,7 +201,7 @@ export class AccountController {
       event.charge = ChargeType.ORGANIZATION;
       event.organizationId = account.organization.id;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.update', event);
     } catch (e) {
       console.log(e)
@@ -234,7 +234,7 @@ export class AccountController {
       event.charge = ChargeType.ORGANIZATION;
       event.organizationId = record.organization.id;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.remove', event);
     } catch (e) {
       console.log(e)
@@ -273,7 +273,7 @@ export class AccountController {
       event.charge = ChargeType.ORGANIZATION;
       event.organizationId = organizationId;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.findOrgProduct', event);
     } catch (e) {
       console.log(e)
@@ -310,7 +310,7 @@ export class AccountController {
       event.charge = ChargeType.ORGANIZATION;
       event.organizationId = account.organization.id;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.verifyEmail', event);
     } catch (e) {
       console.log(e)
@@ -357,7 +357,7 @@ export class AccountController {
       event.charge = ChargeType.ORGANIZATION;
       event.organizationId = organizationId;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.recoverPassword', event);
     } catch (e) {
       console.log(e)
@@ -408,7 +408,7 @@ export class AccountController {
       event.charge = ChargeType.ORGANIZATION;
       event.organizationId = organizationId;
       event.payload = payload;
-      event.createdAt = new Date().toISOString();
+      event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.resetPassword', event);
     } catch (e) {
       console.log(e)

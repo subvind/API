@@ -57,26 +57,6 @@ export class AnalyticService {
     });
   }
 
-  async findBySlug(slug: string, organizationId: string): Promise<Analytic> {
-    return this.analyticRepository.findOne({ 
-      where: {
-        slug: slug,
-        organization: {
-          id: organizationId
-        }
-      },
-      relations: [
-        'parentAnalytic', 
-        'subCategories', 
-        'products',
-        'organization',
-        'organization.owner',
-        'mainPhoto',
-        'mainPhoto.bucket'
-      ]
-    });
-  }
-
   async create(analytic: Analytic): Promise<Analytic> {
     const newObject = this.analyticRepository.create(analytic);
     return this.analyticRepository.save(newObject);
@@ -97,35 +77,6 @@ export class AnalyticService {
     query.where(
       'analytic.organizationId = :tenantId',
       { tenantId: organization.id }
-    );
-
-    if (search) {
-      query.andWhere(
-        'analytic.name LIKE :search OR analytic.description LIKE :search',
-        { search: `%${search}%` }
-      );
-    }
-    
-    query.leftJoinAndSelect('analytic.products', 'products');
-    query.leftJoinAndSelect('analytic.parentAnalytic', 'parentAnalytic');
-    query.leftJoinAndSelect('analytic.subCategories', 'subCategories');
-    query.leftJoinAndSelect('analytic.organization', 'organization');
-    query.leftJoinAndSelect('analytic.mainPhoto', 'mainPhoto');
-    query.leftJoinAndSelect('mainPhoto.bucket', 'mainPhotoBucket');
-  
-    const offset = (page - 1) * limit;
-    
-    const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
-  
-    return { data, total };
-  }
-
-  async findSubCategories(analytic: Analytic, page: number, limit: number, search?: string): Promise<{ data: Analytic[]; total: number }> {
-    const query = this.analyticRepository.createQueryBuilder('analytic');
-  
-    query.where(
-      'analytic.parentAnalyticId = :analyticId',
-      { analyticId: analytic.id }
     );
 
     if (search) {
