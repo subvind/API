@@ -15,7 +15,7 @@ import { EmployeeStatus } from './employee-status.decorator';
 import { v4 as uuidv4 } from 'uuid';
 import { hash } from 'bcrypt';
 
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { AccountEvent, CRUDType, ChargeType } from './account.event';
 
 @ApiTags('accounts')
@@ -24,7 +24,7 @@ export class AccountController {
   constructor(
     private readonly accountService: AccountService,
     private readonly organizationService: OrganizationService,
-    private readonly eventEmitter: EventEmitter2
+    private readonly amqpConnection: AmqpConnection
   ) {}
 
   @ApiOperation({ summary: 'Get all accounts' })
@@ -40,12 +40,16 @@ export class AccountController {
 
     const payload = { data, total }
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.READ;
-    event.charge = ChargeType.WEBMASTER;
-    event.payload = payload;
-    this.eventEmitter.emit('accounts.findAll', event);
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.findAll', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }
@@ -59,13 +63,17 @@ export class AccountController {
   ): Promise<Account> {
     const payload = await this.accountService.findOne(id);
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.READ;
-    event.charge = ChargeType.ORGANIZATION;
-    event.organizationId = payload.organization.id;
-    event.payload = payload;
-    this.eventEmitter.emit('accounts.findOne', event);
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = payload.organization.id;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.findOne', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }
@@ -80,15 +88,17 @@ export class AccountController {
   ): Promise<Account> {
     const payload = await this.accountService.findByAccountname(accountname, organizationId);
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.READ;
-    event.charge = ChargeType.ORGANIZATION;
-    event.organizationId = payload.organization.id;
-    event.payload = payload;
-    let ee = this.eventEmitter.emit('accounts.findSingle', event);
-
-    console.log('findSingle', ee)
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = payload.organization.id;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.findSingle', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }
@@ -106,13 +116,17 @@ export class AccountController {
   ): Promise<Account> {
     const payload = await this.accountService.create(accountData);
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.CREATE;
-    event.charge = ChargeType.ORGANIZATION;
-    event.organizationId = accountData.organization.id;
-    event.payload = payload;
-    this.eventEmitter.emit('accounts.create', event);
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.CREATE;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = accountData.organization.id;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.create', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }
@@ -161,13 +175,17 @@ export class AccountController {
 
     const payload = await this.accountService.update(id, data);
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.UPDATE;
-    event.charge = ChargeType.ORGANIZATION;
-    event.organizationId = account.organization.id;
-    event.payload = payload;
-    this.eventEmitter.emit('accounts.update', event);
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.UPDATE;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = account.organization.id;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.update', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }
@@ -186,13 +204,17 @@ export class AccountController {
     const record = await this.accountService.findRecord(id);
     const payload = await this.accountService.remove(id);
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.DELETE;
-    event.charge = ChargeType.ORGANIZATION;
-    event.organizationId = record.organization.id;
-    event.payload = payload;
-    this.eventEmitter.emit('accounts.remove', event);
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.DELETE;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = record.organization.id;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.remove', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }
@@ -217,13 +239,17 @@ export class AccountController {
     const { data, total } = await this.accountService.findOrgAccount(type, organization, page, limit, search);
     const payload = { data, total };
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.READ;
-    event.charge = ChargeType.ORGANIZATION;
-    event.organizationId = organizationId;
-    event.payload = payload;
-    this.eventEmitter.emit('accounts.findOrgProduct', event);
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = organizationId;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.findOrgProduct', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }
@@ -246,13 +272,17 @@ export class AccountController {
 
     const payload = true;
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.CREATE;
-    event.charge = ChargeType.ORGANIZATION;
-    event.organizationId = account.organization.id;
-    event.payload = payload;
-    this.eventEmitter.emit('accounts.verifyEmail', event);
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.CREATE;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = account.organization.id;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.verifyEmail', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }
@@ -285,13 +315,17 @@ export class AccountController {
 
     const payload = true;
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.CREATE;
-    event.charge = ChargeType.ORGANIZATION;
-    event.organizationId = organizationId;
-    event.payload = payload;
-    this.eventEmitter.emit('accounts.recoverPassword', event);
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.CREATE;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = organizationId;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.recoverPassword', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }
@@ -328,13 +362,17 @@ export class AccountController {
 
     const payload = await this.accountService.update(account.id, data);
 
-    const event = new AccountEvent();
-    event.url = req.url;
-    event.crud = CRUDType.UPDATE;
-    event.charge = ChargeType.ORGANIZATION;
-    event.organizationId = organizationId;
-    event.payload = payload;
-    this.eventEmitter.emit('accounts.resetPassword', event);
+    try {
+      const event = new AccountEvent();
+      event.url = req.url;
+      event.crud = CRUDType.UPDATE;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = organizationId;
+      event.payload = payload;
+      this.amqpConnection.publish('analytics', 'accounts.resetPassword', event);
+    } catch (e) {
+      console.log(e)
+    }
 
     return payload;
   }

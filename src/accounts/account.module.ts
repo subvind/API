@@ -22,7 +22,7 @@ import { AccountListener } from './account.listener';
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
-          name: 'exchange1',
+          name: 'analytics',
           type: 'topic',
         },
       ],
