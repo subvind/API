@@ -8,15 +8,14 @@ import { AnalyticService } from './analytic.service';
 
 import { Analytic } from './analytic.entity';
 import { OrganizationModule } from '../organizations/organization.module';
-import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
+import { UserModule } from '../users/user.module';
 
 @Module({
   imports: [
-    OrganizationModule,
-    UserModule,
-    AccountModule,
-    // forwardRef(() => OrganizationModule),
+    forwardRef(() => UserModule),
+    forwardRef(() => OrganizationModule),
+    forwardRef(() => AccountModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {

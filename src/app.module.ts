@@ -23,6 +23,7 @@ import { OrganizationModule } from './organizations/organization.module';
 import { ProductModule } from './products/product.module';
 import { ShowcaseModule } from './showcases/showcase.module';
 import { UserModule } from './users/user.module';
+import { AnalyticModule } from './analytics/analytic.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { UserModule } from './users/user.module';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(config),
     JwtAuthModule,
+    AnalyticModule,
     AuthModule,
     AccountModule,
     BucketModule,
