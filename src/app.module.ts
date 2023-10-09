@@ -29,7 +29,7 @@ import { UserModule } from './users/user.module';
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
-          name: 'exchange1',
+          name: 'analytics',
           type: 'topic',
         },
       ],

@@ -15,7 +15,7 @@ import { OrganizationModule } from '../organizations/organization.module';
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
-          name: 'exchange1',
+          name: 'analytics',
           type: 'topic',
         },
       ],

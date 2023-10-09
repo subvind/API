@@ -19,7 +19,7 @@ import { AccountModule } from '../accounts/account.module';
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
-          name: 'exchange1',
+          name: 'analytics',
           type: 'topic',
         },
       ],
