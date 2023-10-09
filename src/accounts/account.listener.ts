@@ -7,9 +7,9 @@ export class AccountListener {
   @RabbitSubscribe({
     exchange: 'analytics',
     routingKey: 'accounts.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
-    queue: 'subscribe-queue',
+    queue: 'AccountEvent',
   })
-  public async pubSubHandler(msg: AccountEvent) {
+  public async accountEventHandler(msg: AccountEvent) {
     // TODO: save event to analytics table
     console.log('analytics', JSON.stringify(msg));
   }
