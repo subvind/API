@@ -8,7 +8,6 @@ import { AuthService } from '../auth/auth.service';
 import { AccountService } from './account.service';
 import { OrganizationModule } from '../organizations/organization.module';
 import { JwtService } from '@nestjs/jwt';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { Account } from './account.entity';
 import { UserModule } from '../users/user.module';
@@ -16,7 +15,6 @@ import { AccountListener } from './account.listener';
 
 @Module({
   imports: [
-    EventEmitterModule.forRoot(),
     forwardRef(() => UserModule),
     forwardRef(() => OrganizationModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
