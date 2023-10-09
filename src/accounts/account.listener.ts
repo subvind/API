@@ -34,7 +34,7 @@ export class AccountListener {
       eventAt: event.eventAt,
     }
 
-    let record = await this.analyticService.create(analytic)
-    console.log(record)
+    let record = await this.analyticService.create(analytic);
+    // console.log(record)
   }
 }
