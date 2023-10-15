@@ -99,6 +99,25 @@ export class CategoryController {
     return { data, total };
   }
 
+  @ApiOperation({ summary: 'Find categories related to an organization by erpHostname' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('erpHostname/:erpHostname')
+  async findOrgCategoryByHostname(
+    @Param('erpHostname') erpHostname: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('search') search?: string,
+  ): Promise<any> {
+    const organization = await this.organizationService.findByErpHostname(erpHostname);
+
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
+
+    const { data, total } = await this.categoryService.findOrgCategory(organization, page, limit, search);
+    return { data, total };
+  }
+
   @ApiOperation({ summary: 'Find sub categories related to a category' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('categoryRelated/:id')
