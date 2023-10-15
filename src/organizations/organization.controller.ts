@@ -49,11 +49,11 @@ export class OrganizationController {
     return await this.organizationService.findByOrgname(orgname);
   }
 
-  @ApiOperation({ summary: 'Get a organization by hostname' })
+  @ApiOperation({ summary: 'Get a organization by erpHostname' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Get('hostname/:hostname')
-  async findMain(@Param('hostname') orgname: string): Promise<Organization> {
-    return await this.organizationService.findByHostname(orgname);
+  @Get('erpHostname/:erpHostname')
+  async findMain(@Param('erpHostname') erpHostname: string): Promise<Organization> {
+    return await this.organizationService.findByErpHostname(erpHostname);
   }
 
   @ApiOperation({ summary: 'Create a organization' })

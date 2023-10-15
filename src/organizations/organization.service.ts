@@ -87,17 +87,17 @@ export class OrganizationService {
     });
   }
 
-  async findByHostname(hostname: string): Promise<Organization> {
-    function isSubdomainOfErpnomy(hostname) {
+  async findByErpHostname(erpHostname: string): Promise<Organization> {
+    function isSubdomainOfErpnomy(erpHostname) {
       const pattern = /^[\w-]+\.erpnomy\.com$/i; // Case-insensitive match
-      return pattern.test(hostname);
+      return pattern.test(erpHostname);
     }
     
     let org: any;
-    if (isSubdomainOfErpnomy(hostname)) {
+    if (isSubdomainOfErpnomy(erpHostname)) {
       org = this.organizationRepository.findOne({
         where: {
-          orgname: hostname.split('.')[0],
+          orgname: erpHostname.split('.')[0],
         },
         relations: [
           'owner',
@@ -108,7 +108,7 @@ export class OrganizationService {
     } else {
       org = this.organizationRepository.findOne({
         where: {
-          hostname: hostname,
+          erpHostname: erpHostname,
         },
         relations: [
           'owner',

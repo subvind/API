@@ -17,7 +17,7 @@ import { Account } from '../accounts/account.entity'
 
 @Entity()
 @Unique(['orgname']) 
-@Unique(['hostname']) 
+@Unique(['erpHostname']) 
 export class Organization {
   @PrimaryColumn('uuid')
   id: string;
@@ -30,12 +30,9 @@ export class Organization {
   })
   orgname: string;
 
-  @ApiProperty({ example: 'www.brokenrecord.store', description: 'The hostname of the organization' })
+  @ApiProperty({ example: 'www.brokenrecord.store', description: 'The erp hostname of the organization' })
   @Column({ type: 'varchar', length: 256, nullable: true })
-  @Matches(/^[a-z0-9.]+$/, {
-    message: 'Orgname can only contain lowercase letters, numbers, and periods'
-  })
-  hostname: string;
+  erpHostname: string;
 
   @ApiProperty({ example: 'ACME Corp.', description: 'The display name of the organization' })
   @Column()
