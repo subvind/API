@@ -24,6 +24,7 @@ import { ProductModule } from './products/product.module';
 import { ShowcaseModule } from './showcases/showcase.module';
 import { UserModule } from './users/user.module';
 import { AnalyticModule } from './analytics/analytic.module';
+import { GuestModule } from './guests/guest.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { AnalyticModule } from './analytics/analytic.module';
     AccountModule,
     BucketModule,
     CategoryModule,
+    GuestModule,
     FileModule,
     InventoryModule,
     OrganizationModule,
