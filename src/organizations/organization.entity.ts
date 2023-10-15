@@ -30,9 +30,29 @@ export class Organization {
   })
   orgname: string;
 
-  @ApiProperty({ example: 'www.brokenrecord.store', description: 'The erp hostname of the organization' })
+  @ApiProperty({ example: 'false', description: 'The erp module enabled of the organization' })
+  @Column({ default: true })
+  isErpModule: boolean;
+
+  @ApiProperty({ example: 'false', description: 'The tube module enabled of the organization' })
+  @Column({ default: true })
+  isTubeModule: boolean;
+
+  @ApiProperty({ example: 'false', description: 'The desk module enabled of the organization' })
+  @Column({ default: true })
+  isDeskModule: boolean;
+
+  @ApiProperty({ example: 'store.istrav.com', description: 'The erp hostname of the organization' })
   @Column({ type: 'varchar', length: 256, nullable: true })
   erpHostname: string;
+
+  @ApiProperty({ example: 'videos.istrav.com', description: 'The tube hostname of the organization' })
+  @Column({ type: 'varchar', length: 256, nullable: true })
+  tubeHostname: string;
+
+  @ApiProperty({ example: 'client-area.istrav.com', description: 'The desk hostname of the organization' })
+  @Column({ type: 'varchar', length: 256, nullable: true })
+  deskHostname: string;
 
   @ApiProperty({ example: 'ACME Corp.', description: 'The display name of the organization' })
   @Column()
@@ -68,10 +88,6 @@ export class Organization {
   @ApiProperty({ example: '/', description: 'The homepage url link of the organization' })
   @Column({ nullable: true })
   homepageLink: string;
-
-  @ApiProperty({ example: '/categories', description: 'The shop url link of the organization' })
-  @Column({ nullable: true })
-  shopLink: string;
 
   @ApiProperty({ example: 'www.brokenrecord.store@gmail.com', description: 'The contact center email of the organization' })
   @Column({ nullable: true })

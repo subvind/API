@@ -121,6 +121,76 @@ export class OrganizationService {
     return org
   }
 
+
+  async findByTubeHostname(tubeHostname: string): Promise<Organization> {
+    function isSubdomainOfErpnomy(tubeHostname) {
+      const pattern = /^[\w-]+\.tubenomy\.com$/i; // Case-insensitive match
+      return pattern.test(tubeHostname);
+    }
+    
+    let org: any;
+    if (isSubdomainOfErpnomy(tubeHostname)) {
+      org = this.organizationRepository.findOne({
+        where: {
+          orgname: tubeHostname.split('.')[0],
+        },
+        relations: [
+          'owner',
+          'orgPhoto',
+          'orgPhoto.bucket',
+        ]
+      });
+    } else {
+      org = this.organizationRepository.findOne({
+        where: {
+          tubeHostname: tubeHostname,
+        },
+        relations: [
+          'owner',
+          'orgPhoto',
+          'orgPhoto.bucket',
+        ]
+      });
+    }
+    
+    return org
+  }
+
+
+  async findByDeskHostname(deskHostname: string): Promise<Organization> {
+    function isSubdomainOfErpnomy(deskHostname) {
+      const pattern = /^[\w-]+\.desknomy\.com$/i; // Case-insensitive match
+      return pattern.test(deskHostname);
+    }
+    
+    let org: any;
+    if (isSubdomainOfErpnomy(deskHostname)) {
+      org = this.organizationRepository.findOne({
+        where: {
+          orgname: deskHostname.split('.')[0],
+        },
+        relations: [
+          'owner',
+          'orgPhoto',
+          'orgPhoto.bucket',
+        ]
+      });
+    } else {
+      org = this.organizationRepository.findOne({
+        where: {
+          deskHostname: deskHostname,
+        },
+        relations: [
+          'owner',
+          'orgPhoto',
+          'orgPhoto.bucket',
+        ]
+      });
+    }
+    
+    return org
+  }
+
   async create(organization: Organization): Promise<Organization> {
     const newObject = this.organizationRepository.create(organization);
     return this.organizationRepository.save(newObject);

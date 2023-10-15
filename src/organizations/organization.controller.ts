@@ -52,8 +52,22 @@ export class OrganizationController {
   @ApiOperation({ summary: 'Get a organization by erpHostname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('erpHostname/:erpHostname')
-  async findMain(@Param('erpHostname') erpHostname: string): Promise<Organization> {
+  async findMainErp(@Param('erpHostname') erpHostname: string): Promise<Organization> {
     return await this.organizationService.findByErpHostname(erpHostname);
+  }
+
+  @ApiOperation({ summary: 'Get a organization by tubeHostname' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('tubeHostname/:tubeHostname')
+  async findMainTube(@Param('tubeHostname') tubeHostname: string): Promise<Organization> {
+    return await this.organizationService.findByTubeHostname(tubeHostname);
+  }
+
+  @ApiOperation({ summary: 'Get a organization by deskHostname' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('deskHostname/:deskHostname')
+  async findMainDesk(@Param('deskHostname') deskHostname: string): Promise<Organization> {
+    return await this.organizationService.findByDeskHostname(deskHostname);
   }
 
   @ApiOperation({ summary: 'Create a organization' })
