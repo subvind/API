@@ -74,6 +74,10 @@ export class Organization {
   @Column({ nullable: true })
   etsyShop: string;
 
+  @ApiProperty({ example: 'brokenrecord.store', description: 'The youtube channel of the organization' })
+  @Column({ nullable: true })
+  youtubeChannel: string;
+
   @ManyToOne(() => File, file => file.id)
   orgPhoto: File;
 
