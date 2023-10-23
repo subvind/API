@@ -119,9 +119,10 @@ export class AccountController {
   @ApiBody({ type: Account })
   @ApiResponse({ status: 201, description: 'Success', type: Account })
   @Post()
-  @AuthStatus(['Verified'])
-  @EmployeeStatus(['Working'])
-  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
+  // anyone can create a new account
+  // @AuthStatus(['Verified']) 
+  // @EmployeeStatus(['Working'])
+  // @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
   async create(
     @Req() req: Request,
     @Body() accountData: Account
