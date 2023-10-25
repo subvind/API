@@ -66,7 +66,8 @@ export class AccountService {
         'organization.owner',
         'supplier',
         'employee',
-        'customer'
+        'customer',
+        'client'
       ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'emailVerificationToken', 'isEmailVerified', 'recoverPasswordToken', 'createdAt']
     });
@@ -82,7 +83,8 @@ export class AccountService {
         'organization.owner',
         'supplier',
         'employee',
-        'customer'
+        'customer',
+        'client'
       ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
@@ -103,7 +105,8 @@ export class AccountService {
         'organization.owner',
         'supplier',
         'employee',
-        'customer'
+        'customer',
+        'client'
       ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'password', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
@@ -122,7 +125,8 @@ export class AccountService {
         'organization.owner',
         'supplier',
         'employee',
-        'customer'
+        'customer',
+        'client'
       ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
     });
@@ -144,6 +148,7 @@ export class AccountService {
         'supplier',
         'employee',
         'customer',
+        'client',
       ]
     });
 
@@ -160,6 +165,9 @@ export class AccountService {
       }
       if (newAccount.customer) {
         this.accountRepository.merge(account.customer, newAccount.customer);
+      }
+      if (newAccount.client) {
+        this.accountRepository.merge(account.client, newAccount.client);
       }
   
       await this.accountRepository.save(account);
@@ -201,6 +209,11 @@ export class AccountService {
         'supplier.supplierStatus != :status',
         { status: 'Void' }
       );
+    } else if (type === 'client') {
+      query.andWhere(
+        'client.clientStatus != :status',
+        { status: 'Free' }
+      );
     } else {
       // fetch all
     }
@@ -209,6 +222,7 @@ export class AccountService {
     query.leftJoinAndSelect('account.customer', 'customer');
     query.leftJoinAndSelect('account.employee', 'employee');
     query.leftJoinAndSelect('account.supplier', 'supplier');
+    query.leftJoinAndSelect('account.client', 'client');
   
     const offset = (page - 1) * limit;
     

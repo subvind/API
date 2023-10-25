@@ -11,6 +11,7 @@ import { Organization } from '../organizations/organization.entity';
 import { Customer } from './customers/customer.entity';
 import { Employee } from './employees/employee.entity';
 import { Supplier } from './suppliers/supplier.entity';
+import { Client } from './clients/client.entity';
 
 export enum AuthStatus {
   BANNED = 'Banned',
@@ -93,6 +94,10 @@ export class Account {
   @OneToOne(() => Supplier, { eager: true, cascade: true })
   @JoinColumn()
   supplier: Supplier;
+
+  @OneToOne(() => Client, { eager: true, cascade: true })
+  @JoinColumn()
+  client: Client;
 
   /**
    * Other properties and relationships as needed
