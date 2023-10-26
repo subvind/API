@@ -16,8 +16,12 @@ import { Showcase } from '../showcases/showcase.entity'
 import { Account } from '../accounts/account.entity'
 
 @Entity()
-@Unique(['orgname']) 
-@Unique(['erpHostname']) 
+@Unique(['orgname'])
+@Unique(['hostname'])
+@Unique(['homeHostname'])
+@Unique(['erpHostname'])
+@Unique(['tubeHostname'])
+@Unique(['deskHostname'])
 export class Organization {
   @PrimaryColumn('uuid')
   id: string;
@@ -30,6 +34,14 @@ export class Organization {
   })
   orgname: string;
 
+  @ApiProperty({ example: 'istrav.com', description: 'The hostname of the organization' })
+  @Column({ type: 'varchar', length: 256, nullable: true })
+  hostname: string;
+
+  @ApiProperty({ example: 'false', description: 'The home module enabled of the organization' })
+  @Column({ default: true })
+  isHomeModule: boolean;
+  
   @ApiProperty({ example: 'false', description: 'The erp module enabled of the organization' })
   @Column({ default: true })
   isErpModule: boolean;
@@ -41,6 +53,10 @@ export class Organization {
   @ApiProperty({ example: 'false', description: 'The desk module enabled of the organization' })
   @Column({ default: true })
   isDeskModule: boolean;
+
+  @ApiProperty({ example: 'www.istrav.com', description: 'The home hostname of the organization' })
+  @Column({ type: 'varchar', length: 256, nullable: true })
+  homeHostname: string;
 
   @ApiProperty({ example: 'store.istrav.com', description: 'The erp hostname of the organization' })
   @Column({ type: 'varchar', length: 256, nullable: true })
@@ -66,6 +82,14 @@ export class Organization {
   @Column({ type: 'varchar', length: 1024, nullable: true })
   description: string;
   
+  @ApiProperty({ example: `[{ "icon": "home", "name": "Homepage", "url": "https://www.istrav.com" }]`, description: 'The menu of the organization' })
+  @Column('json', { nullable: true })
+  menu: { icon: string; name: string; url: string }[];
+
+  @ApiProperty({ example: '<p>Hello World!</p>', description: 'The about of the organization' })
+  @Column({ nullable: true })
+  about: string;
+
   @ApiProperty({ example: 'brokenrecord.store', description: 'The ebay usr of the organization' })
   @Column({ nullable: true })
   ebayUser: string;
@@ -108,6 +132,11 @@ export class Organization {
   /**
    * Other properties and relationships as needed
    */
+  // sub organizations
+  @OneToMany(() => Organization, organization => organization.parentOrganization, { nullable: true })
+  subOrganizations: Organization[]
+  @ManyToOne(() => Organization, organization => organization.id)
+  parentOrganization: Organization;
 
   @ManyToOne(() => User, user => user.organizations)
   owner: User;

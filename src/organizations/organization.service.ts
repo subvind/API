@@ -68,6 +68,7 @@ export class OrganizationService {
         'accounts.customer',
         'accounts.employee',
         'accounts.supplier',
+        'accounts.client',
         'orgPhoto',
         'orgPhoto.bucket',
       ]
@@ -85,6 +86,40 @@ export class OrganizationService {
         'orgPhoto.bucket',
       ]
     });
+  }
+
+  async findByHomeHostname(homeHostname: string): Promise<Organization> {
+    function isSubdomainOfHomenomy(homeHostname) {
+      const pattern = /^[\w-]+\.homenomy\.com$/i; // Case-insensitive match
+      return pattern.test(homeHostname);
+    }
+    
+    let org: any;
+    if (isSubdomainOfHomenomy(homeHostname)) {
+      org = this.organizationRepository.findOne({
+        where: {
+          orgname: homeHostname.split('.')[0],
+        },
+        relations: [
+          'owner',
+          'orgPhoto',
+          'orgPhoto.bucket',
+        ]
+      });
+    } else {
+      org = this.organizationRepository.findOne({
+        where: {
+          homeHostname: homeHostname,
+        },
+        relations: [
+          'owner',
+          'orgPhoto',
+          'orgPhoto.bucket',
+        ]
+      });
+    }
+    
+    return org
   }
 
   async findByErpHostname(erpHostname: string): Promise<Organization> {
@@ -120,7 +155,6 @@ export class OrganizationService {
     
     return org
   }
-
 
   async findByTubeHostname(tubeHostname: string): Promise<Organization> {
     function isSubdomainOfErpnomy(tubeHostname) {
