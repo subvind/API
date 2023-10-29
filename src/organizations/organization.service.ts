@@ -88,14 +88,43 @@ export class OrganizationService {
     });
   }
 
+  async findByFrontendHostname(frontendHostname: string): Promise<Organization> {
+    let org = this.organizationRepository.findOne({
+      where: {
+        frontendHostname: frontendHostname,
+      },
+      relations: [
+        'owner',
+        'orgPhoto',
+        'orgPhoto.bucket',
+      ]
+    });
+
+    return org
+  }
+
+  async findByBackendHostname(backendHostname: string): Promise<Organization> {
+    let org = this.organizationRepository.findOne({
+      where: {
+        backendHostname: backendHostname,
+      },
+      relations: [
+        'owner',
+        'orgPhoto',
+        'orgPhoto.bucket',
+      ]
+    });
+
+    return org
+  }
+
   async findByHomeHostname(homeHostname: string): Promise<Organization> {
-    function isSubdomainOfHomenomy(homeHostname) {
-      const pattern = /^[\w-]+\.homenomy\.com$/i; // Case-insensitive match
-      return pattern.test(homeHostname);
+    function isNomySubdomain(hostname) {
+      return hostname.split('.').length === 4
     }
     
     let org: any;
-    if (isSubdomainOfHomenomy(homeHostname)) {
+    if (isNomySubdomain(homeHostname)) {
       org = this.organizationRepository.findOne({
         where: {
           orgname: homeHostname.split('.')[0],
@@ -123,13 +152,12 @@ export class OrganizationService {
   }
 
   async findByErpHostname(erpHostname: string): Promise<Organization> {
-    function isSubdomainOfErpnomy(erpHostname) {
-      const pattern = /^[\w-]+\.erpnomy\.com$/i; // Case-insensitive match
-      return pattern.test(erpHostname);
+    function isNomySubdomain(hostname) {
+      return hostname.split('.').length === 4
     }
     
     let org: any;
-    if (isSubdomainOfErpnomy(erpHostname)) {
+    if (isNomySubdomain(erpHostname)) {
       org = this.organizationRepository.findOne({
         where: {
           orgname: erpHostname.split('.')[0],
@@ -157,13 +185,12 @@ export class OrganizationService {
   }
 
   async findByTubeHostname(tubeHostname: string): Promise<Organization> {
-    function isSubdomainOfErpnomy(tubeHostname) {
-      const pattern = /^[\w-]+\.tubenomy\.com$/i; // Case-insensitive match
-      return pattern.test(tubeHostname);
+    function isNomySubdomain(hostname) {
+      return hostname.split('.').length === 4
     }
     
     let org: any;
-    if (isSubdomainOfErpnomy(tubeHostname)) {
+    if (isNomySubdomain(tubeHostname)) {
       org = this.organizationRepository.findOne({
         where: {
           orgname: tubeHostname.split('.')[0],
@@ -192,13 +219,12 @@ export class OrganizationService {
 
 
   async findByDeskHostname(deskHostname: string): Promise<Organization> {
-    function isSubdomainOfErpnomy(deskHostname) {
-      const pattern = /^[\w-]+\.desknomy\.com$/i; // Case-insensitive match
-      return pattern.test(deskHostname);
+    function isNomySubdomain(hostname) {
+      return hostname.split('.').length === 4
     }
     
     let org: any;
-    if (isSubdomainOfErpnomy(deskHostname)) {
+    if (isNomySubdomain(deskHostname)) {
       org = this.organizationRepository.findOne({
         where: {
           orgname: deskHostname.split('.')[0],

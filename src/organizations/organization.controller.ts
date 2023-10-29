@@ -49,6 +49,20 @@ export class OrganizationController {
     return await this.organizationService.findByOrgname(orgname);
   }
 
+  @ApiOperation({ summary: 'Get a organization by frontendHostname' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('frontendHostname/:frontendHostname')
+  async findFrontendHostname(@Param('frontendHostname') frontendHostname: string): Promise<Organization> {
+    return await this.organizationService.findByFrontendHostname(frontendHostname);
+  }
+
+  @ApiOperation({ summary: 'Get a organization by backendHostname' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('backendHostname/:backendHostname')
+  async findBackendHostname(@Param('backendHostname') backendHostname: string): Promise<Organization> {
+    return await this.organizationService.findByBackendHostname(backendHostname);
+  }
+
   @ApiOperation({ summary: 'Get a organization by homeHostname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('homeHostname/:homeHostname')

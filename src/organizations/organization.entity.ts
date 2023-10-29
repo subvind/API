@@ -17,7 +17,8 @@ import { Account } from '../accounts/account.entity'
 
 @Entity()
 @Unique(['orgname'])
-@Unique(['hostname'])
+@Unique(['frontendHostname'])
+@Unique(['backendHostname'])
 @Unique(['homeHostname'])
 @Unique(['erpHostname'])
 @Unique(['tubeHostname'])
@@ -34,9 +35,13 @@ export class Organization {
   })
   orgname: string;
 
-  @ApiProperty({ example: 'istrav.com', description: 'The hostname of the organization' })
+  @ApiProperty({ example: 'istrav.com', description: 'The main or frontend hostname of the organization' })
   @Column({ type: 'varchar', length: 256, nullable: true })
-  hostname: string;
+  frontendHostname: string;
+
+  @ApiProperty({ example: 'subvind.com', description: 'The admin or backend hostname of the organization' })
+  @Column({ type: 'varchar', length: 256, nullable: true })
+  backendHostname: string;
 
   @ApiProperty({ example: 'false', description: 'The home module enabled of the organization' })
   @Column({ default: true })
