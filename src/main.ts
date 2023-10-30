@@ -15,7 +15,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // so browsers can use api
-  app.enableCors();
+  app.enableCors({
+    origin: '*',
+  });
 
   // Create a Swagger document builder
   const options = new DocumentBuilder()
