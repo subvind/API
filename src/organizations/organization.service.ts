@@ -5,6 +5,17 @@ import { Repository } from 'typeorm';
 import { Organization } from './organization.entity';
 import { User } from '../users/user.entity';
 
+function getHostnameEnding(hostname) {
+  const parts = hostname.split('.');
+  if (parts.length >= 3) {
+    const domain = parts[parts.length - 2];
+    const tld = parts[parts.length - 1];
+    return domain + '.' + tld;
+  } else {
+    return hostname
+  }
+}
+
 @Injectable()
 export class OrganizationService {
   constructor(
@@ -91,7 +102,7 @@ export class OrganizationService {
   async findByFrontendHostname(frontendHostname: string): Promise<Organization> {
     let org = this.organizationRepository.findOne({
       where: {
-        frontendHostname: frontendHostname,
+        frontendHostname: getHostnameEnding(frontendHostname),
       },
       relations: [
         'owner',
@@ -106,7 +117,7 @@ export class OrganizationService {
   async findByBackendHostname(backendHostname: string): Promise<Organization> {
     let org = this.organizationRepository.findOne({
       where: {
-        backendHostname: backendHostname,
+        backendHostname: getHostnameEnding(backendHostname),
       },
       relations: [
         'owner',
