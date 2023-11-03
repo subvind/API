@@ -12,19 +12,21 @@ import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmExceptionFilter } from './typeorm-exception.filter';
 
 import { JwtAuthModule } from './auth/jwt.module';
-import { AuthModule } from './auth/auth.module';
 
+import { AnalyticModule } from './analytics/analytic.module';
+import { AuthModule } from './auth/auth.module';
 import { AccountModule } from './accounts/account.module';
 import { BucketModule } from './buckets/bucket.module';
 import { CategoryModule } from './categories/category.module';
 import { FileModule } from './files/file.module';
+import { GuestModule } from './guests/guest.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrganizationModule } from './organizations/organization.module';
+import { PlaylistModule } from './playlists/playlist.module';
 import { ProductModule } from './products/product.module';
 import { ShowcaseModule } from './showcases/showcase.module';
 import { UserModule } from './users/user.module';
-import { AnalyticModule } from './analytics/analytic.module';
-import { GuestModule } from './guests/guest.module';
+import { VideoModule } from './videos/video.module';
 
 @Module({
   imports: [
@@ -46,13 +48,15 @@ import { GuestModule } from './guests/guest.module';
     AccountModule,
     BucketModule,
     CategoryModule,
-    GuestModule,
     FileModule,
+    GuestModule,
     InventoryModule,
     OrganizationModule,
+    PlaylistModule,
     ProductModule,
     ShowcaseModule,
     UserModule,
+    VideoModule
   ],
   controllers: [AppController],
   providers: [

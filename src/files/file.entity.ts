@@ -9,6 +9,8 @@ import { Bucket } from '../buckets/bucket.entity';
 import { Product } from '../products/product.entity';
 import { Category } from '../categories/category.entity';
 import { Showcase } from '../showcases/showcase.entity';
+import { Video } from '../videos/video.entity';
+import { Playlist } from '../playlists/playlist.entity';
 
 @Entity()
 @Unique(['filename', 'organization']) 
@@ -47,6 +49,14 @@ export class File {
   // bannerPhotos
   @OneToMany(() => Showcase, showcase => showcase.bannerPhoto, { nullable: true })
   bannerPhotos: Showcase[]
+
+  // playlistPhotos
+  @OneToMany(() => Playlist, playlist => playlist.playlistPhoto, { nullable: true })
+  playlistPhotos: Playlist[]
+
+  // thumbnails
+  @OneToMany(() => Video, video => video.thumbnail, { nullable: true })
+  thumbnails: Video[]
 
   /**
    * Other properties and relationships as needed

@@ -14,6 +14,8 @@ import { Bucket } from '../buckets/bucket.entity';
 import { File } from '../files/file.entity';
 import { Showcase } from '../showcases/showcase.entity'
 import { Account } from '../accounts/account.entity'
+import { Video } from '../videos/video.entity';
+import { Playlist } from '../playlists/playlist.entity';
 
 @Entity()
 @Unique(['orgname'])
@@ -181,6 +183,14 @@ export class Organization {
   // accounts
   @OneToMany(() => Account, account => account.organization, { nullable: true })
   accounts: Account[]
+
+  // playlists
+  @OneToMany(() => Playlist, playlist => playlist.organization, { nullable: true })
+  playlists: Playlist[]
+
+  // videos
+  @OneToMany(() => Video, video => video.organization, { nullable: true })
+  videos: Video[]
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

@@ -4,44 +4,44 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { Product } from '../products/product.entity';
+import { Video } from '../videos/video.entity';
 import { Organization } from '../organizations/organization.entity';
 import { File } from '../files/file.entity';
 
 @Entity()
 @Unique(['slug', 'organization']) 
-export class Category {
+export class Playlist {
   @PrimaryColumn('uuid')
   id: string;
 
-  @ApiProperty({ example: 'My Category', description: 'The name of the category' })
+  @ApiProperty({ example: 'My Playlist', description: 'The name this playlist' })
   @Column()
   name: string;
 
-  @ApiProperty({ example: 'my-category', description: 'The url slug of the category' })
+  @ApiProperty({ example: 'my-playlist', description: 'The slug that is used to identify this playlist' })
   @Column({ nullable: true })
   slug: string;
 
-  @ApiProperty({ example: 'This is my category.', description: 'The description of the category' })
+  @ApiProperty({ example: '', description: 'The description of this playlist' })
   @Column({ nullable: true })
   description: string;
 
   @ManyToOne(() => File, file => file.id)
-  mainPhoto: File;
+  playlistPhoto: File;
 
   /**
    * Other properties and relationships as needed
    */
 
-  // sub categories
-  @OneToMany(() => Category, category => category.parentCategory, { nullable: true })
-  subCategories: Category[]
-  @ManyToOne(() => Category, category => category.id)
-  parentCategory: Category;
+  // sub playlists
+  @OneToMany(() => Playlist, playlist => playlist.parentPlaylist, { nullable: true })
+  subPlaylists: Playlist[]
+  @ManyToOne(() => Playlist, playlist => playlist.id)
+  parentPlaylist: Playlist;
 
-  // products
-  @OneToMany(() => Product, product => product.category, { nullable: true })
-  products: Product[]
+  // videos
+  @OneToMany(() => Video, video => video.playlist, { nullable: true })
+  videos: Video[]
 
   // tenant id
   @ManyToOne(() => Organization, organization => organization.id)
@@ -58,6 +58,6 @@ export class Category {
     if (!this.id) {
       this.id = uuidv4();
     }
-    console.log('category insert', this.id)
+    console.log('playlist insert', this.id)
   }
 }
