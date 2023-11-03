@@ -108,7 +108,7 @@ export class PlaylistController {
     @Query('limit') limit: number = 10,
     @Query('search') search?: string,
   ): Promise<any> {
-    const organization = await this.organizationService.findByErpHostname(tubeHostname);
+    const organization = await this.organizationService.findByTubeHostname(tubeHostname);
 
     if (!organization) {
       throw new NotFoundException('Organization not found');
