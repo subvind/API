@@ -10,6 +10,8 @@ import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 
 import { AuthStatus } from '../auth-status.decorator';
 import { AuthStatusGuard } from '../auth-status.guard';
+import { UserStatusGuard } from './user-status.guard';
+import { UserStatus } from './user-status.decorator';
 
 import { v4 as uuidv4 } from 'uuid';
 import { hash } from 'bcrypt';
@@ -62,7 +64,8 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
   @AuthStatus(['Pending', 'Verified'])
-  @UseGuards(AuthStatusGuard)
+  @UserStatus(['Owner'])
+  @UseGuards(AuthStatusGuard, UserStatusGuard)
   async update(@Param('id') id: string, @Body() updatedUserData: User): Promise<User> {
     let user = await this.userService.findRecord(id);
     let data
@@ -102,7 +105,8 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
   @AuthStatus(['Pending', 'Verified'])
-  @UseGuards(AuthStatusGuard)
+  @UserStatus(['Owner'])
+  @UseGuards(AuthStatusGuard, UserStatusGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.userService.remove(id);
   }
