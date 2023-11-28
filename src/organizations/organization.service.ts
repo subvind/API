@@ -39,6 +39,9 @@ export class OrganizationService {
   
     query.leftJoinAndSelect('organization.owner', 'owner');
     query.leftJoinAndSelect('organization.orgPhoto', 'orgPhoto');
+    query.leftJoinAndSelect('orgPhoto.bucket', 'orgBucket');
+    query.leftJoinAndSelect('organization.splashPhoto', 'splashPhoto');
+    query.leftJoinAndSelect('splashPhoto.bucket', 'splashBucket');
     
     query.addSelect([
       'owner.id',
@@ -64,6 +67,8 @@ export class OrganizationService {
         'owner',
         'orgPhoto',
         'orgPhoto.bucket',
+        'splashPhoto',
+        'splashPhoto.bucket',
       ]
     });
   }
@@ -82,6 +87,8 @@ export class OrganizationService {
         'accounts.client',
         'orgPhoto',
         'orgPhoto.bucket',
+        'splashPhoto',
+        'splashPhoto.bucket',
       ]
     });
   }
@@ -95,6 +102,8 @@ export class OrganizationService {
         'owner',
         'orgPhoto',
         'orgPhoto.bucket',
+        'splashPhoto',
+        'splashPhoto.bucket',
       ]
     });
   }
@@ -108,6 +117,8 @@ export class OrganizationService {
         'owner',
         'orgPhoto',
         'orgPhoto.bucket',
+        'splashPhoto',
+        'splashPhoto.bucket',
       ]
     });
 
@@ -123,6 +134,8 @@ export class OrganizationService {
         'owner',
         'orgPhoto',
         'orgPhoto.bucket',
+        'splashPhoto',
+        'splashPhoto.bucket',
       ]
     });
 
@@ -144,6 +157,8 @@ export class OrganizationService {
           'owner',
           'orgPhoto',
           'orgPhoto.bucket',
+          'splashPhoto',
+          'splashPhoto.bucket',
         ]
       });
     } else {
@@ -155,6 +170,8 @@ export class OrganizationService {
           'owner',
           'orgPhoto',
           'orgPhoto.bucket',
+          'splashPhoto',
+          'splashPhoto.bucket',
         ]
       });
     }
@@ -177,6 +194,8 @@ export class OrganizationService {
           'owner',
           'orgPhoto',
           'orgPhoto.bucket',
+          'splashPhoto',
+          'splashPhoto.bucket',
         ]
       });
     } else {
@@ -188,6 +207,8 @@ export class OrganizationService {
           'owner',
           'orgPhoto',
           'orgPhoto.bucket',
+          'splashPhoto',
+          'splashPhoto.bucket',
         ]
       });
     }
@@ -210,6 +231,8 @@ export class OrganizationService {
           'owner',
           'orgPhoto',
           'orgPhoto.bucket',
+          'splashPhoto',
+          'splashPhoto.bucket',
         ]
       });
     } else {
@@ -221,6 +244,8 @@ export class OrganizationService {
           'owner',
           'orgPhoto',
           'orgPhoto.bucket',
+          'splashPhoto',
+          'splashPhoto.bucket',
         ]
       });
     }
@@ -244,6 +269,8 @@ export class OrganizationService {
           'owner',
           'orgPhoto',
           'orgPhoto.bucket',
+          'splashPhoto',
+          'splashPhoto.bucket',
         ]
       });
     } else {
@@ -255,6 +282,8 @@ export class OrganizationService {
           'owner',
           'orgPhoto',
           'orgPhoto.bucket',
+          'splashPhoto',
+          'splashPhoto.bucket',
         ]
       });
     }
@@ -292,7 +321,9 @@ export class OrganizationService {
     }
 
     query.leftJoinAndSelect('organization.orgPhoto', 'orgPhoto');
-    query.leftJoinAndSelect('orgPhoto.bucket', 'bucket');
+    query.leftJoinAndSelect('orgPhoto.bucket', 'orgBucket');
+    query.leftJoinAndSelect('organization.splashPhoto', 'splashPhoto');
+    query.leftJoinAndSelect('splashPhoto.bucket', 'splashBucket');
   
     const offset = (page - 1) * limit;
     
@@ -310,9 +341,13 @@ export class OrganizationService {
         'organization.subOrganizations',
         'organization.subOrganizations.orgPhoto',
         'organization.subOrganizations.orgPhoto.bucket',
+        'organization.subOrganizations.splashPhoto',
+        'organization.subOrganizations.splashPhoto.bucket',
         'organization.parentOrganizations',
         'organization.parentOrganizations.orgPhoto',
         'organization.parentOrganizations.orgPhoto.bucket',
+        'organization.parentOrganizations.splashPhoto',
+        'organization.parentOrganizations.splashPhoto.bucket',
       ]
     });
   }

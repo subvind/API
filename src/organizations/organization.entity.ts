@@ -112,6 +112,9 @@ export class Organization {
   @ManyToOne(() => File, file => file.id)
   orgPhoto: File;
 
+  @ManyToOne(() => File, file => file.id)
+  splashPhoto: File;
+
   @ApiProperty({ example: 'false', description: 'Turn on and off branding' })
   @Column({ default: true })
   isBranding: boolean;

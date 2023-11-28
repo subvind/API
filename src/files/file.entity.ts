@@ -42,6 +42,10 @@ export class File {
   @OneToMany(() => Organization, organization => organization.orgPhoto, { nullable: true })
   orgPhotos: Organization[]
 
+  // splashPhotos
+  @OneToMany(() => Organization, organization => organization.splashPhoto, { nullable: true })
+  splashPhotos: Organization[]
+
   // mainPhotos
   @OneToMany(() => Category, category => category.mainPhoto, { nullable: true })
   mainPhotos: Category[]
