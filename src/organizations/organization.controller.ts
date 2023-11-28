@@ -176,4 +176,17 @@ export class OrganizationController {
     const { data, total } = await this.organizationService.findUserOrganizations(user, page, limit, search);
     return { data, total };
   }
+
+  @ApiOperation({ summary: 'Find organizations related to an organization' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Get('childRelated/:id')
+  async find(@Param('id') orgId: string): Promise<Organization> {
+    const org = await this.organizationService.findOne(orgId);
+
+    if (!org) {
+      throw new NotFoundException('Organization not found');
+    }
+
+    return this.organizationService.findChildOrganizations(org);
+  }
 }

@@ -300,4 +300,20 @@ export class OrganizationService {
   
     return { data, total };
   }
+
+  async findChildOrganizations(organization: Organization): Promise<Organization> {
+    return await this.organizationRepository.findOne({
+      where: {
+        id: organization.id,
+      },
+      relations: [
+        'organization.subOrganizations',
+        'organization.subOrganizations.orgPhoto',
+        'organization.subOrganizations.orgPhoto.bucket',
+        'organization.parentOrganizations',
+        'organization.parentOrganizations.orgPhoto',
+        'organization.parentOrganizations.orgPhoto.bucket',
+      ]
+    });
+  }
 }

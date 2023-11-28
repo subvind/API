@@ -1,4 +1,4 @@
-import { Entity, Unique, PrimaryColumn, Column, BeforeInsert, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Unique, PrimaryColumn, Column, BeforeInsert, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 import { IsNotEmpty, Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -140,10 +140,11 @@ export class Organization {
    * Other properties and relationships as needed
    */
   // sub organizations
-  @OneToMany(() => Organization, organization => organization.parentOrganization, { nullable: true })
+  @ManyToMany(() => Organization, organization => organization.parentOrganizations, { nullable: true })
   subOrganizations: Organization[]
-  @ManyToOne(() => Organization, organization => organization.id)
-  parentOrganization: Organization;
+  @ManyToMany(() => Organization, organization => organization.subOrganizations, { nullable: true })
+  @JoinTable()
+  parentOrganizations: Organization[];
 
   @ManyToOne(() => User, user => user.organizations)
   owner: User;
