@@ -109,6 +109,14 @@ export class Organization {
   @Column({ nullable: true })
   youtubeChannel: string;
 
+  @ApiProperty({ example: 'brokenrecord.store', description: 'The twitter user of the organization' })
+  @Column({ nullable: true })
+  twitterUser: string;
+
+  @ApiProperty({ example: 'brokenrecord.store', description: 'The github user of the organization' })
+  @Column({ nullable: true })
+  githubUser: string;
+
   @ManyToOne(() => File, file => file.id)
   orgPhoto: File;
 
