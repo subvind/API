@@ -331,6 +331,8 @@ export class OrganizationService {
       });
       organization.subOrganizations = subOrgs;
     }
+
+    console.log('organization', JSON.stringify(organization, null, 2));
   
     // Save the updated organization
     await this.organizationRepository.save(organization);
