@@ -322,6 +322,8 @@ export class OrganizationService {
     // Extract the array of IDs
     const subOrgIds = updatedOrganization.subOrganizations.map(subOrg => subOrg.id);
 
+    console.log('subOrgIds', JSON.stringify(subOrgIds, null, 2));
+
     // Add the updated subOrganizations
     if (subOrgIds.length > 0) {
       const subOrgs = await this.organizationRepository.find({
@@ -329,6 +331,7 @@ export class OrganizationService {
           id: In(subOrgIds)
         }
       });
+      console.log('subOrgs', JSON.stringify(subOrgs, null, 2))
       organization.subOrganizations = subOrgs;
     }
 
