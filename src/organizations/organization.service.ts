@@ -306,7 +306,10 @@ export class OrganizationService {
     const organization: any = await this.organizationRepository.find({
       where: {
         id: id
-      }
+      },
+      relations: [
+        'subOrganizations',
+      ]
     });
   
     if (!organization) {
