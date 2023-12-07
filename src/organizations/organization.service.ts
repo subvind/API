@@ -1,7 +1,7 @@
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Organization } from './organization.entity';
 import { User } from '../users/user.entity';
 
@@ -299,6 +299,37 @@ export class OrganizationService {
   async update(id: string, organization: Organization): Promise<Organization> {
     await this.organizationRepository.update(id, organization);
     return this.findOne(id);
+  }
+
+  async updateChildOrganizations(id: string, updatedOrganization: Organization): Promise<Organization> {
+    // Find the existing organization
+    const organization: any = await this.organizationRepository.find({
+      where: {
+        id: id
+      }
+    });
+  
+    if (!organization) {
+      throw new NotFoundException(`Organization with id ${id} not found`);
+    }
+  
+    // Update the organization properties
+    // organization.name = updatedOrganization.name;
+  
+    // Clear existing subOrganizations
+    organization.subOrganizations = [];
+  
+    // Add the updated subOrganizations
+    if (updatedOrganization.subOrganizations) {
+      const subOrgs = await this.organizationRepository.findBy({ id: In(updatedOrganization.subOrganizations) });
+      organization.subOrganizations = subOrgs;
+    }
+  
+    // Save the updated organization
+    await this.organizationRepository.save(organization);
+  
+    // Return the updated organization
+    return organization;
   }
 
   async remove(id: string): Promise<void> {

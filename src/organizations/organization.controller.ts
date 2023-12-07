@@ -35,63 +35,63 @@ export class OrganizationController {
     return { data, total };
   }
 
-  @ApiOperation({ summary: 'Get a organization by id' })
+  @ApiOperation({ summary: 'Get an organization by id' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Organization> {
     return this.organizationService.findOne(id);
   }
 
-  @ApiOperation({ summary: 'Get a organization by orgname' })
+  @ApiOperation({ summary: 'Get an organization by orgname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('orgname/:orgname')
   async findSingle(@Param('orgname') orgname: string): Promise<Organization> {
     return await this.organizationService.findByOrgname(orgname);
   }
 
-  @ApiOperation({ summary: 'Get a organization by frontendHostname' })
+  @ApiOperation({ summary: 'Get an organization by frontendHostname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('frontendHostname/:frontendHostname')
   async findFrontendHostname(@Param('frontendHostname') frontendHostname: string): Promise<Organization> {
     return await this.organizationService.findByFrontendHostname(frontendHostname);
   }
 
-  @ApiOperation({ summary: 'Get a organization by backendHostname' })
+  @ApiOperation({ summary: 'Get an organization by backendHostname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('backendHostname/:backendHostname')
   async findBackendHostname(@Param('backendHostname') backendHostname: string): Promise<Organization> {
     return await this.organizationService.findByBackendHostname(backendHostname);
   }
 
-  @ApiOperation({ summary: 'Get a organization by homeHostname' })
+  @ApiOperation({ summary: 'Get an organization by homeHostname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('homeHostname/:homeHostname')
   async findMainHome(@Param('homeHostname') homeHostname: string): Promise<Organization> {
     return await this.organizationService.findByHomeHostname(homeHostname);
   }
 
-  @ApiOperation({ summary: 'Get a organization by erpHostname' })
+  @ApiOperation({ summary: 'Get an organization by erpHostname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('erpHostname/:erpHostname')
   async findMainErp(@Param('erpHostname') erpHostname: string): Promise<Organization> {
     return await this.organizationService.findByErpHostname(erpHostname);
   }
 
-  @ApiOperation({ summary: 'Get a organization by tubeHostname' })
+  @ApiOperation({ summary: 'Get an organization by tubeHostname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('tubeHostname/:tubeHostname')
   async findMainTube(@Param('tubeHostname') tubeHostname: string): Promise<Organization> {
     return await this.organizationService.findByTubeHostname(tubeHostname);
   }
 
-  @ApiOperation({ summary: 'Get a organization by deskHostname' })
+  @ApiOperation({ summary: 'Get an organization by deskHostname' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('deskHostname/:deskHostname')
   async findMainDesk(@Param('deskHostname') deskHostname: string): Promise<Organization> {
     return await this.organizationService.findByDeskHostname(deskHostname);
   }
 
-  @ApiOperation({ summary: 'Create a organization' })
+  @ApiOperation({ summary: 'Create an organization' })
   @ApiBody({ type: Organization })
   @ApiResponse({ status: 201, description: 'Success', type: Organization })
   @Post()
@@ -103,7 +103,7 @@ export class OrganizationController {
     return this.organizationService.create(organizationData);
   }
 
-  @ApiOperation({ summary: 'Update a organization' })
+  @ApiOperation({ summary: 'Update an organization' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch(':id')
   @AuthStatus(['Verified'])
@@ -113,7 +113,17 @@ export class OrganizationController {
     return this.organizationService.update(id, updatedOrganizationData);
   }
 
-  @ApiOperation({ summary: 'Update ebay access token for a organization' })
+  @ApiOperation({ summary: 'Update an organizations sub orgs' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @Patch(':id')
+  @AuthStatus(['Verified'])
+  @EmployeeStatus(['Working'])
+  @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
+  async updateChildOrganizations(@Param('id') id: string, @Body() updatedOrganizationData: Organization): Promise<Organization> {
+    return this.organizationService.updateChildOrganizations(id, updatedOrganizationData);
+  }
+
+  @ApiOperation({ summary: 'Update ebay access token for an organization' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch('ebayAccessToken/:id')
   @AuthStatus(['Verified'])
@@ -148,7 +158,7 @@ export class OrganizationController {
     return this.organizationService.update(id, organization);
   }
 
-  @ApiOperation({ summary: 'Delete a organization' })
+  @ApiOperation({ summary: 'Delete an organization' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Delete(':id')
   @AuthStatus(['Verified'])
