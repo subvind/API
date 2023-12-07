@@ -319,12 +319,15 @@ export class OrganizationService {
     // Clear existing subOrganizations
     organization.subOrganizations = [];
   
+    // Extract the array of IDs
+    const subOrgIds = updatedOrganization.subOrganizations.map(subOrg => subOrg.id);
+
     // Add the updated subOrganizations
-    if (updatedOrganization.subOrganizations) {
+    if (subOrgIds.length > 0) {
       const subOrgs = await this.organizationRepository.find({
-        where: { 
-          id: In(updatedOrganization.subOrganizations) 
-        }
+          where: {
+            id: In(subOrgIds)
+          }
       });
       organization.subOrganizations = subOrgs;
     }
