@@ -325,9 +325,9 @@ export class OrganizationService {
     // Add the updated subOrganizations
     if (subOrgIds.length > 0) {
       const subOrgs = await this.organizationRepository.find({
-          where: {
-            id: In(subOrgIds)
-          }
+        where: {
+          id: In(subOrgIds)
+        }
       });
       organization.subOrganizations = subOrgs;
     }
