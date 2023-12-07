@@ -303,7 +303,7 @@ export class OrganizationService {
 
   async updateChildOrganizations(id: string, updatedOrganization: Organization): Promise<Organization> {
     // Find the existing organization
-    const organization: any = await this.organizationRepository.find({
+    const organization: any = await this.organizationRepository.findOne({
       where: {
         id: id
       },
@@ -335,7 +335,7 @@ export class OrganizationService {
         }
       });
       console.log('subOrgs', JSON.stringify(subOrgs, null, 2))
-      organization.subOrganizations = subOrgs;
+      organization.subOrganizations = [...subOrgs];
     }
 
     console.log('organization', JSON.stringify(organization, null, 2));
