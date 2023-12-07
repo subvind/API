@@ -115,7 +115,7 @@ export class OrganizationController {
 
   @ApiOperation({ summary: 'Update an organizations sub orgs' })
   @ApiResponse({ status: 200, description: 'Success' })
-  @Patch(':id')
+  @Patch('childRelated/:id')
   @AuthStatus(['Verified'])
   @EmployeeStatus(['Working'])
   @UseGuards(AuthStatusGuard, EmployeeStatusGuard)
