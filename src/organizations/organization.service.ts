@@ -338,16 +338,16 @@ export class OrganizationService {
         id: organization.id,
       },
       relations: [
-        'organization.subOrganizations',
-        'organization.subOrganizations.orgPhoto',
-        'organization.subOrganizations.orgPhoto.bucket',
-        'organization.subOrganizations.splashPhoto',
-        'organization.subOrganizations.splashPhoto.bucket',
-        'organization.parentOrganizations',
-        'organization.parentOrganizations.orgPhoto',
-        'organization.parentOrganizations.orgPhoto.bucket',
-        'organization.parentOrganizations.splashPhoto',
-        'organization.parentOrganizations.splashPhoto.bucket',
+        'subOrganizations',
+        'subOrganizations.orgPhoto',
+        'subOrganizations.orgPhoto.bucket',
+        'subOrganizations.splashPhoto',
+        'subOrganizations.splashPhoto.bucket',
+        'parentOrganizations',
+        'parentOrganizations.orgPhoto',
+        'parentOrganizations.orgPhoto.bucket',
+        'parentOrganizations.splashPhoto',
+        'parentOrganizations.splashPhoto.bucket',
       ]
     });
   }
