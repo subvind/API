@@ -91,23 +91,4 @@ export class AnalyticController {
     const { data, total } = await this.analyticService.findOrgAnalytic(organization, page, limit, search);
     return { data, total };
   }
-
-  @ApiOperation({ summary: 'Find analytics related to an organization by erpHostname' })
-  @ApiResponse({ status: 200, description: 'Success' })
-  @Get('erpHostname/:erpHostname')
-  async findOrgAnalyticByHostname(
-    @Param('erpHostname') erpHostname: string,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
-    @Query('search') search?: string,
-  ): Promise<any> {
-    const organization = await this.organizationService.findByErpHostname(erpHostname);
-
-    if (!organization) {
-      throw new NotFoundException('Organization not found');
-    }
-
-    const { data, total } = await this.analyticService.findOrgAnalytic(organization, page, limit, search);
-    return { data, total };
-  }
 }
