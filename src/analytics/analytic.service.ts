@@ -26,12 +26,7 @@ export class AnalyticService {
       );
     }
   
-    query.leftJoinAndSelect('analytic.products', 'products');
     query.leftJoinAndSelect('analytic.organization', 'organization');
-    query.leftJoinAndSelect('analytic.parentAnalytic', 'parentAnalytic');
-    query.leftJoinAndSelect('analytic.subCategories', 'subCategories');
-    query.leftJoinAndSelect('analytic.mainPhoto', 'mainPhoto');
-    query.leftJoinAndSelect('mainPhoto.bucket', 'mainPhotoBucket');
     
     const offset = (page - 1) * limit;
   
@@ -46,13 +41,7 @@ export class AnalyticService {
         id: id
       },
       relations: [
-        'parentAnalytic', 
-        'subCategories', 
-        'products',
         'organization',
-        'organization.owner',
-        'mainPhoto',
-        'mainPhoto.bucket'
       ]
     });
   }
@@ -81,17 +70,12 @@ export class AnalyticService {
 
     if (search) {
       query.andWhere(
-        'analytic.name LIKE :search OR analytic.description LIKE :search',
+        'analytic.url LIKE :search OR analytic.method LIKE :search',
         { search: `%${search}%` }
       );
     }
     
-    query.leftJoinAndSelect('analytic.products', 'products');
-    query.leftJoinAndSelect('analytic.parentAnalytic', 'parentAnalytic');
-    query.leftJoinAndSelect('analytic.subCategories', 'subCategories');
     query.leftJoinAndSelect('analytic.organization', 'organization');
-    query.leftJoinAndSelect('analytic.mainPhoto', 'mainPhoto');
-    query.leftJoinAndSelect('mainPhoto.bucket', 'mainPhotoBucket');
   
     const offset = (page - 1) * limit;
     
