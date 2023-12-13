@@ -11,9 +11,12 @@ import { Organization } from './organization.entity';
 import { AuthStatusGuard } from '../auth-status.guard';
 import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
+import { OrganizationListener } from './organization.listener';
+import { AnalyticModule } from 'src/analytics/analytic.module';
 
 @Module({
   imports: [
+    forwardRef(() => AnalyticModule),
     forwardRef(() => UserModule),
     forwardRef(() => AccountModule),
     RabbitMQModule.forRoot(RabbitMQModule, {
@@ -35,7 +38,8 @@ import { AccountModule } from '../accounts/account.module';
   providers: [
     OrganizationService,
     AuthStatusGuard,
-    JwtService
+    JwtService,
+    OrganizationListener,
   ],
 })
 export class OrganizationModule {}

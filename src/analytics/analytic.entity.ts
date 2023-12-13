@@ -23,6 +23,10 @@ export class Analytic {
   @PrimaryColumn('uuid')
   id: string;
 
+  @ApiProperty({ example: 'accounts', description: 'The kind of the analytic' })
+  @Column({ nullable: true })
+  kind: string;
+
   @ApiProperty({ example: '', description: 'The url of the analytic' })
   @Column({ nullable: true })
   url: string;

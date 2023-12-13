@@ -11,9 +11,12 @@ import { OrganizationModule } from '../organizations/organization.module';
 import { CategoryModule } from '../categories/category.module';
 import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
+import { ProductListener } from './product.listener';
+import { AnalyticModule } from 'src/analytics/analytic.module';
 
 @Module({
   imports: [
+    forwardRef(() => AnalyticModule),
     OrganizationModule,
     CategoryModule,
     UserModule,
@@ -35,6 +38,6 @@ import { AccountModule } from '../accounts/account.module';
     ProductService
   ],
   controllers: [ProductController],
-  providers: [ProductService, JwtService],
+  providers: [ProductService, JwtService, ProductListener],
 })
 export class ProductModule {}

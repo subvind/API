@@ -10,9 +10,12 @@ import { Showcase } from './showcase.entity';
 import { OrganizationModule } from '../organizations/organization.module';
 import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
+import { ShowcaseListener } from './showcase.listener';
+import { AnalyticModule } from 'src/analytics/analytic.module';
 
 @Module({
   imports: [
+    forwardRef(() => AnalyticModule),
     OrganizationModule,
     UserModule,
     AccountModule,
@@ -33,6 +36,6 @@ import { AccountModule } from '../accounts/account.module';
     ShowcaseService
   ],
   controllers: [ShowcaseController],
-  providers: [ShowcaseService, JwtService],
+  providers: [ShowcaseService, JwtService, ShowcaseListener],
 })
 export class ShowcaseModule {}

@@ -11,9 +11,12 @@ import { OrganizationModule } from '../organizations/organization.module';
 import { BucketModule } from '../buckets/bucket.module';
 import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
+import { FileListener } from './file.listener';
+import { AnalyticModule } from 'src/analytics/analytic.module';
 
 @Module({
   imports: [
+    forwardRef(() => AnalyticModule),
     OrganizationModule,
     BucketModule,
     UserModule,
@@ -35,6 +38,6 @@ import { AccountModule } from '../accounts/account.module';
     FileService
   ],
   controllers: [FileController],
-  providers: [FileService, JwtService],
+  providers: [FileService, JwtService, FileListener],
 })
 export class FileModule {}

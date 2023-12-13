@@ -13,6 +13,7 @@ import { User } from './user.entity';
 import { AuthModule } from '../auth/auth.module';
 import { AccountModule } from '../accounts/account.module';
 import { AnalyticModule } from 'src/analytics/analytic.module';
+import { UserListener } from './user.listener';
 
 @Module({
   imports: [
@@ -36,6 +37,6 @@ import { AnalyticModule } from 'src/analytics/analytic.module';
     UserService
   ],
   controllers: [UserController],
-  providers: [UserService, AuthService, JwtService],
+  providers: [UserService, AuthService, JwtService, UserListener],
 })
 export class UserModule {}

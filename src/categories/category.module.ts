@@ -10,9 +10,12 @@ import { Category } from './category.entity';
 import { OrganizationModule } from '../organizations/organization.module';
 import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
+import { CategoryListener } from './category.listener';
+import { AnalyticModule } from 'src/analytics/analytic.module';
 
 @Module({
   imports: [
+    forwardRef(() => AnalyticModule),
     OrganizationModule,
     UserModule,
     AccountModule,
@@ -33,6 +36,6 @@ import { AccountModule } from '../accounts/account.module';
     CategoryService
   ],
   controllers: [CategoryController],
-  providers: [CategoryService, JwtService],
+  providers: [CategoryService, JwtService, CategoryListener],
 })
 export class CategoryModule {}

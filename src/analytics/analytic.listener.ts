@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import { AccountEvent } from './account.event';
-import { AnalyticService } from '../analytics/analytic.service';
+import { AnalyticEvent } from './analytic.event';
+import { AnalyticService } from './analytic.service';
 
 @Injectable()
-export class AccountListener {
+export class AnalyticListener {
 
   constructor (
     private readonly analyticService: AnalyticService
@@ -12,10 +12,10 @@ export class AccountListener {
 
   @RabbitSubscribe({
     exchange: 'analytics',
-    routingKey: 'accounts.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
-    queue: 'AccountEvent',
+    routingKey: 'analytics.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
+    queue: 'AnalyticEvent',
   })
-  public async accountEventHandler(event: AccountEvent) {
+  public async accountEventHandler(event: AnalyticEvent) {
     // reports
     console.log(JSON.stringify(event));
 

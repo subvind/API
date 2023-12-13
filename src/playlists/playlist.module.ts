@@ -10,9 +10,12 @@ import { Playlist } from './playlist.entity';
 import { OrganizationModule } from '../organizations/organization.module';
 import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
+import { PlaylistListener } from './playlist.listener';
+import { AnalyticModule } from 'src/analytics/analytic.module';
 
 @Module({
   imports: [
+    forwardRef(() => AnalyticModule),
     OrganizationModule,
     UserModule,
     AccountModule,
@@ -33,6 +36,6 @@ import { AccountModule } from '../accounts/account.module';
     PlaylistService
   ],
   controllers: [PlaylistController],
-  providers: [PlaylistService, JwtService],
+  providers: [PlaylistService, JwtService, PlaylistListener],
 })
 export class PlaylistModule {}

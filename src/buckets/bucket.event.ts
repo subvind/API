@@ -10,8 +10,8 @@ export enum CRUDType {
   DELETE = 'Delete',
 }
 
-export class AccountEvent {
-  kind: string = 'accounts';
+export class BucketEvent {
+  kind: string = 'buckets';
   url: string;
   method: string;
   headers: any;

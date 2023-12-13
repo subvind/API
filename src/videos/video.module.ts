@@ -11,9 +11,12 @@ import { OrganizationModule } from '../organizations/organization.module';
 import { PlaylistModule } from '../playlists/playlist.module';
 import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
+import { VideoListener } from './video.listener';
+import { AnalyticModule } from 'src/analytics/analytic.module';
 
 @Module({
   imports: [
+    forwardRef(() => AnalyticModule),
     OrganizationModule,
     PlaylistModule,
     UserModule,
@@ -35,6 +38,6 @@ import { AccountModule } from '../accounts/account.module';
     VideoService
   ],
   controllers: [VideoController],
-  providers: [VideoService, JwtService],
+  providers: [VideoService, JwtService, VideoListener],
 })
 export class VideoModule {}

@@ -11,9 +11,12 @@ import { OrganizationModule } from '../organizations/organization.module';
 import { CategoryModule } from '../categories/category.module';
 import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
+import { BucketListener } from './bucket.listener';
+import { AnalyticModule } from 'src/analytics/analytic.module';
 
 @Module({
   imports: [
+    forwardRef(() => AnalyticModule),
     OrganizationModule,
     CategoryModule,
     UserModule,
@@ -35,6 +38,6 @@ import { AccountModule } from '../accounts/account.module';
     BucketService
   ],
   controllers: [BucketController],
-  providers: [BucketService, JwtService],
+  providers: [BucketService, JwtService, BucketListener],
 })
 export class BucketModule {}
