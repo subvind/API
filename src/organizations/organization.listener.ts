@@ -11,7 +11,7 @@ export class OrganizationListener {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'organizations',
+    exchange: 'analytics',
     routingKey: 'organizations.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'OrganizationEvent',
   })

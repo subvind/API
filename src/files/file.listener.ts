@@ -11,7 +11,7 @@ export class FileListener {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'files',
+    exchange: 'analytics',
     routingKey: 'files.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'FileEvent',
   })

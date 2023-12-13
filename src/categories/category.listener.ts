@@ -11,7 +11,7 @@ export class CategoryListener {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'categories',
+    exchange: 'analytics',
     routingKey: 'categories.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'CategoryEvent',
   })

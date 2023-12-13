@@ -11,7 +11,7 @@ export class ProductListener {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'products',
+    exchange: 'analytics',
     routingKey: 'products.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'ProductEvent',
   })

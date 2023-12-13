@@ -11,7 +11,7 @@ export class PlaylistListener {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'playlists',
+    exchange: 'analytics',
     routingKey: 'playlists.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'PlaylistEvent',
   })

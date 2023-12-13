@@ -11,7 +11,7 @@ export class VideoListener {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'videos',
+    exchange: 'analytics',
     routingKey: 'videos.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'VideoEvent',
   })

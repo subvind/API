@@ -11,7 +11,7 @@ export class BucketListener {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'buckets',
+    exchange: 'analytics',
     routingKey: 'buckets.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'BucketEvent',
   })

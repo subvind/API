@@ -11,7 +11,7 @@ export class UserListener {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'users',
+    exchange: 'analytics',
     routingKey: 'users.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'UserEvent',
   })
