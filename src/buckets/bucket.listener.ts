@@ -15,7 +15,7 @@ export class BucketListener {
     routingKey: 'buckets.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'BucketEvent',
   })
-  public async accountEventHandler(event: BucketEvent) {
+  public async bucketEventHandler(event: BucketEvent) {
     // reports
     console.log(JSON.stringify(event));
 

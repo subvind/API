@@ -15,7 +15,7 @@ export class AnalyticListener {
     routingKey: 'analytics.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'AnalyticEvent',
   })
-  public async accountEventHandler(event: AnalyticEvent) {
+  public async analyticEventHandler(event: AnalyticEvent) {
     // reports
     console.log(JSON.stringify(event));
 

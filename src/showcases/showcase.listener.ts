@@ -15,7 +15,7 @@ export class ShowcaseListener {
     routingKey: 'showcases.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'ShowcaseEvent',
   })
-  public async accountEventHandler(event: ShowcaseEvent) {
+  public async showcaseEventHandler(event: ShowcaseEvent) {
     // reports
     console.log(JSON.stringify(event));
 

@@ -15,7 +15,7 @@ export class UserListener {
     routingKey: 'users.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'UserEvent',
   })
-  public async accountEventHandler(event: UserEvent) {
+  public async userEventHandler(event: UserEvent) {
     // reports
     console.log(JSON.stringify(event));
 

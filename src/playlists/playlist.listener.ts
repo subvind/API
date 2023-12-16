@@ -15,7 +15,7 @@ export class PlaylistListener {
     routingKey: 'playlists.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'PlaylistEvent',
   })
-  public async accountEventHandler(event: PlaylistEvent) {
+  public async playlistEventHandler(event: PlaylistEvent) {
     // reports
     console.log(JSON.stringify(event));
 

@@ -190,6 +190,7 @@ export class AccountController {
       }
     }
 
+    const record = await this.accountService.findOne(id);
     const payload = await this.accountService.update(id, data);
 
     try {
@@ -200,7 +201,7 @@ export class AccountController {
       event.body = req.body;
       event.crud = CRUDType.UPDATE;
       event.charge = ChargeType.ORGANIZATION;
-      event.organizationId = account.organization.id;
+      event.organizationId = record.organization.id;
       event.payload = payload;
       event.eventAt = new Date().toISOString();
       this.amqpConnection.publish('analytics', 'accounts.update', event);

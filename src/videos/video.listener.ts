@@ -15,7 +15,7 @@ export class VideoListener {
     routingKey: 'videos.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'VideoEvent',
   })
-  public async accountEventHandler(event: VideoEvent) {
+  public async videoEventHandler(event: VideoEvent) {
     // reports
     console.log(JSON.stringify(event));
 

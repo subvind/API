@@ -15,7 +15,7 @@ export class FileListener {
     routingKey: 'files.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'FileEvent',
   })
-  public async accountEventHandler(event: FileEvent) {
+  public async fileEventHandler(event: FileEvent) {
     // reports
     console.log(JSON.stringify(event));
 

@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common'; // Import the NotFoundException
 
 import { UserService } from './user.service';
@@ -12,6 +12,7 @@ import { AuthStatus } from '../auth-status.decorator';
 import { AuthStatusGuard } from '../auth-status.guard';
 import { UserStatusGuard } from './user-status.guard';
 import { UserStatus } from './user-status.decorator';
+import { UserEvent, CRUDType, ChargeType } from './user.event';
 
 import { v4 as uuidv4 } from 'uuid';
 import { hash } from 'bcrypt';
@@ -29,26 +30,84 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Get()
   async findAll(
+    @Req() req: Request,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('search') search?: string,
   ) {
     const { data, total } = await this.userService.findAll(page, limit, search);
-    return { data, total };
+    const payload = { data, total };
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.findAll', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 
   @ApiOperation({ summary: 'Get a user by id' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(id);
+  async findOne(
+    @Req() req: Request,
+    @Param('id') id: string
+  ): Promise<User> {
+    const payload = await this.userService.findOne(id);
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.findOne', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 
   @ApiOperation({ summary: 'Get a user by username' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('username/:username')
-  async findSingle(@Param('username') username: string): Promise<User> {
-    return this.userService.findByUsername(username);
+  async findSingle(
+    @Req() req: Request,
+    @Param('username') username: string
+  ): Promise<User> {
+    const payload = await this.userService.findByUsername(username);
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.findSingle', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 
   @ApiOperation({ summary: 'Create a user' })
@@ -56,8 +115,28 @@ export class UserController {
   @ApiResponse({ status: 201, description: 'Success', type: User })
   @Post()
   // @UseGuards() // anyone can create a user
-  async create(@Body() userData: User): Promise<User> {
-    return this.userService.create(userData);
+  async create(
+    @Req() req: Request,
+    @Body() userData: User
+  ): Promise<User> {
+    const payload = await this.userService.create(userData);
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.CREATE;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.create', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 
   @ApiOperation({ summary: 'Update a user' })
@@ -66,7 +145,11 @@ export class UserController {
   @AuthStatus(['Pending', 'Verified'])
   @UserStatus(['Owner'])
   @UseGuards(AuthStatusGuard, UserStatusGuard)
-  async update(@Param('id') id: string, @Body() updatedUserData: User): Promise<User> {
+  async update(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Body() updatedUserData: User
+  ): Promise<User> {
     let user = await this.userService.findRecord(id);
     let data
     const { password, ...userDataWithoutPassword } = updatedUserData;
@@ -98,7 +181,24 @@ export class UserController {
       }
     }
 
-    return this.userService.update(id, data);
+    const payload = await this.userService.update(id, data);
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.UPDATE;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.update', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 
   @ApiOperation({ summary: 'Delete a user' })
@@ -107,15 +207,39 @@ export class UserController {
   @AuthStatus(['Pending', 'Verified'])
   @UserStatus(['Owner'])
   @UseGuards(AuthStatusGuard, UserStatusGuard)
-  async remove(@Param('id') id: string): Promise<void> {
-    return this.userService.remove(id);
+  async remove(
+    @Req() req: Request,
+    @Param('id') id: string
+  ): Promise<void> {
+    const payload = await this.userService.remove(id);
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.DELETE;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.remove', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 
 
   @ApiOperation({ summary: 'Set a default organization for a user' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Get('defaultOrganization/:username/:orgname')
-  async setDefaultOrg(@Param('username') username: string, @Param('orgname') orgname: string): Promise<User> {
+  async setDefaultOrg(
+    @Req() req: Request,
+    @Param('username') username: string, 
+    @Param('orgname') orgname: string
+  ): Promise<User> {
     let user = await this.userService.findByUsername(username);
     let organization = await this.organizationService.findByOrgname(orgname);
 
@@ -135,13 +259,34 @@ export class UserController {
     // console.log('setDefaultOrg change', change)
     
     // send changes to database
-    return this.userService.update(user.id, change);
+    const payload = await this.userService.update(user.id, change);
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.ORGANIZATION;
+      event.organizationId = organization.id;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.setDefaultOrg', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 
   @ApiOperation({ summary: 'Verify a user\'s email address' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('verifyEmail/:id')
-  async verifyEmail(@Param('id') id: string): Promise<Boolean> {
+  async verifyEmail(
+    @Req() req: Request,
+    @Param('id') id: string
+  ): Promise<Boolean> {
     let user = await this.userService.findRecord(id);
 
     if (!user) {
@@ -151,14 +296,34 @@ export class UserController {
     // Send the verification email
     await this.userService.sendVerificationEmail(user.email, user.emailVerificationToken);
 
-    return true;
+    const payload = true;
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.verifyEmail', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 
 
   @ApiOperation({ summary: 'Recover a user\'s password by email address' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('recoverPassword/:email')
-  async recoverPassword(@Param('email') email: string): Promise<Boolean> {
+  async recoverPassword(
+    @Req() req: Request,
+    @Param('email') email: string
+  ): Promise<Boolean> {
     let user = await this.userService.findByEmail(email)
     if (user) {
       user = await this.userService.findRecord(user.id);
@@ -177,13 +342,34 @@ export class UserController {
     // Send the verification email
     await this.userService.sendPasswordRevocery(user.email, user.recoverPasswordToken);
 
-    return true;
+    const payload = true;
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.recoverPassword', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 
   @ApiOperation({ summary: 'Reset a user\'s password' })
   @ApiResponse({ status: 200, description: 'Success' })
   @Patch('resetPassword/:email')
-  async resetPassword(@Param('email') email: string, @Body() updatedUserData: User): Promise<User> {
+  async resetPassword(
+    @Req() req: Request,
+    @Param('email') email: string,
+    @Body() updatedUserData: User
+  ): Promise<User> {
     let user = await this.userService.findByEmail(email)
     if (user) {
       user = await this.userService.findRecord(user.id);
@@ -205,6 +391,23 @@ export class UserController {
       }
     }
 
-    return this.userService.update(user.id, data);
+    const payload = await this.userService.update(user.id, data);
+
+    try {
+      const event = new UserEvent();
+      event.url = req.url;
+      event.method = req.method;
+      event.headers = req.headers;
+      event.body = req.body;
+      event.crud = CRUDType.READ;
+      event.charge = ChargeType.WEBMASTER;
+      event.payload = payload;
+      event.eventAt = new Date().toISOString();
+      this.amqpConnection.publish('analytics', 'users.resetPassword', event);
+    } catch (e) {
+      console.log(e)
+    }
+    
+    return payload;
   }
 }

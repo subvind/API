@@ -15,7 +15,7 @@ export class CategoryListener {
     routingKey: 'categories.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'CategoryEvent',
   })
-  public async accountEventHandler(event: CategoryEvent) {
+  public async categoryEventHandler(event: CategoryEvent) {
     // reports
     console.log(JSON.stringify(event));
 

@@ -15,7 +15,7 @@ export class OrganizationListener {
     routingKey: 'organizations.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'OrganizationEvent',
   })
-  public async accountEventHandler(event: OrganizationEvent) {
+  public async organizationEventHandler(event: OrganizationEvent) {
     // reports
     console.log(JSON.stringify(event));
 

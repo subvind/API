@@ -15,7 +15,7 @@ export class ProductListener {
     routingKey: 'products.*', // Supports * as a wildcard for one word and # as a wildcard for one or more words.
     queue: 'ProductEvent',
   })
-  public async accountEventHandler(event: ProductEvent) {
+  public async productEventHandler(event: ProductEvent) {
     // reports
     console.log(JSON.stringify(event));
 
