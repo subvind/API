@@ -6,10 +6,10 @@ import { AnalyticService } from './analytic.service';
 export class AnalyticCron {
   constructor(private readonly analyticService: AnalyticService) {}
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   async handleCron() {
     // Run the deleteOldAnalytics method every minute
     let old = await this.analyticService.deleteOldAnalytics();
-    console.log('old analytics', old);
+    console.log('deleted analytics', old);
   }
 }
