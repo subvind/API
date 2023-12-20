@@ -1,7 +1,7 @@
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, LessThan } from 'typeorm';
 import { Analytic } from './analytic.entity';
 import { Organization } from '../organizations/organization.entity';
 
@@ -82,5 +82,18 @@ export class AnalyticService {
     const [data, total] = await query.skip(offset).take(limit).getManyAndCount();
   
     return { data, total };
+  }
+
+  async deleteOldAnalytics(): Promise<any> {
+    const oneDayAgo = new Date();
+    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+    console.log('deleting analytics where eventAt < :oneDayAgo or ', oneDayAgo)
+
+    const deletedAnalytics = await this.analyticRepository.delete({
+      eventAt: LessThan(oneDayAgo),
+    });
+
+    return deletedAnalytics
   }
 }

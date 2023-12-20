@@ -1,6 +1,7 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -30,6 +31,7 @@ import { VideoModule } from './videos/video.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {

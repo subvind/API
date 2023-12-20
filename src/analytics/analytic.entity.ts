@@ -57,8 +57,8 @@ export class Analytic {
   payload: string;
 
   @ApiProperty({ example: '', description: 'The event at of the analytic' })
-  @Column({ nullable: true })
-  eventAt: string;
+  @CreateDateColumn({ type: 'timestamp' })
+  eventAt: Date;
 
   /**
    * Other properties and relationships as needed

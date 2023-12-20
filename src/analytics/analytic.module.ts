@@ -18,6 +18,7 @@ import { PlaylistModule } from 'src/playlists/playlist.module';
 import { ProductModule } from 'src/products/product.module';
 import { ShowcaseModule } from 'src/showcases/showcase.module';
 import { VideoModule } from 'src/videos/video.module';
+import { AnalyticCron } from './analytic.cron';
 
 @Module({
   imports: [
@@ -47,6 +48,6 @@ import { VideoModule } from 'src/videos/video.module';
     AnalyticService
   ],
   controllers: [AnalyticController],
-  providers: [AnalyticService, JwtService, AnalyticListener],
+  providers: [AnalyticService, JwtService, AnalyticListener, AnalyticCron],
 })
 export class AnalyticModule {}
