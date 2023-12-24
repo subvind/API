@@ -64,9 +64,11 @@ export class AccountService {
       relations: [
         'organization',
         'organization.owner',
+        'member',
         'supplier',
         'employee',
         'customer',
+        'subscriber',
         'client'
       ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'email', 'password', 'authStatus', 'twitter', 'youtube', 'emailVerificationToken', 'isEmailVerified', 'recoverPasswordToken', 'createdAt']
@@ -81,9 +83,11 @@ export class AccountService {
       relations: [
         'organization',
         'organization.owner',
+        'member',
         'supplier',
         'employee',
         'customer',
+        'subscriber',
         'client'
       ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
@@ -103,9 +107,11 @@ export class AccountService {
       relations: [
         'organization',
         'organization.owner',
+        'member',
         'supplier',
         'employee',
         'customer',
+        'subscriber',
         'client'
       ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'password', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
@@ -123,9 +129,11 @@ export class AccountService {
       relations: [
         'organization',
         'organization.owner',
+        'member',
         'supplier',
         'employee',
         'customer',
+        'subscriber',
         'client'
       ],
       select: ['id', 'accountname', 'firstName', 'lastName', 'authStatus', 'twitter', 'youtube', 'isEmailVerified', 'createdAt'] 
@@ -145,9 +153,11 @@ export class AccountService {
         id: id
       },
       relations: [
+        'member',
         'supplier',
         'employee',
         'customer',
+        'subscriber',
         'client',
       ]
     });
@@ -157,6 +167,9 @@ export class AccountService {
       this.accountRepository.merge(account, newAccount);
   
       // Update related profile properties
+      if (newAccount.customer) {
+        this.accountRepository.merge(account.customer, newAccount.customer);
+      }
       if (newAccount.supplier) {
         this.accountRepository.merge(account.supplier, newAccount.supplier);
       }
@@ -165,6 +178,9 @@ export class AccountService {
       }
       if (newAccount.customer) {
         this.accountRepository.merge(account.customer, newAccount.customer);
+      }
+      if (newAccount.subscriber) {
+        this.accountRepository.merge(account.subscriber, newAccount.subscriber);
       }
       if (newAccount.client) {
         this.accountRepository.merge(account.client, newAccount.client);
@@ -212,16 +228,18 @@ export class AccountService {
     } else if (type === 'client') {
       query.andWhere(
         'client.clientStatus != :status',
-        { status: 'Free' }
+        { status: 0 }
       );
     } else {
       // fetch all
     }
     
     query.leftJoinAndSelect('account.organization', 'organization');
+    query.leftJoinAndSelect('account.member', 'member');
     query.leftJoinAndSelect('account.customer', 'customer');
     query.leftJoinAndSelect('account.employee', 'employee');
     query.leftJoinAndSelect('account.supplier', 'supplier');
+    query.leftJoinAndSelect('account.subscriber', 'subscriber');
     query.leftJoinAndSelect('account.client', 'client');
   
     const offset = (page - 1) * limit;
