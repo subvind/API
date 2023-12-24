@@ -52,7 +52,7 @@ export class Account {
   lastName: string;
 
   @ApiProperty({ example: 'john.doe@gmail.com', description: 'The email address of the account' })
-  @Column({ select: false }) // Exclude 'password' from default selection
+  @Column({ select: false }) // Exclude 'email' from default selection
   email: string;
 
   @ApiProperty({ example: 'jd2023', description: 'The secret password of the account' })
