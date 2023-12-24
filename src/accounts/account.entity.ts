@@ -8,9 +8,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Organization } from '../organizations/organization.entity';
+import { Member } from './members/member.entity';
 import { Customer } from './customers/customer.entity';
 import { Employee } from './employees/employee.entity';
 import { Supplier } from './suppliers/supplier.entity';
+import { Subscriber } from './subscribers/subscriber.entity';
 import { Client } from './clients/client.entity';
 
 export enum AuthStatus {
@@ -83,6 +85,10 @@ export class Account {
   @Column({ default: 'Customer' })
   organizationStatus: OrganizationStatus; // status can be 'Customer', 'Employee', 'Supplier'.
 
+  @OneToOne(() => Member, { eager: true, cascade: true })
+  @JoinColumn()
+  member: Member;
+
   @OneToOne(() => Customer, { eager: true, cascade: true })
   @JoinColumn()
   customer: Customer;
@@ -94,6 +100,10 @@ export class Account {
   @OneToOne(() => Supplier, { eager: true, cascade: true })
   @JoinColumn()
   supplier: Supplier;
+
+  @OneToOne(() => Subscriber, { eager: true, cascade: true })
+  @JoinColumn()
+  subscriber: Subscriber;
 
   @OneToOne(() => Client, { eager: true, cascade: true })
   @JoinColumn()

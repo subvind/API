@@ -10,6 +10,7 @@ export class AnalyticCron {
   async handleCron() {
     // Run the deleteOldAnalytics method every minute
     let old = await this.analyticService.deleteOldAnalytics();
-    console.log('deleted analytics', old);
+    // old runs correctly but doesn't return anything
+    // console.log('deleted analytics', old);
   }
 }
