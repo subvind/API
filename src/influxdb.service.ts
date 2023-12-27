@@ -16,10 +16,11 @@ export class InfluxDBService {
   async writeDataAnalytic(measurement: string, fields: any): Promise<void> {
     let writeClient = this.influx.getWriteApi(
       process.env.INFLUXDB_ORGANIZATION || 'your_organization', 
-      process.env.INFLUXDB_BUCKET || 'your_bucket'
+      process.env.INFLUXDB_BUCKET || 'your_bucket',
+      'ms' // milliseconds 
     );
 
-    console.log('analytic path', writeClient.path)
+    // console.log('analytic path', writeClient.path)
 
     const point = new Point(measurement)
       .tag('organizationId', fields.organizationId)
@@ -36,7 +37,7 @@ export class InfluxDBService {
     
     point.timestamp(new Date(fields.eventAt).getTime())
 
-    console.log('analytic point', point.fields)
+    // console.log('analytic point', JSON.stringify(point.fields, null, 2))
 
     writeClient.writePoint(point);
 
