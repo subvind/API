@@ -4,20 +4,21 @@ import {InfluxDB, Point, HttpError} from '@influxdata/influxdb-client'
 @Injectable()
 export class InfluxDBService {
   private readonly influx: InfluxDB;
-  private readonly writeApi: any;
+  // private readonly writeApi: any;
 
   constructor() {
     this.influx = new InfluxDB({ 
       url: process.env.INFLUXDB_URL || 'http://localhost:8086',
       token: process.env.INFLUXDB_TOKEN || 'your_influxdb_token'
     });
-    this.writeApi = this.influx.getWriteApi(
-      process.env.INFLUXDB_ORGANIZATION || 'your_organization', 
-      process.env.INFLUXDB_BUCKET || 'your_bucket'
-    );
   }
 
   async writeDataAnalytic(measurement: string, fields: any): Promise<void> {
+    let writeApi = this.influx.getWriteApi(
+      process.env.INFLUXDB_ORGANIZATION || 'your_organization', 
+      process.env.INFLUXDB_BUCKET || 'your_bucket'
+    );
+
     const point = new Point(measurement)
       .stringField('kind', fields.kind)
       .stringField('url', fields.url)
@@ -32,11 +33,7 @@ export class InfluxDBService {
     
     point.timestamp(fields.eventAt)
 
-    this.writeApi.writePoint(point);
-    await this.writeApi.close();
-  }
-  
-  async closeWriteApi(): Promise<void> {
-    await this.writeApi.close();
+    writeApi.writePoint(point);
+    await writeApi.close();
   }
 }

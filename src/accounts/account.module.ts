@@ -1,7 +1,7 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Module, forwardRef, OnModuleDestroy } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AccountController } from './account.controller';
 
 import { AuthService } from '../auth/auth.service';
@@ -39,10 +39,4 @@ import { InfluxDBService } from '../influxdb.service';
   controllers: [AccountController],
   providers: [AccountService, AuthService, JwtService, AccountListener, InfluxDBService],
 })
-export class AccountModule implements OnModuleDestroy {
-  constructor(private readonly influxDBService: InfluxDBService) {}
-
-  onModuleDestroy() {
-    return this.influxDBService.closeWriteApi();
-  }
-}
+export class AccountModule {}
