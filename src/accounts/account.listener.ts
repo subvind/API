@@ -19,7 +19,7 @@ export class AccountListener {
   })
   public async accountEventHandler(event: AccountEvent) {
     // reports
-    console.log(JSON.stringify(event));
+    console.log('analytic event', JSON.stringify(event));
 
     // charging
     await this.influxDBService.writeDataAnalytic('analytic', event);

@@ -19,7 +19,10 @@ export class InfluxDBService {
       process.env.INFLUXDB_BUCKET || 'your_bucket'
     );
 
+    console.log('analytic path', writeClient.path)
+
     const point = new Point(measurement)
+      .tag('organizationId', fields.organizationId)
       .stringField('kind', fields.kind)
       .stringField('url', fields.url)
       .stringField('method', fields.method)
@@ -27,11 +30,13 @@ export class InfluxDBService {
       // .stringField('body', JSON.stringify(fields.body))
       .stringField('crud', fields.crud)
       .stringField('charge', fields.charge)
-      .stringField('organizationId', fields.organizationId)
+      // .stringField('organizationId', fields.organizationId)
       // .stringField('payload', JSON.stringify(fields.payload))
       // .stringField('eventAt', fields.eventAt);
     
     point.timestamp(new Date(fields.eventAt).getTime())
+
+    console.log('analytic point', point.fields)
 
     writeClient.writePoint(point);
 
