@@ -35,4 +35,8 @@ export class InfluxDBService {
     this.writeApi.writePoint(point);
     await this.writeApi.close();
   }
+  
+  async closeWriteApi(): Promise<void> {
+    await this.writeApi.close();
+  }
 }
