@@ -14,6 +14,7 @@ import { UserModule } from '../users/user.module';
 
 import { Account } from './account.entity';
 import { AccountListener } from './account.listener';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -36,6 +37,6 @@ import { AccountListener } from './account.listener';
     AccountService
   ],
   controllers: [AccountController],
-  providers: [AccountService, AuthService, JwtService, AccountListener],
+  providers: [AccountService, AuthService, JwtService, AccountListener, InfluxDBService],
 })
 export class AccountModule {}
