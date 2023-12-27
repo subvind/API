@@ -31,7 +31,7 @@ export class InfluxDBService {
       // .stringField('payload', JSON.stringify(fields.payload))
       // .stringField('eventAt', fields.eventAt);
     
-    point.timestamp(fields.eventAt)
+    point.timestamp(new Date(fields.eventAt).getTime())
 
     writeApi.writePoint(point);
     await writeApi.close();
