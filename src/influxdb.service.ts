@@ -14,7 +14,7 @@ export class InfluxDBService {
   }
 
   async writeDataAnalytic(measurement: string, fields: any): Promise<void> {
-    let writeApi = this.influx.getWriteApi(
+    let writeClient = this.influx.getWriteApi(
       process.env.INFLUXDB_ORGANIZATION || 'your_organization', 
       process.env.INFLUXDB_BUCKET || 'your_bucket'
     );
@@ -33,7 +33,9 @@ export class InfluxDBService {
     
     point.timestamp(new Date(fields.eventAt).getTime())
 
-    writeApi.writePoint(point);
-    await writeApi.close();
+    writeClient.writePoint(point);
+
+    await writeClient.flush()
+    await writeClient.close();
   }
 }
