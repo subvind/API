@@ -13,6 +13,7 @@ import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
 import { VideoListener } from './video.listener';
 import { AnalyticModule } from 'src/analytics/analytic.module';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -38,6 +39,6 @@ import { AnalyticModule } from 'src/analytics/analytic.module';
     VideoService
   ],
   controllers: [VideoController],
-  providers: [VideoService, JwtService, VideoListener],
+  providers: [VideoService, JwtService, VideoListener, InfluxDBService],
 })
 export class VideoModule {}

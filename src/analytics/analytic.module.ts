@@ -19,6 +19,7 @@ import { ProductModule } from 'src/products/product.module';
 import { ShowcaseModule } from 'src/showcases/showcase.module';
 import { VideoModule } from 'src/videos/video.module';
 import { AnalyticCron } from './analytic.cron';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -48,6 +49,6 @@ import { AnalyticCron } from './analytic.cron';
     AnalyticService
   ],
   controllers: [AnalyticController],
-  providers: [AnalyticService, JwtService, AnalyticListener, AnalyticCron],
+  providers: [AnalyticService, JwtService, AnalyticListener, AnalyticCron, InfluxDBService],
 })
 export class AnalyticModule {}

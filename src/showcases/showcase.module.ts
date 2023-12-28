@@ -12,6 +12,7 @@ import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
 import { ShowcaseListener } from './showcase.listener';
 import { AnalyticModule } from 'src/analytics/analytic.module';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -36,6 +37,6 @@ import { AnalyticModule } from 'src/analytics/analytic.module';
     ShowcaseService
   ],
   controllers: [ShowcaseController],
-  providers: [ShowcaseService, JwtService, ShowcaseListener],
+  providers: [ShowcaseService, JwtService, ShowcaseListener, InfluxDBService],
 })
 export class ShowcaseModule {}

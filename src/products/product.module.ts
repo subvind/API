@@ -13,6 +13,7 @@ import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
 import { ProductListener } from './product.listener';
 import { AnalyticModule } from 'src/analytics/analytic.module';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -38,6 +39,6 @@ import { AnalyticModule } from 'src/analytics/analytic.module';
     ProductService
   ],
   controllers: [ProductController],
-  providers: [ProductService, JwtService, ProductListener],
+  providers: [ProductService, JwtService, ProductListener, InfluxDBService],
 })
 export class ProductModule {}

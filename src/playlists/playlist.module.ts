@@ -12,6 +12,7 @@ import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
 import { PlaylistListener } from './playlist.listener';
 import { AnalyticModule } from 'src/analytics/analytic.module';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -36,6 +37,6 @@ import { AnalyticModule } from 'src/analytics/analytic.module';
     PlaylistService
   ],
   controllers: [PlaylistController],
-  providers: [PlaylistService, JwtService, PlaylistListener],
+  providers: [PlaylistService, JwtService, PlaylistListener, InfluxDBService],
 })
 export class PlaylistModule {}

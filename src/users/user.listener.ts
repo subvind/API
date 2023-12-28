@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { UserEvent } from './user.event';
 import { AnalyticService } from '../analytics/analytic.service';
+import { InfluxDBService } from '../influxdb.service';
 
 @Injectable()
 export class UserListener {
 
   constructor (
-    private readonly analyticService: AnalyticService
+    private readonly analyticService: AnalyticService,
+    private readonly influxDBService: InfluxDBService
   ) {}
 
   @RabbitSubscribe({
@@ -16,10 +18,13 @@ export class UserListener {
     queue: 'UserEvent',
   })
   public async userEventHandler(event: UserEvent) {
-    // reports
-    console.log(JSON.stringify(event));
+    // logs
+    console.log('event', JSON.stringify(event));
 
     // charging
+    await this.influxDBService.writeAnalyticPoint(event);
+
+    // database
     let analytic: any = {
       kind: event.kind,
       url: event.url,

@@ -13,6 +13,7 @@ import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
 import { FileListener } from './file.listener';
 import { AnalyticModule } from 'src/analytics/analytic.module';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -38,6 +39,6 @@ import { AnalyticModule } from 'src/analytics/analytic.module';
     FileService
   ],
   controllers: [FileController],
-  providers: [FileService, JwtService, FileListener],
+  providers: [FileService, JwtService, FileListener, InfluxDBService],
 })
 export class FileModule {}

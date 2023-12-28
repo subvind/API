@@ -12,6 +12,7 @@ import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
 import { CategoryListener } from './category.listener';
 import { AnalyticModule } from 'src/analytics/analytic.module';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -36,6 +37,6 @@ import { AnalyticModule } from 'src/analytics/analytic.module';
     CategoryService
   ],
   controllers: [CategoryController],
-  providers: [CategoryService, JwtService, CategoryListener],
+  providers: [CategoryService, JwtService, CategoryListener, InfluxDBService],
 })
 export class CategoryModule {}

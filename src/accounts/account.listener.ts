@@ -18,13 +18,13 @@ export class AccountListener {
     queue: 'AccountEvent',
   })
   public async accountEventHandler(event: AccountEvent) {
-    // reports
-    console.log('analytic event', JSON.stringify(event));
+    // logs
+    console.log('event', JSON.stringify(event));
 
     // charging
-    await this.influxDBService.writeDataAnalytic('analytic', event);
+    await this.influxDBService.writeAnalyticPoint(event);
 
-    // logs
+    // database
     let analytic: any = {
       kind: event.kind,
       url: event.url,

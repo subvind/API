@@ -13,7 +13,7 @@ export class InfluxDBService {
     });
   }
 
-  async writeDataAnalytic(measurement: string, fields: any): Promise<void> {
+  async writeAnalyticPoint(fields: any): Promise<void> {
     let writeClient = this.influx.getWriteApi(
       process.env.INFLUXDB_ORGANIZATION || 'your_organization', 
       process.env.INFLUXDB_BUCKET || 'your_bucket',
@@ -22,16 +22,16 @@ export class InfluxDBService {
 
     // console.log('analytic path', writeClient.path)
 
-    const point = new Point(measurement)
+    const point = new Point('analytic')
       .tag('organizationId', fields.organizationId)
       .stringField('kind', fields.kind)
       .stringField('url', fields.url)
       .stringField('method', fields.method)
-      // .stringField('headers', JSON.stringify(fields.headers))
+      .stringField('headers', JSON.stringify(fields.headers))
       // .stringField('body', JSON.stringify(fields.body))
       .stringField('crud', fields.crud)
       .stringField('charge', fields.charge)
-      // .stringField('organizationId', fields.organizationId)
+      .stringField('organizationId', fields.organizationId)
       // .stringField('payload', JSON.stringify(fields.payload))
       // .stringField('eventAt', fields.eventAt);
     

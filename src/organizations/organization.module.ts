@@ -13,6 +13,7 @@ import { UserModule } from '../users/user.module';
 import { AccountModule } from '../accounts/account.module';
 import { OrganizationListener } from './organization.listener';
 import { AnalyticModule } from 'src/analytics/analytic.module';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AnalyticModule } from 'src/analytics/analytic.module';
     AuthStatusGuard,
     JwtService,
     OrganizationListener,
+    InfluxDBService
   ],
 })
 export class OrganizationModule {}

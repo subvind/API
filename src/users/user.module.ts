@@ -14,6 +14,7 @@ import { AuthModule } from '../auth/auth.module';
 import { AccountModule } from '../accounts/account.module';
 import { AnalyticModule } from 'src/analytics/analytic.module';
 import { UserListener } from './user.listener';
+import { InfluxDBService } from '../influxdb.service';
 
 @Module({
   imports: [
@@ -37,6 +38,6 @@ import { UserListener } from './user.listener';
     UserService
   ],
   controllers: [UserController],
-  providers: [UserService, AuthService, JwtService, UserListener],
+  providers: [UserService, AuthService, JwtService, UserListener, InfluxDBService],
 })
 export class UserModule {}
